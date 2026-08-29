@@ -3,6 +3,7 @@ import { loadConfig, type Config } from "./config.js";
 import { toolErrorResult } from "./errors.js";
 import { doctor, doctorInput, doctorOutput, summarizeDoctor } from "./tools/doctor.js";
 import { probeMedia, probeMediaInput, probeMediaOutput, summarizeProbe } from "./tools/probe-media.js";
+import { extractText, extractTextInput, extractTextOutput, summarizeExtractText } from "./tools/extract-text.js";
 
 export const SERVER_NAME = "media-intel";
 export const SERVER_VERSION = "0.1.0";
@@ -57,6 +58,30 @@ export function createServer(config: Config = loadConfig()): McpServer {
       try {
         const result = await probeMedia(config, args);
         return { content: [{ type: "text", text: summarizeProbe(result) }], structuredContent: result };
+      } catch (error) {
+        return toolErrorResult(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "extract_text",
+    {
+      title: "Extract text (OCR)",
+      description:
+        "Extract text from images or video frames using OCR (tesseract). For images, run directly. " +
+        "For video, specify timestamps (1..32 per call) to extract frames and OCR them. " +
+        "Returns text with word boxes, line-level confidence, and language-aware detection. " +
+        "Supports region crops and upscaling for small text. Language codes: deu+eng (German+English). " +
+        "Warning: tesseract is optional; run doctor first to check availability.",
+      inputSchema: extractTextInput,
+      outputSchema: extractTextOutput,
+      annotations: { readOnlyHint: true, idempotentHint: false, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await extractText(config, args);
+        return { content: [{ type: "text", text: summarizeExtractText(result) }], structuredContent: result };
       } catch (error) {
         return toolErrorResult(error);
       }
