@@ -1,0 +1,40 @@
+src/backends/ocr/tesseract.ts
+  s_dd83aa1d90e0ec::t_3312a3733fb355 1-193
+src/tools/extract-text.ts
+  s_dd83aa1d90e0ec::t_940ac76441b69f 129-130
+  s_dd83aa1d90e0ec::t_31ee59b9462dcf 108
+  s_dd83aa1d90e0ec::t_f7b77119ddb1a8 1,3-6,8-107,109-128,131-145,147-156,162-170,172-173,176-188,190-195,197-208,210-233,235-236,238-240
+  s_dd83aa1d90e0ec::t_3d21f2cb4eea6c 234
+  s_dd83aa1d90e0ec::t_3870774b3b3ec0 2,7,146,157-161,171,174-175,189,196,209
+  s_dd83aa1d90e0ec::t_1f5d614109aedd 237
+src/server.ts
+  s_dd83aa1d90e0ec::t_1d64ee0f548f54 6
+  s_dd83aa1d90e0ec::t_0169f12b3f0bcb 67-90
+tests/extract-text.test.ts
+  s_dd83aa1d90e0ec::t_f7aae8091f134e 71-72
+  s_dd83aa1d90e0ec::t_b1780066b30486 291-292
+  s_dd83aa1d90e0ec::t_536d9a6f12d088 1-19,21-25,40-55,62-70,73-114,117-133,136-147,150-166,169-193,196-210,213-224,227-282,285-290,293-304
+  s_dd83aa1d90e0ec::t_8f7f3dc7b4a908 134-135,148-149,167-168,194-195,211-212,225-226,283-284
+  s_dd83aa1d90e0ec::t_705236d6a3d545 26-28
+  s_dd83aa1d90e0ec::t_5a12c275271f93 29-39
+  s_dd83aa1d90e0ec::t_00149bc3845d7a 20
+  s_dd83aa1d90e0ec::t_33f6f01f3802f5 56,60-61
+  s_dd83aa1d90e0ec::t_3e7b375bb6818a 57-59
+  s_dd83aa1d90e0ec::t_6efc30fdcbeea7 115-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "ff4ff83dd51fd496c2201895c91dfc271b4c88c9",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
