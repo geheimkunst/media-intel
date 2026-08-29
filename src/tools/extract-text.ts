@@ -62,7 +62,7 @@ export const extractTextOutput = z.object({
 
 export type ExtractTextResult = z.infer<typeof extractTextOutput>;
 
-export async function extractText(config: Config, input: ExtractTextInput): Promise<ExtractTextResult> {
+async function extractTextInner(config: Config, input: ExtractTextInput): Promise<ExtractTextResult> {
   // Validate language input.
   let requestedLangs = input.language ? input.language.split("+").map((l) => l.trim()).filter((l) => l.length > 0) : config.ocrLanguages.split("+");
   if (requestedLangs.length === 0) {
@@ -272,4 +272,26 @@ export function registerExtractText(server: McpServer, config: Config): void {
       }
     },
   );
+}
+
+import { indexDocument } from "../search.js";
+
+/** Public entry: OCR, then index the lines for media_search (best effort). */
+export async function extractText(config: Config, input: ExtractTextInput): Promise<ExtractTextResult> {
+  const result = await extractTextInner(config, input);
+  try {
+    const resolved = await resolveSource(input.source);
+    const entry = await cacheEntry(config, resolved);
+    await indexDocument(config, {
+      hash: entry.hash,
+      origin: resolved.location,
+      kind: "ocr",
+      language: result.language,
+      backend: "tesseract",
+      segments: result.results.map((r) => ({ start_s: r.t_s ?? 0, end_s: r.t_s ?? 0, text: r.text.text })),
+    });
+  } catch (error) {
+    result.warnings.push(`search index not updated: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  return result;
 }

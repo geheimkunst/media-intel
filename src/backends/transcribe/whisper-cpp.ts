@@ -22,7 +22,9 @@ export interface WhisperCppOptions {
 }
 
 interface WhisperCppOutput {
-  result: WhisperSegment[];
+  /** whisper-cli writes { language } here, not the segments. */
+  result?: { language?: string };
+  transcription?: WhisperSegment[];
 }
 
 interface WhisperSegment {
@@ -89,12 +91,13 @@ export async function transcribeWithWhisperCpp(
     const jsonData = await readFile(jsonPath, "utf-8");
     const output = JSON.parse(jsonData) as WhisperCppOutput;
 
-    if (!output.result || output.result.length === 0) {
-      throw new MediaIntelError("whisper_empty", "whisper-cli produced no transcript", "Check the audio content.");
+    const rawSegments = output.transcription ?? [];
+    if (rawSegments.length === 0) {
+      throw new MediaIntelError("whisper_empty", "whisper-cli produced no transcript", "Check the audio content; with --vad the file may be all silence.");
     }
 
     const timeOffset = opts.startSeconds ?? 0;
-    const segments: Segment[] = output.result.map((seg) => ({
+    const segments: Segment[] = rawSegments.filter((seg) => seg.text.trim().length > 0).map((seg) => ({
       start_s: seg.offsets.from / 1000 + timeOffset,
       end_s: seg.offsets.to / 1000 + timeOffset,
       text: seg.text.trim(),
@@ -104,10 +107,12 @@ export async function transcribeWithWhisperCpp(
     let language = opts.language || "auto";
     let confidence: number | undefined;
 
-    const langMatch = result.stderr.match(/auto-detected language: (\w+) \(p = ([\d.]+)\)/);
-    if (langMatch) {
-      language = langMatch[1]!;
-      confidence = parseFloat(langMatch[2]!);
+    const langMatch = `${result.stderr}\n${result.stdout}`.match(/auto-detected language:\s*([a-z]{2,3})\s*\(p\s*=\s*([\d.]+)\)/i);
+    if (langMatch?.[1] && langMatch[2]) {
+      language = langMatch[1];
+      confidence = parseFloat(langMatch[2]);
+    } else if (output.result?.language) {
+      language = output.result.language;
     }
 
     return {

@@ -150,16 +150,23 @@ export async function getVideoGrids(config: Config, input: GetVideoGridsInput): 
     const batch = timestamps.slice(i, i + batchSize);
     const results = await Promise.all(
       batch.map(async (t_s) => {
-        try {
-          const buffer = await extractFrame(config, resolved.location, t_s, {
-            format: input.frame_format,
-            width: tileWidth,
-            quality: input.quality,
-          });
-          return { buffer, t_s, hash: undefined };
-        } catch (error) {
-          throw new MediaIntelError("frame_extraction_failed", `Failed to extract frame at ${t_s}s`, String(error));
+        // Timestamps near the end can land past the last decodable frame
+        // (e.g. 3.97 s on a 4 s clip at 10 fps). Step back before giving up.
+        const attempts = [t_s, Math.max(0, t_s - 0.25), Math.max(0, t_s - 1)];
+        let lastError: unknown;
+        for (const t of attempts) {
+          try {
+            const buffer = await extractFrame(config, resolved.location, t, {
+              format: input.frame_format,
+              width: tileWidth,
+              quality: input.quality,
+            });
+            return { buffer, t_s: t, hash: undefined };
+          } catch (error) {
+            lastError = error;
+          }
         }
+        throw new MediaIntelError("frame_extraction_failed", `Failed to extract frame at ${t_s}s`, lastError instanceof Error ? lastError.message : String(lastError));
       }),
     );
     frameDataList.push(...results);

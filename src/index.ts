@@ -18,3 +18,5 @@ export { mediaSearch, mediaSearchInput, mediaSearchOutput, registerMediaSearch }
 export { probeImage, probeImageInput, probeImageOutput, registerProbeImage } from "./tools/probe-image.js";
 export { indexDocument, searchIndex, indexStats, closeIndex, type IndexDocument, type SearchHit } from "./search.js";
 export { startHttp, type HttpOptions } from "./http.js";
+export { analyzeMoment, analyzeMomentInput, analyzeMomentOutput, registerAnalyzeMoment } from "./tools/analyze-moment.js";
+export { understandMedia, understandMediaInput, understandMediaOutput, registerUnderstandMedia } from "./tools/understand-media.js";

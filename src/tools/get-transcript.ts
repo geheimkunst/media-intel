@@ -45,6 +45,10 @@ export const getTranscriptInput = z.object({
     .default("auto")
     .describe("Transcription backend. 'auto' tries free options first (embedded > sidecar > whisper.cpp), then paid APIs if keys are set."),
   word_timestamps: z.boolean().default(false).describe("Include word-level timestamps (whisper.cpp only)."),
+  allow_paid: z
+    .boolean()
+    .default(false)
+    .describe("Let backend=auto fall through to paid APIs (OpenAI/Groq) when free backends fail. Default false: a configured key alone never triggers a paid call. Explicit backend=openai|groq implies consent."),
   subtitle_stream_index: z.number().int().nonnegative().optional().describe("Explicit subtitle stream index (embedded only)."),
   max_chars: z.number().int().positive().optional().describe("Max characters in returned transcript text; default from config."),
 });
@@ -91,7 +95,7 @@ interface TranscriptionResult {
 /**
  * Main transcription tool: tries multiple backends in order of speed/cost.
  */
-export async function getTranscript(config: Config, input: GetTranscriptInput): Promise<GetTranscriptResult> {
+async function getTranscriptInner(config: Config, input: GetTranscriptInput): Promise<GetTranscriptResult> {
   const resolved = await resolveSource(input.source);
 
   // Probe for duration and audio presence
@@ -150,8 +154,16 @@ export async function getTranscript(config: Config, input: GetTranscriptInput): 
     }
   }
 
-  // Paid backends only if keys are set and cost is acceptable
-  if (input.backend === "auto" || input.backend === "openai") {
+  // Paid backends only with consent (allow_paid or explicit backend), a key, and an acceptable cost estimate.
+  const paidAllowed = input.backend !== "auto" || input.allow_paid;
+  if (input.backend === "auto" && !paidAllowed && (process.env.OPENAI_API_KEY || process.env.GROQ_API_KEY)) {
+    throw new MediaIntelError(
+      "no_free_transcription",
+      "No embedded or sidecar subtitles and local whisper.cpp is unavailable or failed",
+      "Paid backends are configured but need consent: call again with allow_paid=true (cost preflight still applies) or backend=openai|groq, or install whisper-cli plus a model (run doctor).",
+    );
+  }
+  if ((input.backend === "auto" && paidAllowed) || input.backend === "openai") {
     if (process.env.OPENAI_API_KEY) {
       const cost = estimateCost("openai", end_s - start_s);
       if (cost.estimated_cost_usd <= config.maxCostUsd) {
@@ -173,7 +185,7 @@ export async function getTranscript(config: Config, input: GetTranscriptInput): 
     }
   }
 
-  if (input.backend === "auto" || input.backend === "groq") {
+  if ((input.backend === "auto" && paidAllowed) || input.backend === "groq") {
     if (process.env.GROQ_API_KEY) {
       const cost = estimateCost("groq", end_s - start_s);
       if (cost.estimated_cost_usd <= config.maxCostUsd) {
@@ -378,4 +390,26 @@ export function registerGetTranscript(server: McpServer, config: Config): void {
       }
     },
   );
+}
+
+import { indexDocument } from "../search.js";
+
+/** Public entry: run the chain, then index the segments for media_search (best effort). */
+export async function getTranscript(config: Config, input: GetTranscriptInput): Promise<GetTranscriptResult> {
+  const result = await getTranscriptInner(config, input);
+  try {
+    const resolved = await resolveSource(input.source);
+    const entry = await cacheEntry(config, resolved);
+    await indexDocument(config, {
+      hash: entry.hash,
+      origin: resolved.location,
+      kind: "transcript",
+      language: result.language,
+      backend: result.transcription_source,
+      segments: result.segments,
+    });
+  } catch (error) {
+    result.warnings.push(`search index not updated: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  return result;
 }

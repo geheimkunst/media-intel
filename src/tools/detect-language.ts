@@ -19,7 +19,7 @@ export const detectLanguageInput = z.object({
 export const detectLanguageOutput = z.object({
   source: z.string(),
   language: z.string().describe("Detected ISO-639-1 language code (e.g., 'de', 'en')."),
-  confidence: z.number().nonnegative().describe("Confidence value (0.0-1.0) if available."),
+  confidence: z.number().nonnegative().optional().describe("Confidence 0..1 when whisper reports it; absent when only the model's language field was available."),
   backend: z.literal("whisper_cpp"),
   ...commonOutput,
 });
@@ -56,7 +56,7 @@ export async function detectLanguage(config: Config, input: DetectLanguageInput)
     return {
       source: input.source,
       language: result.language,
-      confidence: result.language_confidence ?? 0,
+      ...(result.language_confidence !== undefined ? { confidence: result.language_confidence } : {}),
       backend: "whisper_cpp",
       warnings: [],
       suggested_next: ["get_transcript"],
@@ -74,7 +74,7 @@ export async function detectLanguage(config: Config, input: DetectLanguageInput)
 }
 
 export function summarizeDetectLanguage(result: DetectLanguageResult): string {
-  return `Detected language: ${result.language} (confidence: ${(result.confidence * 100).toFixed(0)}%).`;
+  return `Detected language: ${result.language}${result.confidence !== undefined ? ` (confidence ${(result.confidence * 100).toFixed(0)}%)` : ""}.`;
 }
 
 import type { McpServer } from "@modelcontextprotocol/server";

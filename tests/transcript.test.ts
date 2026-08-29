@@ -140,7 +140,7 @@ describe("cost estimation", () => {
 });
 
 describe("MCP round trip for get_transcript and detect_language", () => {
-  it.skip("lists get_transcript tool", async () => {
+  it("lists get_transcript tool", async () => {
     const server = createServer(config);
     const client = new Client({ name: "test-client", version: "1.0" });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
@@ -153,7 +153,7 @@ describe("MCP round trip for get_transcript and detect_language", () => {
     expect(tool?.description).toContain("transcript");
   });
 
-  it.skip("lists detect_language tool", async () => {
+  it("lists detect_language tool", async () => {
     const server = createServer(config);
     const client = new Client({ name: "test-client", version: "1.0" });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();

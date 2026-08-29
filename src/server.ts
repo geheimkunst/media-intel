@@ -3,6 +3,8 @@ import { loadConfig, type Config } from "./config.js";
 import { toolErrorResult } from "./errors.js";
 import { registerPrompts } from "./prompts.js";
 import { registerAnalyzeAudio } from "./tools/analyze-audio.js";
+import { registerAnalyzeMoment } from "./tools/analyze-moment.js";
+import { registerUnderstandMedia } from "./tools/understand-media.js";
 import { registerDiffFrames } from "./tools/diff-frames.js";
 import { doctor, doctorInput, doctorOutput, summarizeDoctor } from "./tools/doctor.js";
 import { registerGetScenes } from "./tools/get-scenes.js";
@@ -84,6 +86,9 @@ export function createServer(config: Config = loadConfig()): McpServer {
   registerFetchMedia(server, config);
   registerGetEngagement(server, config);
 
+  // Stage 2 (orchestration)
+  registerUnderstandMedia(server, config);
+
   // Stage 3 (extraction)
   registerGetTranscript(server, config);
   registerDetectLanguage(server, config);
@@ -95,6 +100,7 @@ export function createServer(config: Config = loadConfig()): McpServer {
   registerGetScenes(server, config);
   registerAnalyzeAudio(server, config);
   registerDiffFrames(server, config);
+  registerAnalyzeMoment(server, config);
 
   // Stage 4 (search over the cache)
   registerMediaSearch(server, config);
