@@ -1,0 +1,18 @@
+src/backends/ocr/tesseract.ts
+  h_b5c0fbb816f657 1-193
+src/tools/extract-text.ts
+  h_b5c0fbb816f657 1-245
+tests/extract-text.test.ts
+  h_b5c0fbb816f657 1-356
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "355a8d3d5a39df840d4d7ca304d6d01c1e8a6919",
+  "prompts": {},
+  "humans": {
+    "h_b5c0fbb816f657": {
+      "author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
