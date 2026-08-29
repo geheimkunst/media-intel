@@ -1,0 +1,31 @@
+src/tools/extract-text.ts
+  s_dd83aa1d90e0ec::t_acff41b174a94c 204
+  s_dd83aa1d90e0ec::t_e89d0ca92e20b8 5
+  s_dd83aa1d90e0ec::t_1af7d07a0ce91a 114-116
+  s_dd83aa1d90e0ec::t_d526adcdd730b3 233-238,240-241,243
+  s_dd83aa1d90e0ec::t_8e87a46a59ea80 44
+tests/extract-text.test.ts
+  s_dd83aa1d90e0ec::t_2cf7e9313b460f 2
+  s_dd83aa1d90e0ec::t_c2619820e328aa 215-231,234-261
+  s_dd83aa1d90e0ec::t_a75257cebeec2c 96-101,111-112
+  s_dd83aa1d90e0ec::t_cf6ddc8934ca01 232-233
+src/server.ts
+  s_dd83aa1d90e0ec::t_dc407837d9e9d5 85-91
+  s_dd83aa1d90e0ec::t_64e5f13c528b46 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "6bf664df29e6a4ba35b00a39ce2ea3957c06c5bb",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
