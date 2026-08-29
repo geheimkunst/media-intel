@@ -1,0 +1,41 @@
+src/server.ts
+  s_dd83aa1d90e0ec::t_5444523be548b4 76-77,83-84
+  s_dd83aa1d90e0ec::t_23eab1817cf243 10-11
+  s_dd83aa1d90e0ec::t_336627687809cf 85
+src/tools/probe-image.ts
+  s_dd83aa1d90e0ec::t_f508aaff174930 4-11
+  s_dd83aa1d90e0ec::t_381aa93ff3da28 149
+  s_dd83aa1d90e0ec::t_cb3d371bc99fef 1-3,12-148,150-225
+package.json
+  s_dd83aa1d90e0ec::t_866df3dae78746 29,37-38
+src/http.ts
+  s_dd83aa1d90e0ec::t_664378dcc7ad10 1-82
+src/cli.ts
+  s_dd83aa1d90e0ec::t_18fb53b3898826 3-5,8-27,29-31,35-64
+tests/search-image-http.test.ts
+  s_dd83aa1d90e0ec::t_e08b2d8869174e 1-127
+src/search.ts
+  s_dd83aa1d90e0ec::t_897cc64e88d12c 1-186
+src/index.ts
+  s_dd83aa1d90e0ec::t_b209feec4b8503 17-20
+src/tools/media-search.ts
+  s_dd83aa1d90e0ec::t_e1ce39fdaed934 1-85
+package-lock.json
+  s_dd83aa1d90e0ec::t_2006e713e49b9d 12,20-21,501-512,1051-1071,1423-1428,2197-2206,2942-2953,3042-3056,3359-3371
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "1722b56aa37a3d8727b17d9c0329641ea3c8a6b2",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
