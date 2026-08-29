@@ -120,6 +120,23 @@ export async function getVideoGrids(config: Config, input: GetVideoGridsInput): 
   const rawTimestamps = input.timestamps ?? sampleTimestamps(windowed.start_s, paginatedEnd, framesInWindow);
   const timestamps = rawTimestamps.slice(0, framesInWindow);
 
+  // Compute tile dimensions based on aspect ratio.
+  // For landscape (aspectRatio >= 1): grid's long edge = tileWidth * cols, so tileWidth = grid_long_edge / cols.
+  // For portrait (aspectRatio < 1): grid's long edge = tileHeight * rows, so tileHeight = grid_long_edge / rows.
+  const cols = Math.sqrt(input.cells);
+  const rows = Math.sqrt(input.cells);
+  let tileWidth: number;
+  let tileHeight: number;
+  if (aspectRatio >= 1) {
+    // Landscape: compute width-first.
+    tileWidth = Math.floor(input.grid_long_edge / cols);
+    tileHeight = Math.floor(tileWidth / aspectRatio);
+  } else {
+    // Portrait: compute height-first.
+    tileHeight = Math.floor(input.grid_long_edge / rows);
+    tileWidth = Math.floor(tileHeight * aspectRatio);
+  }
+
   // Extract frames concurrently (4 at a time).
   const frameDataList: FrameData[] = [];
   const batchSize = 4;
@@ -130,7 +147,7 @@ export async function getVideoGrids(config: Config, input: GetVideoGridsInput): 
         try {
           const buffer = await extractFrame(config, resolved.location, t_s, {
             format: input.frame_format,
-            width: Math.floor(input.grid_long_edge / Math.sqrt(input.cells)),
+            width: tileWidth,
             quality: input.quality,
           });
           return { buffer, t_s, hash: undefined };
@@ -141,6 +158,9 @@ export async function getVideoGrids(config: Config, input: GetVideoGridsInput): 
     );
     frameDataList.push(...results);
   }
+
+  // Save frame count before padding.
+  const extractedFrameCount = frameDataList.length;
 
   // Deduplication with pHash.
   let dedupCount = 0;
@@ -195,10 +215,72 @@ export async function getVideoGrids(config: Config, input: GetVideoGridsInput): 
       cellData.push(cell);
     }
 
-    // If we have fewer kept frames than cells, fill with black and mark empty.
-    if (keptIndices.size < input.cells) {
-      const tileWidth = Math.floor(input.grid_long_edge / Math.sqrt(input.cells));
-      const tileHeight = Math.floor(tileWidth / aspectRatio);
+    // If we have fewer kept frames than cells, try one round of re-sampling from largest gaps.
+    if (keptIndices.size < input.cells && keptIndices.size > 0) {
+      const sortedKeptIndices = Array.from(keptIndices).sort((a, b) => a - b);
+      const gaps: { start_idx: number; end_idx: number; gap_size: number }[] = [];
+
+      // Identify gaps between kept frames.
+      for (let i = 0; i < sortedKeptIndices.length - 1; i++) {
+        const start = sortedKeptIndices[i];
+        const end = sortedKeptIndices[i + 1];
+        if (start !== undefined && end !== undefined) {
+          const gap = end - start - 1;
+          if (gap > 0) {
+            gaps.push({ start_idx: start, end_idx: end, gap_size: gap });
+          }
+        }
+      }
+
+      // Also consider gap before first and after last kept frame.
+      const firstKept = sortedKeptIndices[0];
+      const lastKept = sortedKeptIndices[sortedKeptIndices.length - 1];
+      if (firstKept !== undefined && firstKept !== 0) {
+        gaps.push({ start_idx: -1, end_idx: firstKept, gap_size: firstKept });
+      }
+      if (lastKept !== undefined && lastKept !== frameDataList.length - 1) {
+        gaps.push({
+          start_idx: lastKept,
+          end_idx: frameDataList.length,
+          gap_size: frameDataList.length - lastKept - 1,
+        });
+      }
+
+      // Sort gaps by size (largest first) and re-sample from largest gaps.
+      gaps.sort((a, b) => b.gap_size - a.gap_size);
+      let resampled = 0;
+      for (const gap of gaps) {
+        if (frameDataList.length >= input.cells || resampled >= 1) break; // At most one replacement round.
+        // Re-sample one frame from this gap.
+        const frameAfterGap = frameDataList[gap.start_idx + 1];
+        const frameAtEnd = frameDataList[gap.end_idx];
+        const startT = frameAfterGap?.t_s ?? windowed.start_s;
+        const endT = frameAtEnd?.t_s ?? windowed.end_s;
+        const midT = (startT + endT) / 2;
+        if (midT >= windowed.start_s && midT <= windowed.end_s) {
+          try {
+            const buffer = await extractFrame(config, resolved.location, midT, {
+              format: input.frame_format,
+              width: tileWidth,
+              quality: input.quality,
+            });
+            frameDataList.push({ buffer, t_s: midT, hash: undefined });
+            cellData.push({
+              cell_index: frameDataList.length - 1,
+              t_s: round3(midT),
+              duplicate_of: undefined,
+              empty: undefined,
+            });
+            resampled++;
+          } catch {
+            // If re-sampling fails, continue to black tiles.
+          }
+        }
+      }
+    }
+
+    // If still fewer frames than cells, fill trailing cells with black and mark empty.
+    if (frameDataList.length < input.cells) {
       const blackTile = await sharp({ create: { width: tileWidth, height: tileHeight, channels: 3, background: "#000000" } }).toBuffer();
       for (let i = frameDataList.length; i < input.cells; i++) {
         frameDataList.push({ buffer: blackTile, t_s: 0, hash: undefined });
@@ -225,8 +307,6 @@ export async function getVideoGrids(config: Config, input: GetVideoGridsInput): 
       cellData.push(cell);
     }
     if (frameDataList.length < input.cells) {
-      const tileWidth = Math.floor(input.grid_long_edge / Math.sqrt(input.cells));
-      const tileHeight = Math.floor(tileWidth / aspectRatio);
       const blackTile = await sharp({ create: { width: tileWidth, height: tileHeight, channels: 3, background: "#000000" } }).toBuffer();
       for (let i = frameDataList.length; i < input.cells; i++) {
         frameDataList.push({ buffer: blackTile, t_s: 0, hash: undefined });
@@ -241,11 +321,7 @@ export async function getVideoGrids(config: Config, input: GetVideoGridsInput): 
     }
   }
 
-  // Montage with sharp composite.
-  const tileWidth = Math.floor(input.grid_long_edge / Math.sqrt(input.cells));
-  const cols = Math.sqrt(input.cells);
-  const rows = Math.sqrt(input.cells);
-  const tileHeight = Math.floor(tileWidth / aspectRatio);
+  // Montage with sharp composite (tileWidth and tileHeight already computed above).
 
   const grids: GridSpec[] = [];
   const manifest: ManifestEntry[] = [];
@@ -340,7 +416,7 @@ export async function getVideoGrids(config: Config, input: GetVideoGridsInput): 
     source: input.source,
     grids,
     manifest,
-    frames_sampled: frameDataList.length,
+    frames_sampled: extractedFrameCount,
     frames_deduplicated: dedupCount,
     total_bytes: totalBytes,
     pagination: {

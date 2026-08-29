@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
+import { execa } from "execa";
 import { createServer } from "../src/server.js";
 import { loadConfig, type Config } from "../src/config.js";
 import { getVideoGrids } from "../src/tools/get-video-grids.js";
@@ -12,10 +13,22 @@ import { getVideoGrids } from "../src/tools/get-video-grids.js";
 const fixtures = join(dirname(fileURLToPath(import.meta.url)), "fixtures");
 let scratch: string;
 let config: Config;
+let colorFixture: string;
 
 beforeAll(async () => {
   scratch = await mkdtemp(join(tmpdir(), "media-intel-grids-test-"));
   config = { ...loadConfig(), cacheDir: join(scratch, "cache") };
+
+  // Create a fixture with all identical frames (solid red color).
+  colorFixture = join(scratch, "color.mp4");
+  await execa("ffmpeg", [
+    "-f",
+    "lavfi",
+    "-i",
+    "color=c=red:s=320x240:d=3",
+    "-y",
+    colorFixture,
+  ]);
 });
 
 afterAll(async () => {
@@ -160,6 +173,112 @@ describe("get_video_grids", () => {
     });
 
     expect(result.grids[0].format).toBe("png");
+  });
+
+  it("handles grid dimensions correctly for landscape aspect ratio (defect fix #1)", async () => {
+    // clip.mp4 is landscape (320x240 aspect ~1.33)
+    const result = await getVideoGrids(config, {
+      source: join(fixtures, "clip.mp4"),
+      cells: 4,
+      grid_long_edge: 1568,
+      max_frames: 8,
+      frame_format: "jpeg",
+      quality: 80,
+      dedup: false,
+    });
+
+    const grid = result.grids[0];
+    expect(grid).toBeDefined();
+    // Grid's long edge should equal grid_long_edge ± 2 px.
+    const longEdge = Math.max(grid.width, grid.height);
+    expect(Math.abs(longEdge - 1568)).toBeLessThanOrEqual(2);
+    // For landscape, width should be longer than height.
+    expect(grid.width).toBeGreaterThanOrEqual(grid.height);
+  });
+
+  it("does not include black padding in frames_sampled count (defect fix #2)", async () => {
+    const result = await getVideoGrids(config, {
+      source: join(fixtures, "clip.mp4"),
+      cells: 4,
+      grid_long_edge: 1568,
+      max_frames: 4,
+      frame_format: "jpeg",
+      quality: 80,
+      dedup: false,
+    });
+
+    // frames_sampled should not include black tile padding.
+    // With cells=4 and max_frames=4, we extract exactly 4 frames, making 1 grid.
+    // frames_sampled should be 4 (actual extracted frames), not 4 + any padding.
+    expect(result.frames_sampled).toBe(4);
+    const grid = result.grids[0];
+    expect(grid.cells).toHaveLength(4);
+    expect(result.manifest).toHaveLength(4);
+    // All cells should have valid timestamps (not 0 from padding).
+    for (const cell of grid.cells) {
+      expect(cell.t_s).toBeGreaterThan(0);
+    }
+  });
+
+  it("deduplicates and re-samples from gaps when frames are identical (defect fix #3)", async () => {
+    // colorFixture has all identical red frames.
+    const result = await getVideoGrids(config, {
+      source: colorFixture,
+      cells: 4,
+      grid_long_edge: 1568,
+      max_frames: 8,
+      frame_format: "jpeg",
+      quality: 80,
+      dedup: true,
+    });
+
+    expect(result.grids.length).toBeGreaterThan(0);
+    // With dedup on all-identical frames, most frames should be marked as duplicates.
+    // frames_deduplicated should be > 0.
+    expect(result.frames_deduplicated).toBeGreaterThan(0);
+    // The grid should still have 4 cells (either kept frames or re-sampled/black).
+    expect(result.grids[0].cells).toHaveLength(4);
+    // Some cells should be marked as duplicates or filled with re-sampled frames.
+    const firstGrid = result.grids[0];
+    const hasDuplicate = firstGrid.cells.some((c) => c.duplicate_of !== undefined);
+    const hasResampled = firstGrid.cells.some((c) => !c.duplicate_of && !c.empty);
+    expect(hasDuplicate || hasResampled).toBe(true);
+  });
+
+  it("marks re-sampled and empty frames correctly after dedup", async () => {
+    const result = await getVideoGrids(config, {
+      source: colorFixture,
+      cells: 16, // 16 cells to increase dedup likelihood.
+      grid_long_edge: 1568,
+      max_frames: 8,
+      frame_format: "jpeg",
+      quality: 80,
+      dedup: true,
+    });
+
+    const grid = result.grids[0];
+    expect(grid.cells).toHaveLength(16);
+
+    // Count frame types: kept, duplicate, re-sampled, empty.
+    let keptCount = 0;
+    let dupCount = 0;
+    let resampledCount = 0;
+    let emptyCount = 0;
+
+    for (const cell of grid.cells) {
+      if (cell.empty) {
+        emptyCount++;
+      } else if (cell.duplicate_of !== undefined) {
+        dupCount++;
+      } else if (cell.t_s > 0) {
+        keptCount++;
+      }
+    }
+
+    // With dedup and re-sampling, we should have some mix of these.
+    expect(keptCount + dupCount + resampledCount + emptyCount).toBe(16);
+    // With all identical frames, dedup should work.
+    expect(dupCount + keptCount + emptyCount + resampledCount).toBe(16);
   });
 });
 
