@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { loadConfig, type Config } from "../src/config.js";
 import { MediaIntelError } from "../src/errors.js";
 import {
+  classifyElevenLabsError,
   ELEVENLABS_STT_URL,
   toIso6391,
   transcribeWithElevenLabs,
@@ -200,10 +201,22 @@ describe("transcribeWithElevenLabs (fetch mocked at the boundary)", () => {
     );
     const err = await transcribeWithElevenLabs(config, tone, {}).catch((e: unknown) => e);
     expect(err).toBeInstanceOf(MediaIntelError);
-    expect((err as MediaIntelError).code).toBe("elevenlabs_api_error");
+    expect((err as MediaIntelError).code).toBe("elevenlabs_invalid_api_key");
     expect((err as MediaIntelError).message).toContain("401");
     expect((err as MediaIntelError).message).not.toContain("secret-key-xyz-1234");
     expect((err as MediaIntelError).hint).toContain("ELEVENLABS_API_KEY");
+  });
+
+  it("maps quota_exceeded (seen live: 401 with detail.status) to its own code and hint", async () => {
+    process.env.ELEVENLABS_API_KEY = "test-key-1234567890";
+    const body = { detail: { type: "invalid_request", code: "quota_exceeded", message: "This request exceeds your quota of 40000. You have 0 credits remaining.", status: "quota_exceeded" } };
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(body), { status: 401 })));
+    const err = (await transcribeWithElevenLabs(config, tone, {}).catch((e: unknown) => e)) as MediaIntelError;
+    expect(err.code).toBe("elevenlabs_quota_exceeded");
+    expect(err.message).toContain("0 credits remaining");
+    expect(err.hint).toContain("credits");
+    expect(classifyElevenLabsError(500, "<html>gateway</html>").code).toBe("elevenlabs_api_error");
+    expect(classifyElevenLabsError(422, JSON.stringify({ detail: "model_id invalid" })).message).toContain("model_id invalid");
   });
 
   it("reports elevenlabs_empty when the API returns no words", async () => {

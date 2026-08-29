@@ -172,6 +172,44 @@ export function toIso6391(code: string): string {
   return ISO_639_3_TO_1[c] ?? c;
 }
 
+/** Error bodies look like {"detail":{"status":"quota_exceeded","message":"..."}} (seen live on 29-08-2026). */
+interface ElevenLabsErrorBody {
+  detail?: { status?: string; code?: string; message?: string } | string;
+}
+
+const KNOWN_ERROR_STATUS: Record<string, string> = {
+  quota_exceeded: "The ElevenLabs plan has no credits left for this request: top up or wait for the renewal, or use whisper.cpp or openai.",
+  invalid_api_key: "The API key was rejected: check ELEVENLABS_API_KEY.",
+  missing_permissions: "The key lacks the speech-to-text scope: edit the key's permissions in the ElevenLabs workspace settings.",
+  too_many_concurrent_requests: "Concurrency limit reached: retry later or narrow the window.",
+  rate_limit_exceeded: "Rate limit reached: retry later or narrow the window.",
+  detected_unusual_activity: "ElevenLabs flagged the account (free tier abuse check): contact their support or use another backend.",
+  free_users_not_allowed: "This feature needs a paid ElevenLabs plan.",
+};
+
+/** Map an error response to a stable code, a redacted message and a hint. */
+export function classifyElevenLabsError(status: number, bodyText: string): { code: string; message: string; hint: string } {
+  let detailStatus: string | undefined;
+  let detailMessage: string | undefined;
+  try {
+    const parsed = JSON.parse(bodyText) as ElevenLabsErrorBody;
+    if (parsed.detail && typeof parsed.detail === "object") {
+      detailStatus = parsed.detail.status ?? parsed.detail.code;
+      detailMessage = parsed.detail.message;
+    } else if (typeof parsed.detail === "string") {
+      detailMessage = parsed.detail;
+    }
+  } catch {
+    // not JSON, keep the raw body
+  }
+  const known = detailStatus !== undefined && detailStatus in KNOWN_ERROR_STATUS;
+  const code = known ? `elevenlabs_${detailStatus}` : "elevenlabs_api_error";
+  const hint = known ? KNOWN_ERROR_STATUS[detailStatus as string]! : hintForStatus(status);
+  const body = redactSecrets(detailMessage ?? bodyText).slice(0, 500);
+  const message = `ElevenLabs API error ${status}${detailStatus ? ` (${detailStatus})` : ""}: ${body}`;
+  return { code, message, hint };
+}
+
 function hintForStatus(status: number): string {
   switch (status) {
     case 401:
@@ -252,11 +290,8 @@ export async function transcribeWithElevenLabs(config: Config, location: string,
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => "");
-      throw new MediaIntelError(
-        "elevenlabs_api_error",
-        `ElevenLabs API error ${response.status}: ${redactSecrets(errorText).slice(0, 500)}`,
-        hintForStatus(response.status),
-      );
+      const classified = classifyElevenLabsError(response.status, errorText);
+      throw new MediaIntelError(classified.code, classified.message, classified.hint);
     }
 
     const data = (await response.json()) as ElevenLabsResponse;
