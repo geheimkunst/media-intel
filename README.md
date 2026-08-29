@@ -143,6 +143,10 @@ Tests run offline: fixtures are synthesized with ffmpeg and sharp, external bina
 
 Design notes, decisions (A1 to A20), the capability map and the roadmap live in `docs/`. Deep dives into the reference projects and the tool landscape are in `docs/research/`.
 
+## Benchmark
+
+`docs/benchmarks/2026-08-29-stufe-1.md` compares media-intel with dymoo/media-understanding, guimatheus92/mcp-video-analyzer and the claude-video skill in isolated Docker containers on one host, offline, against fixtures with known ground truth (WER, CER, cut precision/recall, tokens per frame, robustness). Reproduce with `node bench/make-fixtures.mjs && bash bench/run-vps.sh && node bench/report.mjs bench/results/<run>.json`.
+
 ## License
 
 MIT
