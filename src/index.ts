@@ -9,3 +9,8 @@ export * from "./cache.js";
 export * from "./contracts.js";
 export { probeMedia, probeMediaInput, probeMediaOutput, type ProbeMediaInput, type ProbeMediaResult } from "./tools/probe-media.js";
 export { doctor, doctorInput, doctorOutput, whisperModelPath, vadModelPath, type DoctorResult } from "./tools/doctor.js";
+export { getScenes, getScenesInput, getScenesOutput, registerGetScenes } from "./tools/get-scenes.js";
+export { analyzeAudio as analyzeAudioTool, analyzeAudioInput, analyzeAudioOutput, registerAnalyzeAudio } from "./tools/analyze-audio.js";
+export { diffFrames, diffFramesInput, diffFramesOutput, registerDiffFrames } from "./tools/diff-frames.js";
+export { listCached, listCachedInput, listCachedOutput, registerListCached } from "./tools/list-cached.js";
+export { registerPrompts } from "./prompts.js";

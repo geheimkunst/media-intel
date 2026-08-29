@@ -1,22 +1,28 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { loadConfig, type Config } from "./config.js";
 import { toolErrorResult } from "./errors.js";
+import { registerPrompts } from "./prompts.js";
+import { registerAnalyzeAudio } from "./tools/analyze-audio.js";
+import { registerDiffFrames } from "./tools/diff-frames.js";
 import { doctor, doctorInput, doctorOutput, summarizeDoctor } from "./tools/doctor.js";
+import { registerGetScenes } from "./tools/get-scenes.js";
+import { registerListCached } from "./tools/list-cached.js";
 import { probeMedia, probeMediaInput, probeMediaOutput, summarizeProbe } from "./tools/probe-media.js";
 
 export const SERVER_NAME = "media-intel";
-export const SERVER_VERSION = "0.1.0";
+export const SERVER_VERSION = "0.2.0";
 
 /**
  * Build a fully configured server. Transport is chosen by the caller
  * (stdio in the CLI, in-memory in tests, Streamable HTTP behind a bridge).
  *
- * Adding a tool: create src/tools/<name>.ts with xInput, xOutput, x() and
- * summarizeX(), then register it below following the same shape.
+ * Adding a tool: create src/tools/<name>.ts with xInput, xOutput, x(),
+ * summarizeX() and registerX(server, config), then call registerX below.
  */
 export function createServer(config: Config = loadConfig()): McpServer {
   const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
 
+  // Stage 0
   server.registerTool(
     "doctor",
     {
@@ -39,7 +45,9 @@ export function createServer(config: Config = loadConfig()): McpServer {
       }
     },
   );
+  registerListCached(server, config);
 
+  // Stage 1
   server.registerTool(
     "probe_media",
     {
@@ -62,6 +70,14 @@ export function createServer(config: Config = loadConfig()): McpServer {
       }
     },
   );
+
+  // Stage 3 (analysis)
+  registerGetScenes(server, config);
+  registerAnalyzeAudio(server, config);
+  registerDiffFrames(server, config);
+
+  // Prompts
+  registerPrompts(server);
 
   return server;
 }
