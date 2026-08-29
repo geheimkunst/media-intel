@@ -30,7 +30,8 @@
 - [x] Connector via `mcp-new`: Port 3016, Resource `https://media-intel.mcp.geheimkunst.eu`, Issuer `auth-media-intel.mcp.geheimkunst.eu`, mcp-check 6/6 grün, bestehende Connectoren regressionsfrei
 - [x] Claude Code (Mac): `media-intel` im User-Scope registriert, Status Connected; seit 29-08 abends über `/Users/yunus/.local/bin/media-intel-launcher` (Keys per `op read`, fail-soft)
 - [x] VPS: Bridge startet über `~/.local/bin/media-intel-mcp-launcher` (liest `op.env`, Selbsttest `--check`)
-- [ ] **Yunus:** `/home/yunus/media-intel-mcp/op.env` (OP_CONNECT_HOST + OP_CONNECT_TOKEN, 0600) anlegen, dann `sudo systemctl restart media-intel-mcp`; ElevenLabs-Konto hat 0 Credits (Stand 29-08), vorher aufladen
+- [x] VPS: `op.env` angelegt (29-08 abends, Yunus), Launcher lädt ELEVENLABS_API_KEY und OPENAI_API_KEY
+- [ ] **Yunus:** ElevenLabs-Konto aufladen (0 Credits am 29-08, `quota_exceeded`); danach ist `backend=elevenlabs` sofort nutzbar
 - [ ] **Yunus:** Google Console → OAuth-Client → Redirect-URI `https://auth-media-intel.mcp.geheimkunst.eu/auth/google/callback` ergänzen
 - [ ] **Yunus:** claude.ai → Connectors → `https://media-intel.mcp.geheimkunst.eu` hinzufügen
 - [ ] Hermes: `~/.hermes/config.yaml` auf media-intel umstellen (stdio, Launcher mit `op read` für Keys, sobald bezahlte Backends gewünscht)
