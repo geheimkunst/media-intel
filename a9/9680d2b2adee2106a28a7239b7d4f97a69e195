@@ -1,0 +1,25 @@
+bench/run.mjs
+  s_dd83aa1d90e0ec::t_f899259ee23fa3 7,12,28,33,55-63,68,73,81-116,142-156,164,168,173-182,184-193,195-199,206,211-255,260,263,268-269
+bench/report.mjs
+  s_dd83aa1d90e0ec::t_59f82b4ded374a 11,16-17,28-30,32-37,41-42,46-48
+bench/candidates.mjs
+  s_dd83aa1d90e0ec::t_87e91521184224 4-9,23,25,27,39-54,58,84,87-88,91-93,95,99,105-121,126,129-131,133-138,143,147-148,150,152-156,158-173,175,183
+bench/run-vps.sh
+  s_dd83aa1d90e0ec::t_f546e631702d82 2,26,28,35-44,47,53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "a99680d2b2adee2106a28a7239b7d4f97a69e195",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "unknown"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
