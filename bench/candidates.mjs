@@ -96,7 +96,7 @@ const mediaUnderstanding = {
     transcript: () => ({ na: "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)" }),
     frames: (src, t) => ({ tool: "get_frames", args: { file_path: src, timestamps: t.timestamps, max_total_chars: 600000 } }),
     overview: (src) => ({ tool: "get_video_grids", args: { file_path: src, max_total_chars: 600000 } }),
-    scenes: (src) => ({ tool: "get_video_grids", args: { file_path: src, sampling_strategy: "scene", scene_threshold: 0.3, max_grids: 6, max_total_chars: 600000 } }),
+    scenes: (src) => ({ tool: "get_video_grids", args: { file_path: src, sampling_strategy: "scene", scene_threshold: 0.3, seconds_per_frame: 0.5, max_total_chars: 600000 } }),
   },
   parse: {
     transcriptText: (r) => {
