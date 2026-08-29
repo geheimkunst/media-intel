@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { loadConfig, type Config } from "./config.js";
 import { toolErrorResult } from "./errors.js";
+import { frameUntrusted } from "./contracts.js";
 import { doctor, doctorInput, doctorOutput, summarizeDoctor } from "./tools/doctor.js";
 import { probeMedia, probeMediaInput, probeMediaOutput, summarizeProbe } from "./tools/probe-media.js";
 import { extractText, extractTextInput, extractTextOutput, summarizeExtractText } from "./tools/extract-text.js";
@@ -81,7 +82,13 @@ export function createServer(config: Config = loadConfig()): McpServer {
     async (args) => {
       try {
         const result = await extractText(config, args);
-        return { content: [{ type: "text", text: summarizeExtractText(result) }], structuredContent: result };
+        const headerLine = `Extracted text from ${result.results.length} image(s) in language: ${result.language}`;
+        const contentLines = [headerLine];
+        for (const r of result.results) {
+          const label = `OCR ${r.t_s !== undefined ? `t=${r.t_s}s` : "image"}`;
+          contentLines.push(frameUntrusted(label, r.text));
+        }
+        return { content: [{ type: "text", text: contentLines.join("\n") }], structuredContent: result };
       } catch (error) {
         return toolErrorResult(error);
       }

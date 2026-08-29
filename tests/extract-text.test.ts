@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -93,7 +93,12 @@ describe("extract-text tool", () => {
     expect(firstResult).toMatchObject({
       image_width: expect.any(Number),
       image_height: expect.any(Number),
-      text: expect.any(String),
+      text: expect.objectContaining({
+        text: expect.any(String),
+        source_trust: "untrusted",
+        truncated: expect.any(Boolean),
+        chars: expect.any(Number),
+      }),
       lines: expect.any(Array),
       word_count: expect.any(Number),
       mean_confidence: expect.any(Number),
@@ -103,8 +108,8 @@ describe("extract-text tool", () => {
     expect(firstResult.t_s).toBeUndefined();
 
     // Check that text contains expected strings (Hallo, ERROR).
-    expect(firstResult.text.toLowerCase()).toContain("hallo");
-    expect(firstResult.text.toUpperCase()).toContain("ERROR");
+    expect(firstResult.text.text.toLowerCase()).toContain("hallo");
+    expect(firstResult.text.text.toUpperCase()).toContain("ERROR");
 
     // Validate output schema.
     const validated = extractTextOutput.parse(result);
@@ -205,6 +210,53 @@ describe("extract-text tool", () => {
     if (result.results.some((r) => r.mean_confidence < 95)) {
       expect(result.warnings.length).toBeGreaterThan(0);
     }
+  });
+
+  it("applies region crop to images and affects results", async () => {
+    if (!tesseractAvailable) {
+      expect(true).toBe(true);
+      return;
+    }
+
+    // Extract full image.
+    const fullResult = await extractText(config, {
+      source: testImagePath,
+      language: "eng",
+    });
+
+    expect(fullResult.results.length).toBe(1);
+    const fullText = fullResult.results[0]!.text.text;
+    const fullWordCount = fullResult.results[0]!.word_count;
+
+    // Extract only the top half (first line).
+    const imageBuffer = await readFile(testImagePath);
+    const metadata = await sharp(imageBuffer).metadata();
+    const cropRegion = {
+      x: 0,
+      y: 0,
+      width: metadata.width ?? 400,
+      height: Math.floor((metadata.height ?? 200) / 2),
+    };
+
+    const croppedResult = await extractText(config, {
+      source: testImagePath,
+      language: "eng",
+      region: cropRegion,
+    });
+
+    expect(croppedResult.results.length).toBe(1);
+    const croppedText = croppedResult.results[0]!.text.text;
+    const croppedWordCount = croppedResult.results[0]!.word_count;
+
+    // Cropped result should have different (likely fewer) words than full image.
+    expect(croppedWordCount).toBeLessThan(fullWordCount);
+
+    // Cropped text should not contain "ERROR" (which is in the second line).
+    expect(croppedText.toUpperCase()).not.toContain("ERROR");
+
+    // Full text should contain both "Hallo" and "ERROR".
+    expect(fullText.toUpperCase()).toContain("HALLO");
+    expect(fullText.toUpperCase()).toContain("ERROR");
   });
 
   it("rejects video without timestamps", async () => {

@@ -2,7 +2,7 @@ import * as z from "zod/v4";
 import { readFile, rm, writeFile } from "node:fs/promises";
 import sharp from "sharp";
 import type { Config } from "../config.js";
-import { commonOutput, frameUntrusted, wrapUntrusted } from "../contracts.js";
+import { commonOutput, frameUntrusted, untrustedText, wrapUntrusted } from "../contracts.js";
 import { MediaIntelError } from "../errors.js";
 import { cacheEntry, readSidecarJson, tmpDir, writeSidecarJson } from "../cache.js";
 import { runTesseract, type OcrResult } from "../backends/ocr/tesseract.js";
@@ -41,7 +41,7 @@ const extractedText = z.object({
   t_s: z.number().optional().describe("Timestamp in video (omitted for images)"),
   image_width: z.number(),
   image_height: z.number(),
-  text: z.string().describe("All OCR text concatenated"),
+  text: untrustedText.describe("All OCR text concatenated (untrusted, length-capped)"),
   lines: z.array(
     z.object({
       text: z.string(),
@@ -111,8 +111,9 @@ export async function extractText(config: Config, input: ExtractTextInput): Prom
   const imagesToProcess: Array<{ t_s?: number; buffer: Buffer; width: number; height: number }> = [];
 
   if (!isVideo) {
-    // Single image: load it directly.
-    const imageBuffer = await extractFrame(config, resolved.location, 0, { format: "png" });
+    // Single image: load it directly, optionally with region crop.
+    const frameOptions = input.region ? { format: "png" as const, crop: input.region } : { format: "png" as const };
+    const imageBuffer = await extractFrame(config, resolved.location, 0, frameOptions);
     const metadata = await sharp(imageBuffer).metadata();
     imagesToProcess.push({
       buffer: imageBuffer,
@@ -200,7 +201,7 @@ export async function extractText(config: Config, input: ExtractTextInput): Prom
         ...(image.t_s !== undefined ? { t_s: image.t_s } : {}),
         image_width: result.image_width,
         image_height: result.image_height,
-        text: wrappedText.text,
+        text: wrappedText,
         lines: result.lines,
         word_count: result.word_count,
         mean_confidence: result.mean_confidence,
@@ -229,12 +230,16 @@ export async function extractText(config: Config, input: ExtractTextInput): Prom
 }
 
 export function summarizeExtractText(result: ExtractTextResult): string {
-  const lines = [
-    `Extracted text from ${result.results.length} image(s) in language: ${result.language}`,
-    `Total: ${result.results.reduce((a: number, r: ExtractTextResult["results"][0]) => a + r.word_count, 0)} words, mean confidence ${result.results[0]?.mean_confidence ?? 0}%`,
-  ];
+  const headerLine = `Extracted text from ${result.results.length} image(s) in language: ${result.language}`;
+  const totalLine = `Total: ${result.results.reduce((a: number, r: ExtractTextResult["results"][0]) => a + r.word_count, 0)} words, mean confidence ${result.results[0]?.mean_confidence ?? 0}%`;
+
+  const lines = [headerLine, totalLine];
+
+  // Add framed untrusted text for each result.
   for (const r of result.results.slice(0, 3)) {
-    lines.push(`  ${r.t_s !== undefined ? `t=${r.t_s}s: ` : ""}${r.text.slice(0, 60)}${r.text.length > 60 ? "..." : ""}`);
+    const label = `OCR ${r.t_s !== undefined ? `t=${r.t_s}s` : "image"}`;
+    lines.push(frameUntrusted(label, r.text));
   }
+
   return lines.join("\n");
 }
