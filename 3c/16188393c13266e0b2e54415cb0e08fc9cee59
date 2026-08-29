@@ -1,0 +1,64 @@
+src/tools/get-transcript.ts
+  s_dd83aa1d90e0ec::t_29a99d2e03ba6c 246-247,252
+  s_dd83aa1d90e0ec::t_f9243debb0d9bb 278-279,284
+  s_dd83aa1d90e0ec::t_dce0ffdc2e266c 228
+  s_dd83aa1d90e0ec::t_089af5f2de504e 111,120,132,144,160,182
+  s_dd83aa1d90e0ec::t_e7a30cc2d33fe6 254
+  s_dd83aa1d90e0ec::t_b21d1c9972b753 291-293
+  s_dd83aa1d90e0ec::t_71c20cc09d67c4 261
+  s_dd83aa1d90e0ec::t_e48e48c737fea0 335,337
+  s_dd83aa1d90e0ec::t_db56d8a84647a9 262-263,268
+  s_dd83aa1d90e0ec::t_4a0c744a93700f 211-212
+  s_dd83aa1d90e0ec::t_c0343cb94c19a5 277
+  s_dd83aa1d90e0ec::t_3a7e221bdebf0b 341
+src/backends/transcribe/openai.ts
+  s_dd83aa1d90e0ec::t_6cf6cef06b26d7 10-11
+  s_dd83aa1d90e0ec::t_99d545c90c2458 18-19
+  s_dd83aa1d90e0ec::t_dfb2d9bbc993d8 70
+  s_dd83aa1d90e0ec::t_1cb59c55d15a08 128
+  s_dd83aa1d90e0ec::t_208c77578bb13a 63,65-66,69,71-72,80-81,90
+  s_dd83aa1d90e0ec::t_78889d4545578f 144
+  s_dd83aa1d90e0ec::t_66dbccc3cbb8a1 120,122-123
+src/tools/detect-language.ts
+  s_dd83aa1d90e0ec::t_b29c44fdc9761c 11
+  s_dd83aa1d90e0ec::t_e48daf9df83cea 47,52-53
+src/backends/transcribe/groq.ts
+  s_dd83aa1d90e0ec::t_6ebe6f80c99e7a 10-11
+  s_dd83aa1d90e0ec::t_29b057cc55a121 70
+  s_dd83aa1d90e0ec::t_4b99f2948124c9 120,122-123
+  s_dd83aa1d90e0ec::t_79109ae391e780 63,65-66,69,71-72,80-81,90
+  s_dd83aa1d90e0ec::t_abab22e6c5917c 128
+  s_dd83aa1d90e0ec::t_8484448da75346 144
+  s_dd83aa1d90e0ec::t_1740f98a790b2e 18-19
+tests/transcript.test.ts
+  s_dd83aa1d90e0ec::t_03d120a5fde409 10
+  s_dd83aa1d90e0ec::t_94f6361da8d4b2 11
+  s_dd83aa1d90e0ec::t_3677b1bc45126b 145,147-148,158,160-161
+  s_dd83aa1d90e0ec::t_dd6cafcec512f7 250,253
+  s_dd83aa1d90e0ec::t_e0957aeb6c70ba 272
+  s_dd83aa1d90e0ec::t_f65f807501c092 143,156
+src/backends/transcribe/whisper-cpp.ts
+  s_dd83aa1d90e0ec::t_55f16960905e62 96,98-99
+  s_dd83aa1d90e0ec::t_20bdb64077f138 10-11
+  s_dd83aa1d90e0ec::t_3d31fe449bae32 56
+  s_dd83aa1d90e0ec::t_b982278959d5c4 20-21
+  s_dd83aa1d90e0ec::t_b342be94d4cf38 116
+  s_dd83aa1d90e0ec::t_00ff8ee2a70753 55
+  s_dd83aa1d90e0ec::t_127d95698186b9 109-110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "3c16188393c13266e0b2e54415cb0e08fc9cee59",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
