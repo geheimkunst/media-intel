@@ -1,0 +1,40 @@
+tests/phase2-tools.test.ts
+  s_dd83aa1d90e0ec::t_ffbeacda244a77 1-89,92-144
+  s_dd83aa1d90e0ec::t_8871aa8e230a0d 90-91
+src/prompts.ts
+  s_dd83aa1d90e0ec::t_246e3af789be13 1-119
+.gitignore
+  s_dd83aa1d90e0ec::t_26f2d4e8995e11 9
+src/server.ts
+  s_dd83aa1d90e0ec::t_82000c8fea15de 4-6,8-9,13,19-20,25,48,50,74-80
+  s_dd83aa1d90e0ec::t_c7d8af6a653b66 81
+src/tools/list-cached.ts
+  s_dd83aa1d90e0ec::t_b501661d5e918b 1-132
+src/tools/diff-frames.ts
+  s_dd83aa1d90e0ec::t_aed9ce0287b996 1-49,54-186
+  s_dd83aa1d90e0ec::t_b1f4c2d2adc21d 50-53
+tests/prompts.test.ts
+  s_dd83aa1d90e0ec::t_28d091f9f6ecd3 1-35
+src/index.ts
+  s_dd83aa1d90e0ec::t_60969ccbf92f2a 12-16
+src/tools/get-scenes.ts
+  s_dd83aa1d90e0ec::t_754f550df546f4 1-221
+src/tools/analyze-audio.ts
+  s_dd83aa1d90e0ec::t_7d9fbb08ee11e9 1-218
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "c4e8a0a020df6ff796afca190bb60d84b5ac1755",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
