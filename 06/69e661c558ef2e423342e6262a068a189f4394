@@ -1,0 +1,37 @@
+src/backends/transcribe/cost.ts
+  s_dd83aa1d90e0ec::t_922334f5953fdd 1-37
+src/backends/transcribe/embedded.ts
+  s_dd83aa1d90e0ec::t_f8638673f517c6 1-64
+src/backends/transcribe/groq.ts
+  s_dd83aa1d90e0ec::t_0e3d770dabf1c3 1-149
+src/backends/transcribe/openai.ts
+  s_dd83aa1d90e0ec::t_1b294562ea8611 1-149
+src/backends/transcribe/sidecar.ts
+  s_dd83aa1d90e0ec::t_90308bc2eb2b9d 1-111
+src/backends/transcribe/srt.ts
+  s_dd83aa1d90e0ec::t_0c98e95c316609 1-164
+src/backends/transcribe/whisper-cpp.ts
+  s_dd83aa1d90e0ec::t_e5d21f36a770b9 1-127
+src/tools/detect-language.ts
+  s_dd83aa1d90e0ec::t_0c48165fa755b7 1-78
+src/tools/get-transcript.ts
+  s_dd83aa1d90e0ec::t_d0badf2d9666cb 1-350
+tests/transcript.test.ts
+  s_dd83aa1d90e0ec::t_370fcb382f1826 1-283
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "0669e661c558ef2e423342e6262a068a189f4394",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
