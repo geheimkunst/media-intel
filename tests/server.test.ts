@@ -53,4 +53,35 @@ describe("media-intel MCP server end to end (in-memory transport)", () => {
     expect(text && "text" in text ? text.text : "").toContain("source_not_found");
     expect(text && "text" in text ? text.text : "").toContain("Hint:");
   });
+
+  it("advertises get_frames tool", async () => {
+    const { tools } = await client.listTools();
+    const getFrames = tools.find((t) => t.name === "get_frames");
+    expect(getFrames).toBeDefined();
+    expect(getFrames?.inputSchema.properties).toHaveProperty("source");
+    expect(getFrames?.inputSchema.properties).toHaveProperty("timestamps");
+    expect(getFrames?.outputSchema?.properties).toHaveProperty("frames");
+  });
+
+  it("extracts frames and returns image blocks", async () => {
+    const result = await client.callTool({
+      name: "get_frames",
+      arguments: {
+        source: join(fixtures, "clip.mp4"),
+        timestamps: [0.5, 1.5],
+        frame_format: "jpeg",
+      },
+    });
+    expect(result.isError).toBeFalsy();
+    const text = result.content.find((c) => c.type === "text");
+    expect(text && "text" in text ? text.text : "").toContain("frames extracted");
+
+    // Should have image blocks
+    const images = result.content.filter((c) => c.type === "image");
+    expect(images).toHaveLength(2);
+
+    const sc = result.structuredContent as { frames: any[]; manifest: any[] };
+    expect(sc.frames).toHaveLength(2);
+    expect(sc.manifest).toHaveLength(2);
+  });
 });

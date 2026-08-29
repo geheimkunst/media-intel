@@ -3,6 +3,7 @@ import { loadConfig, type Config } from "./config.js";
 import { toolErrorResult } from "./errors.js";
 import { doctor, doctorInput, doctorOutput, summarizeDoctor } from "./tools/doctor.js";
 import { probeMedia, probeMediaInput, probeMediaOutput, summarizeProbe } from "./tools/probe-media.js";
+import { getFramesInput, getFramesOutput, registerGetFrames } from "./tools/get-frames.js";
 
 export const SERVER_NAME = "media-intel";
 export const SERVER_VERSION = "0.1.0";
@@ -62,6 +63,8 @@ export function createServer(config: Config = loadConfig()): McpServer {
       }
     },
   );
+
+  registerGetFrames(server, config);
 
   return server;
 }
