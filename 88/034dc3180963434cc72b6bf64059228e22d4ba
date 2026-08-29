@@ -1,0 +1,30 @@
+tests/get-video-grids.test.ts
+  s_dd83aa1d90e0ec::t_16cc1a8eba964b 204,211-213,217-220
+  s_dd83aa1d90e0ec::t_6ddb08ed78d6b6 202,215-216
+  s_dd83aa1d90e0ec::t_4d62aefa89aa81 8,16,21-31
+  s_dd83aa1d90e0ec::t_6d118b031f8f73 177-201,203,205-210,214,221-282
+src/tools/get-video-grids.ts
+  s_dd83aa1d90e0ec::t_0414c2e3d3095c 219,236-239,241,243,245,255-258
+  s_dd83aa1d90e0ec::t_c149155dadac79 227-231
+  s_dd83aa1d90e0ec::t_e9beef0109e91b 324
+  s_dd83aa1d90e0ec::t_c3cd2e35e45871 419
+  s_dd83aa1d90e0ec::t_997121597c6435 123-139,150,162-163
+  s_dd83aa1d90e0ec::t_0b518b471ec33c 218,220-226,232-235,240,242,244,246-254,259-283
+  s_dd83aa1d90e0ec::t_cf2ae07a74b4a1 164
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "88034dc3180963434cc72b6bf64059228e22d4ba",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
