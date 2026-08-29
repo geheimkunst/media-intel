@@ -210,8 +210,8 @@ async function getTranscriptInner(config: Config, input: GetTranscriptInput): Pr
   if (input.backend === "auto") {
     throw new MediaIntelError(
       "no_transcription_available",
-      "No free transcription backend available (whisper-cpp missing) and no paid API keys set",
-      "Install whisper-cpp or set OPENAI_API_KEY or GROQ_API_KEY.",
+      "No free transcription produced a result: no embedded or sidecar subtitles, and local whisper.cpp is missing, failed, or found no speech; no paid API key is configured",
+      "Run doctor to check whisper-cli and the model; for silent or music-only audio there is nothing to transcribe. Paid fallback needs OPENAI_API_KEY or GROQ_API_KEY plus allow_paid=true.",
     );
   }
 
