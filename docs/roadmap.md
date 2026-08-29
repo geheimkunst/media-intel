@@ -10,7 +10,8 @@
 ## Phase 1: MVP (erledigt, per Workflow mit 5 Bauern, 5 Reviews, 5 Fix-Runden)
 
 - [x] `get_frames`, `get_video_grids` (cells/grid_long_edge/max_frames, pHash-Dedup, Manifest, Pagination)
-- [x] `get_transcript` (eingebettet > Sidecar > whisper.cpp mit VAD > OpenAI/Groq nur mit `allow_paid` oder explizitem Backend, Cost-Preflight), `detect_language`
+- [x] `get_transcript` (eingebettet > Sidecar > whisper.cpp mit VAD > OpenAI/ElevenLabs nur mit `allow_paid` oder explizitem Backend, Cost-Preflight), `detect_language`
+- [x] 29-08 (abends): ElevenLabs Scribe ersetzt Groq als zweiten bezahlten Provider (`backend=elevenlabs`, `diarize=true` für Sprecher, `MEDIA_INTEL_ELEVENLABS_MODEL`, 0,22 $/h im Preflight; Entscheidung A21)
 - [x] `fetch_media`, `get_engagement` (Heatmap, Kapitel, SponsorBlock, Kommentare), `extract_text` (tesseract, volle Auflösung, Boxen)
 - [x] Verträge: Untrusted-Text, Pagination, Manifest; Sicherheits-Checks (SSRF, Schema-Whitelist, realpath, Grenzen, Prozessgruppen)
 - [x] Abnahme mit echtem Material: deutsche Sprachnotiz (macOS `say`, Anna) ohne API-Key korrekt transkribiert, Screen-Recording mit Terminal-Fehlertext per OCR gelesen, diff_frames und Grids stimmen
@@ -38,7 +39,7 @@
 
 1. `media`-Connector (media-understanding-Fork) abbauen, sobald media-intel in claude.ai läuft
 2. MCP Tasks für `understand_media` oberhalb 20 min; `resource_link` ab zwei Grids
-3. `get_speakers` (sherpa-onnx oder Deepgram/ElevenLabs), zweites lokales ASR (Parakeet), `fpcalc` für Duplikate
+3. `get_speakers` lokal (sherpa-onnx); bezahlt liefert `get_transcript diarize=true` über ElevenLabs bereits Sprecher. Zweites lokales ASR (Parakeet), `fpcalc` für Duplikate
 4. Veröffentlichung: GitHub-Repo, npm `npx media-intel`, `server.json` für die MCP-Registry, `.mcpb`
 5. Bekannte Schwächen: `get_scenes` erkennt harte Bildwechsel ohne Bewegung nicht immer (scdet-Schwelle), `detect_language` liefert ohne `-dl`-Ausgabe keine Konfidenz, `looks_like_screen_recording` ist eine Heuristik
 

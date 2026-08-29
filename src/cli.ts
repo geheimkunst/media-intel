@@ -21,8 +21,9 @@ Environment (all optional):
   MEDIA_INTEL_PROCESS_TIMEOUT_MS (120000), MEDIA_INTEL_MAX_DURATION_S (4 h), MEDIA_INTEL_MAX_BYTES (20 GiB)
   MEDIA_INTEL_MAX_TEXT_FIELD_CHARS (20000), MEDIA_INTEL_MAX_COST_USD (0.10)
   MEDIA_INTEL_WHISPER_MODEL (default <cache>/models/ggml-large-v3-turbo-q5_0.bin), MEDIA_INTEL_OCR_LANGUAGES (deu+eng)
-  get_transcript allow_paid=true is required before auto mode spends money on OpenAI/Groq
-  MEDIA_INTEL_YTDLP_COOKIES (Netscape cookie file), OPENAI_API_KEY / GROQ_API_KEY (paid transcription)
+  get_transcript allow_paid=true is required before auto mode spends money on OpenAI/ElevenLabs
+  MEDIA_INTEL_YTDLP_COOKIES (Netscape cookie file), OPENAI_API_KEY / ELEVENLABS_API_KEY (paid transcription)
+  MEDIA_INTEL_ELEVENLABS_MODEL (scribe_v2; scribe_v1 also accepted)
   MEDIA_INTEL_HTTP_HOST (127.0.0.1), MEDIA_INTEL_HTTP_ALLOWED_HOSTS (comma list), MEDIA_INTEL_HTTP_TOKEN (static bearer)
 `;
 

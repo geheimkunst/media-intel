@@ -21,7 +21,7 @@ import { registerProbeImage } from "./tools/probe-image.js";
 import { probeMedia, probeMediaInput, probeMediaOutput, summarizeProbe } from "./tools/probe-media.js";
 
 export const SERVER_NAME = "media-intel";
-export const SERVER_VERSION = "0.2.0";
+export const SERVER_VERSION = "0.3.0";
 
 /**
  * Build a fully configured server. Transport is chosen by the caller

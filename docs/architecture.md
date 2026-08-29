@@ -26,6 +26,7 @@
 | A18 | **OCR mit tesseract, Sprache erzwungen (`deu+eng`), kein Downscaling, Region-Crop, TSV mit Boxen** | `-l eng` liefert auf deutschem Text Salat (gemessen); Downscaling auf 800 px zerstört Terminal-Text (mcp-video-analyzer-Schwäche). PaddleOCR, Surya, docTR sind Dokumenten-Werkzeuge mit schweren Abhängigkeiten. |
 | A19 | **Kein zweiter Wissensindex**: `media_search` ist FTS5 über den Transkript-Cache (Introspektion), keine RAG-Schicht | Akasha ist die Gedächtnisschicht des Systems. Ein Vektor-Index im Medienserver wäre eine konkurrierende Wahrheit. |
 | A20 | **Gemini-Video nativ nur als Option, nie Default** | 300 Tokens pro Sekunde Video, rund Faktor 35 gegenüber dem Grid-Pfad. |
+| A21 | **Bezahlte Provider: OpenAI `whisper-1` und ElevenLabs Scribe (`scribe_v2`); Groq gestrichen (29-08-2026)** | Scribe: 90+ Sprachen (Deutsch laut Anbieter unter 5 % WER), Diarisierung bis 32 Sprecher, 0,22 $/h gegenüber 0,36 $/h bei OpenAI, 3 GB und 10 h pro Datei, Auth per Header `xi-api-key`. Groq war billiger, aber ohne Sprecher und mit 25-MB-Grenze. Die API liefert Wörter, `wordsToSegments` baut Segmente (Sprecherwechsel, Pause über 1 s, Satzende, 200 Zeichen, 12 s). Sprachcodes kommen als ISO-639-3 und werden auf ISO-639-1 abgebildet. |
 
 ## 2. Tool-Design (Stufen)
 
@@ -72,7 +73,7 @@ media-intel/
 │   ├── cache.ts            Fingerprint, Layout, Sidecars, TTL-Sweep
 │   ├── contracts.ts        Untrusted-Umrandung, Pagination, Manifest, Budget
 │   ├── tools/              ein Tool je Datei: xInput, xOutput, x(config, input), summarizeX
-│   ├── backends/           transcribe/{embedded,ytdlp,whisper-cpp,openai,groq}.ts, ocr/tesseract.ts
+│   ├── backends/           transcribe/{embedded,sidecar,whisper-cpp,openai,elevenlabs,cost,srt}.ts, ocr/tesseract.ts
 │   └── prompts/            Phase 2
 ├── tests/                  vitest; fixtures/ synthetisch per ffmpeg; Sicherheitsfälle als Tests
 ├── docs/                   analysis, architecture, capabilities, roadmap, research/

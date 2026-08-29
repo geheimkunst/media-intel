@@ -125,12 +125,13 @@ describe("cost estimation", () => {
     expect(cost.estimated_cost_usd).toBeCloseTo(0.006);
   });
 
-  it("estimates Groq Whisper cost", () => {
-    const cost = estimateCost("groq", 3600); // 1 hour
-    expect(cost.backend).toBe("groq");
-    expect(cost.model).toBe("whisper-large-v3-turbo");
+  it("estimates ElevenLabs Scribe cost (0.22 USD per hour)", () => {
+    const cost = estimateCost("elevenlabs", 3600); // 1 hour
+    expect(cost.backend).toBe("elevenlabs");
+    expect(cost.model).toBe("scribe_v2");
     expect(cost.duration_minutes).toBe(60);
-    expect(cost.estimated_cost_usd).toBeCloseTo(0.04, 3);
+    expect(cost.estimated_cost_usd).toBeCloseTo(0.22, 3);
+    expect(estimateCost("elevenlabs", 60, "scribe_v1").model).toBe("scribe_v1");
   });
 
   it("rounds up partial minutes", () => {

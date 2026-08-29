@@ -6,6 +6,8 @@ export interface Segment {
   start_s: number;
   end_s: number;
   text: string;
+  /** Speaker label, only from backends that diarize (ElevenLabs), e.g. "speaker_0". */
+  speaker?: string;
 }
 
 /**

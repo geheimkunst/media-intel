@@ -113,11 +113,11 @@ export async function doctor(config: Config): Promise<DoctorResult> {
     ...(whisperReady ? (vad.found ? {} : { needs: `VAD model at ${vadModelPath(config)} (optional, improves German voice notes)` }) : { needs: has(whisper) ? `model file at ${whisperModelPath(config)}` : "whisper-cli (brew install whisper-cpp) plus model file" }),
   });
   const openaiKey = Boolean(process.env.OPENAI_API_KEY);
-  const groqKey = Boolean(process.env.GROQ_API_KEY);
+  const elevenlabsKey = Boolean(process.env.ELEVENLABS_API_KEY);
   capabilities.push({
     name: "get_transcript (paid API)",
-    status: openaiKey || groqKey ? "ready" : "missing",
-    ...(openaiKey || groqKey ? {} : { needs: "OPENAI_API_KEY or GROQ_API_KEY in the environment (via launcher)" }),
+    status: openaiKey || elevenlabsKey ? "ready" : "missing",
+    ...(openaiKey || elevenlabsKey ? {} : { needs: "OPENAI_API_KEY or ELEVENLABS_API_KEY in the environment (via launcher)" }),
   });
   capabilities.push({ name: "fetch_media / get_engagement", status: has(ytdlp) ? "ready" : "missing", ...(has(ytdlp) ? {} : { needs: "yt-dlp" }) });
   const ocrLangs = config.ocrLanguages.split("+");

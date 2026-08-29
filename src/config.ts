@@ -43,6 +43,8 @@ export interface Config {
 
   /** Local whisper.cpp model file; empty means "look in cacheDir/models". */
   whisperModel: string;
+  /** ElevenLabs Scribe model id for the paid backend: scribe_v2 (default) or scribe_v1. */
+  elevenlabsModel: string;
   /** Default OCR languages for tesseract, plus-separated. */
   ocrLanguages: string;
   /** Netscape cookie file for yt-dlp; empty disables cookies. */
@@ -94,6 +96,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     maxCostUsd: envNumber(env, "MEDIA_INTEL_MAX_COST_USD", 0.1),
 
     whisperModel: envString(env, "MEDIA_INTEL_WHISPER_MODEL", ""),
+    elevenlabsModel: envString(env, "MEDIA_INTEL_ELEVENLABS_MODEL", DEFAULT_ELEVENLABS_MODEL),
     ocrLanguages: envString(env, "MEDIA_INTEL_OCR_LANGUAGES", "deu+eng"),
     ytdlpCookiesFile: envString(env, "MEDIA_INTEL_YTDLP_COOKIES", ""),
   };
@@ -105,3 +108,6 @@ export function modelsDir(config: Config): string {
 }
 
 export const DEFAULT_WHISPER_MODEL = "ggml-large-v3-turbo-q5_0.bin";
+
+/** ElevenLabs Scribe model used unless MEDIA_INTEL_ELEVENLABS_MODEL overrides it. */
+export const DEFAULT_ELEVENLABS_MODEL = "scribe_v2";

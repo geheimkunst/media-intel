@@ -72,7 +72,7 @@ Three tiers: probe first (cheap), then the precise tool the probe suggests, then
 | `fetch_media` | 1 | yt-dlp download into the cache: audio, smallest video, subtitles (manual and auto), thumbnail, info; sections |
 | `get_engagement` | 1 | Platform metrics, chapters, "most replayed" heatmap, SponsorBlock segments, top comments, without downloading |
 | `understand_media` | 2 | One call: deep probe, transcript first, scene structure, contact sheets only when words cannot carry the content; explains every decision |
-| `get_transcript` | 3 | Embedded subtitles > sidecar > yt-dlp captions > local whisper.cpp (VAD) > OpenAI/Groq (only with `allow_paid` or explicit backend, after cost preflight); text/srt/json, time windows, pagination |
+| `get_transcript` | 3 | Embedded subtitles > sidecar > yt-dlp captions > local whisper.cpp (VAD) > OpenAI whisper-1 / ElevenLabs Scribe (only with `allow_paid` or explicit backend, after cost preflight; `diarize=true` adds speaker labels via ElevenLabs); text/srt/json, time windows, pagination |
 | `detect_language` | 3 | Language of the first 30 s via whisper.cpp |
 | `get_frames` | 3 | Exact-timestamp frames (jpeg/png/webp), region crop, optional timestamp overlay, manifest |
 | `get_video_grids` | 3 | Contact sheets: `cells` (64 default), `grid_long_edge` (1568/2576), `max_frames` (512), dedup, manifest with cell to time mapping, pagination |
@@ -118,7 +118,8 @@ Suggested next: get_transcript, get_video_grids, get_frames
 | `MEDIA_INTEL_WHISPER_MODEL` | `<cache>/models/ggml-large-v3-turbo-q5_0.bin` | local model |
 | `MEDIA_INTEL_OCR_LANGUAGES` | `deu+eng` | tesseract languages |
 | `MEDIA_INTEL_YTDLP_COOKIES` | unset | Netscape cookie file (never browser cookies) |
-| `OPENAI_API_KEY`, `GROQ_API_KEY` | unset | paid transcription backends; used only with `allow_paid=true` or `backend=openai\|groq`, never by a set key alone |
+| `OPENAI_API_KEY`, `ELEVENLABS_API_KEY` | unset | paid transcription backends; used only with `allow_paid=true` or `backend=openai\|elevenlabs`, never by a set key alone |
+| `MEDIA_INTEL_ELEVENLABS_MODEL` | `scribe_v2` | ElevenLabs Scribe model (`scribe_v2` or `scribe_v1`): 0.22 USD per hour, 90+ languages, up to 32 speakers with `diarize=true`, header `xi-api-key` |
 | `MEDIA_INTEL_HTTP_HOST`, `MEDIA_INTEL_HTTP_PORT`, `MEDIA_INTEL_HTTP_ALLOWED_HOSTS`, `MEDIA_INTEL_HTTP_TOKEN` | 127.0.0.1, 3020, unset, unset | `--http` mode |
 
 Inject secrets through a launcher (for example `op run`), never into config files.
