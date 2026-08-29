@@ -19,7 +19,7 @@ if [ "$SYNC" = 1 ]; then
 fi
 ssh -o BatchMode=yes "$HOST" bash -s "$ONLY" <<'EOF'
 set -euo pipefail
-ONLY="$1"
+ONLY="${1:-}"
 export PATH=$HOME/.local/opt/node24/bin:$HOME/.local/bin:$PATH
 BENCH=/home/yunus/bench
 REMOTE=/home/yunus/dev/media-intel
