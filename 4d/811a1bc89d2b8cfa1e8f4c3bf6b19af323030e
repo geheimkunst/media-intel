@@ -1,0 +1,38 @@
+src/tools/fetch-media.ts
+  s_dd83aa1d90e0ec::t_bf7b37990ab855 201
+  s_dd83aa1d90e0ec::t_bc0881e5fc0523 130-132
+  s_dd83aa1d90e0ec::t_c679d39e048a30 258-267
+  s_dd83aa1d90e0ec::t_96bb16c567a747 3,6,8
+  s_dd83aa1d90e0ec::t_c511f13833179f 39
+  s_dd83aa1d90e0ec::t_282bc7a0a0a7d7 289
+  s_dd83aa1d90e0ec::t_e27d84534a60d8 302-326
+src/tools/get-engagement.ts
+  s_dd83aa1d90e0ec::t_884c96c4872982 72-78
+  s_dd83aa1d90e0ec::t_fac171b6953a88 1,4,6
+  s_dd83aa1d90e0ec::t_9fa2bedc09663a 110,112-130,137,139
+  s_dd83aa1d90e0ec::t_68ca86e5e2ebad 197
+  s_dd83aa1d90e0ec::t_7c9f395305604a 235-258
+  s_dd83aa1d90e0ec::t_644a0df407e4c6 213
+  s_dd83aa1d90e0ec::t_1e19badc06289b 54,64
+  s_dd83aa1d90e0ec::t_a5872c5b8c0722 71
+tests/ytdlp.test.ts
+  s_dd83aa1d90e0ec::t_8d1f4a76111efa 183
+  s_dd83aa1d90e0ec::t_7fc04e725b8c23 255
+  s_dd83aa1d90e0ec::t_ca573ca041ea03 251
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "4d811a1bc89d2b8cfa1e8f4c3bf6b19af323030e",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
