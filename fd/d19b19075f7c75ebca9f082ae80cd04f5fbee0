@@ -1,0 +1,46 @@
+src/backends/ytdlp.ts
+  s_dd83aa1d90e0ec::t_9a9426e7933cd4 52-60
+  s_dd83aa1d90e0ec::t_b88ccc5b975b3b 17
+  s_dd83aa1d90e0ec::t_899a0ff102de75 1-16,18-51,61-64,68-103,105,110-130,133-135,142-143,145,147-151
+  s_dd83aa1d90e0ec::t_53a14594d02c38 131-132,136-141,144,146
+  s_dd83aa1d90e0ec::t_b4f311b316c646 104,106-109
+  s_dd83aa1d90e0ec::t_55a4337c1f8984 65-67
+src/tools/fetch-media.ts
+  s_dd83aa1d90e0ec::t_03e3e92da7da25 254
+  s_dd83aa1d90e0ec::t_29e9fc75dceff6 233,238,245
+  s_dd83aa1d90e0ec::t_cf75d631ddcbf4 1-112,114-122,125-132,142,150,156,161,164,166,168,173,177-178,180-188,190-192,195,197-198,202-213,215-220,222-225,227-232,234-237,239-244,246-253,255-290
+  s_dd83aa1d90e0ec::t_083bba58e446f0 194,196,199-201,214,221,226
+  s_dd83aa1d90e0ec::t_5bc97f87903051 113
+  s_dd83aa1d90e0ec::t_7b4a66f1d777f6 123-124,133-141,145-149,151-155,157-160,162-163,165,167,169-172,174-176
+  s_dd83aa1d90e0ec::t_e77653a0f91bd7 143-144
+  s_dd83aa1d90e0ec::t_367ab674964b15 179,189,193
+src/tools/get-engagement.ts
+  s_dd83aa1d90e0ec::t_97de3163b93c41 1-143,151-206
+  s_dd83aa1d90e0ec::t_12d5b267b6e5f0 144-150
+src/server.ts
+  s_dd83aa1d90e0ec::t_76b602734d1567 6-7
+  s_dd83aa1d90e0ec::t_d7feaa806af910 68-112
+tests/ytdlp.test.ts
+  s_dd83aa1d90e0ec::t_01bc6499ad6491 1-30,71-73,84,123,125,128,132-134,136-177,179-188,200-202,205,207-208,210-212,219-233,235-303
+  s_dd83aa1d90e0ec::t_97842a81722d54 178,189-199
+  s_dd83aa1d90e0ec::t_4f353d77c048f9 203-204,206,209,213-218
+  s_dd83aa1d90e0ec::t_8a38724eda148e 31-70,74-83,85-88,90-122,124,126-127,129-131,135
+  s_dd83aa1d90e0ec::t_6061ef9d0b4a6a 89
+  s_dd83aa1d90e0ec::t_8f432cde238c34 234
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "fdd19b19075f7c75ebca9f082ae80cd04f5fbee0",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
