@@ -1,0 +1,23 @@
+bench/results/run-20260829-175652.json
+  s_dd83aa1d90e0ec::t_3a8f9ff88007f8 1-429
+bench/candidates.mjs
+  s_dd83aa1d90e0ec::t_38654a98953bb6 99,117-124
+bench/results/run-20260829-174728.json
+  s_dd83aa1d90e0ec::t_50cb718bcb5d5c 1-2664
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "a276bb9b9270b9ab3c194f2546aad3e2cb22f9dd",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
