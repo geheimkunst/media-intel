@@ -1,7 +1,12 @@
 /**
  * Candidate adapters. Each maps the benchmark tasks onto the candidate's tools
  * and tells the runner where text, cuts, and timestamps live in its results.
- * `spawn` returns how to start the stdio server (inside Docker on the VPS).
+ * Facts about the reference candidates come from bench/candidates.md.
+ *
+ * A task function may return:
+ *   { tool, args }            one MCP call
+ *   [{ tool, args }, ...]     several calls, aggregated (wall, images, bytes)
+ *   { na: "reason" }          not applicable for this candidate/file
  */
 
 function dockerSpawn({ docker, name, fixtures, cache }, image, env = {}, extraArgs = [], cmd = []) {
@@ -15,10 +20,11 @@ function dockerSpawn({ docker, name, fixtures, cache }, image, env = {}, extraAr
 }
 
 const sc = (r) => r?.structuredContent ?? {};
+const textOf = (r) => (r?.content ?? []).filter((c) => c.type === "text").map((c) => c.text).join("\n");
 
-/** Try to pull JSON out of a text block (candidates that return JSON as text). */
+/** Pull JSON out of a text block (candidates that return JSON as text). */
 function jsonFromText(result) {
-  const text = (result?.content ?? []).filter((c) => c.type === "text").map((c) => c.text).join("\n");
+  const text = textOf(result);
   try {
     return JSON.parse(text);
   } catch {
@@ -30,9 +36,26 @@ function jsonFromText(result) {
   return undefined;
 }
 
+/** "H:MM:SS.mmm" | "M:SS" | "MM:SS" → seconds */
+function clockToSeconds(s) {
+  const parts = String(s).trim().replace(",", ".").split(":").map(Number);
+  if (parts.some((n) => !Number.isFinite(n))) return undefined;
+  return parts.reduce((acc, n) => acc * 60 + n, 0);
+}
+const secondsToClock = (t) => {
+  const s = Math.max(0, Math.round(t));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  return h > 0 ? `${h}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}` : `${m}:${String(sec).padStart(2, "0")}`;
+};
+const isVideo = (src) => /\.(mp4|webm|mov|mkv|m4v)$/i.test(src);
+
+/* ------------------------------------------------------------ media-intel */
 function mediaIntel(name, whisperModel) {
   return {
     name,
+    kind: "mcp",
     spawn: (ctx) => dockerSpawn(ctx, "media-intel:bench", {
       MEDIA_INTEL_CACHE_DIR: "/cache",
       MEDIA_INTEL_WHISPER_MODEL: `/cache/models/${whisperModel}`,
@@ -58,76 +81,98 @@ function mediaIntel(name, whisperModel) {
   };
 }
 
-/* Reference candidates: filled from bench/candidates.md (exact tool names and result shapes). */
-
+/* ---------------------------------------------------- media-understanding */
 const mediaUnderstanding = {
   name: "media-understanding",
+  kind: "mcp",
+  notes: "whisper.cpp via node-av, model base-q5_1 (multilingual); no language field, no scenes tool (scene sampling of grids used as proxy), no OCR; timestamps burned into images.",
   spawn: (ctx) => dockerSpawn(ctx, "media-understanding:bench", {
-    MEDIA_UNDERSTANDING_MODEL: "base-q5_1",
-    MEDIA_UNDERSTANDING_CACHE_DIR: "/cache",
     XDG_CACHE_HOME: "/cache",
-    HOME: "/cache",
-  }),
+    MEDIA_UNDERSTANDING_MODEL: "base-q5_1",
+    MEDIA_UNDERSTANDING_DISABLE_HW: "1",
+  }, ["--entrypoint", "node"], ["dist/mcp.js"]),
   tasks: {
-    probe: (src) => ({ tool: "probe_media", args: { file_path: src } }),
+    probe: (src) => ({ tool: "probe_media", args: { paths: src } }),
     transcript: (src) => ({ tool: "get_transcript", args: { file_path: src, format: "json" } }),
     frames: (src, t) => ({ tool: "get_frames", args: { file_path: src, timestamps: t.timestamps } }),
     overview: (src) => ({ tool: "get_video_grids", args: { file_path: src } }),
+    scenes: (src) => ({ tool: "get_video_grids", args: { file_path: src, sampling_strategy: "scene", scene_threshold: 0.3, max_grids: 6 } }),
   },
   parse: {
     transcriptText: (r) => {
       const j = jsonFromText(r);
-      if (Array.isArray(j)) return j.map((s) => s.text ?? "").join(" ");
       if (j?.segments) return j.segments.map((s) => s.text ?? "").join(" ");
-      if (j?.transcript) return typeof j.transcript === "string" ? j.transcript : (j.transcript.segments ?? []).map((s) => s.text).join(" ");
-      return (r?.content ?? []).filter((c) => c.type === "text").map((c) => c.text).join(" ");
+      return textOf(r);
     },
-    language: (r) => jsonFromText(r)?.language,
-    frameTimes: () => undefined,
+    // Tile timestamps of scene-sampled grids stand in for a cut list (documented approximation).
+    cuts: (r) => {
+      const text = textOf(r);
+      const out = [];
+      for (const m of text.matchAll(/Tile timestamps:\s*([^\n]+)/g)) {
+        for (const tok of m[1].split(",")) {
+          const t = clockToSeconds(tok.trim());
+          if (t !== undefined && t > 0.05) out.push(t);
+        }
+      }
+      return [...new Set(out)].sort((a, b) => a - b);
+    },
+    frameTimes: (r) => {
+      const text = textOf(r);
+      return [...text.matchAll(/Frame at [\d:.]+ \(([\d.]+)s\)/g)].map((m) => Number(m[1]));
+    },
   },
 };
 
+/* ---------------------------------------------------- mcp-video-analyzer */
 const videoAnalyzer = {
   name: "mcp-video-analyzer",
-  spawn: (ctx) => dockerSpawn(ctx, "mcp-video-analyzer:bench", {
-    WHISPER_MODEL: "base",
-    HOME: "/cache",
-    XDG_CACHE_HOME: "/cache",
-  }),
+  kind: "mcp",
+  notes: "No ASR backend in the image (needs Python openai-whisper or an API key): transcript n/a. Only video extensions accepted: audio and PNG fixtures n/a. Times as M:SS (1 s resolution). OCR only inside analyze_video; tesseract.js with tessdata pre-placed in the cache.",
+  spawn: (ctx) => dockerSpawn(ctx, "mcp-video-analyzer:bench", { MCP_CACHE_DIR: "/cache" }),
   tasks: {
-    probe: (src) => ({ tool: "get_metadata", args: { url: src } }),
-    transcript: (src) => ({ tool: "get_transcript", args: { url: src } }),
-    frames: (src, t) => ({ tool: "get_frame_at", args: { url: src, timestamp: t.timestamps[0] } }),
-    overview: (src) => ({ tool: "get_frames", args: { url: src } }),
-    scenes: (src) => ({ tool: "get_frames", args: { url: src } }),
-    ocr: (src, t) => ({ tool: "analyze_video", args: { url: src, fields: ["ocr"] } }),
+    probe: (src) => (isVideo(src) ? { tool: "get_metadata", args: { url: src } } : { na: "audio not accepted (video extensions only)" }),
+    transcript: () => ({ na: "no speech-to-text backend in the image (whisper CLI or API key required)" }),
+    frames: (src, t) => t.timestamps.map((ts) => ({ tool: "get_frame_at", args: { url: src, timestamp: secondsToClock(ts) } })),
+    overview: (src) => ({ tool: "get_frames", args: { url: src, options: { maxFrames: 20, dense: true } } }),
+    scenes: (src) => ({ tool: "analyze_video", args: { url: src, options: { fields: ["frames"], threshold: 0.3, detail: "standard", forceRefresh: true } } }),
+    ocr: (src, t) => (isVideo(src) ? { tool: "analyze_video", args: { url: src, options: { fields: ["ocrResults"], ocrLanguage: "deu+eng", detail: "detailed", forceRefresh: true } } } : { na: "image files not accepted (video extensions only)" }),
   },
   parse: {
     transcriptText: (r) => {
       const j = jsonFromText(r);
-      const segs = j?.transcript ?? j?.segments ?? j;
-      if (Array.isArray(segs)) return segs.map((s) => s.text ?? "").join(" ");
-      if (typeof segs === "string") return segs;
-      return (r?.content ?? []).filter((c) => c.type === "text").map((c) => c.text).join(" ");
+      return Array.isArray(j?.transcript) ? j.transcript.map((s) => s.text ?? "").join(" ") : "";
     },
-    language: (r) => jsonFromText(r)?.language,
     cuts: (r) => {
       const j = jsonFromText(r);
-      const frames = j?.frames ?? j;
-      return Array.isArray(frames) ? frames.map((f) => f.timestamp ?? f.t ?? f.time).filter((x) => typeof x === "number") : [];
+      const frames = j?.frames ?? [];
+      return frames.map((f) => clockToSeconds(f.time)).filter((t) => typeof t === "number" && t > 0.05);
     },
-    ocrText: (r) => {
+    ocrText: (r, task) => {
       const j = jsonFromText(r);
-      const ocr = j?.ocr ?? j?.frames;
-      if (Array.isArray(ocr)) return ocr.map((f) => f.ocr ?? f.text ?? "").join("\n");
-      return typeof ocr === "string" ? ocr : "";
+      const rows = j?.ocrResults ?? [];
+      if (rows.length === 0) return "";
+      if (task?.t === undefined) return rows.map((x) => x.text).join("\n");
+      const best = rows.reduce((b, x) => (Math.abs((clockToSeconds(x.time) ?? 0) - task.t) < Math.abs((clockToSeconds(b.time) ?? 0) - task.t) ? x : b), rows[0]);
+      return best?.text ?? "";
     },
-    frameTimes: (r) => {
-      const j = jsonFromText(r);
-      const t = j?.timestamp ?? j?.frame?.timestamp;
-      return typeof t === "number" ? [t] : undefined;
-    },
+    frameTimes: (results) => (Array.isArray(results) ? results : [results]).map((r) => clockToSeconds(jsonFromText(r)?.timestamp)).filter((t) => t !== undefined),
   },
+};
+
+/* ------------------------------------------------ claude-video (script) */
+const claudeVideo = {
+  name: "claude-video-script",
+  kind: "script",
+  notes: "Agent skill, not a server: frames.py called directly (uniform sampling, stdlib Python + ffmpeg). Transcript needs Groq/OpenAI keys: n/a offline. No OCR, no scene tool via CLI.",
+  // Runs inside the media-intel image (python3 + ffmpeg present), skill mounted read-only.
+  run: ({ docker, fixtures, cache, ref }, task) => {
+    const base = [...docker.slice(1), "run", "--rm", "--network", "none", "-v", `${fixtures}:/data:ro`, "-v", `${ref}/claude-video:/skill:ro`, "-v", `${cache}:/cache`, "--entrypoint", "python3", "media-intel:bench"];
+    const outDir = `/cache/out-${task.task}-${Math.round(Math.random() * 1e6)}`;
+    if (task.task === "overview") return { command: docker[0], args: [...base, "/skill/skills/watch/scripts/frames.py", `/data/${task.file}`, outDir, "--max-frames", "40", "--no-dedup"], outDir, cacheDir: cache };
+    if (task.task === "frames") return { command: docker[0], args: [...base, "/skill/skills/watch/scripts/watch.py", `/data/${task.file}`, "--timestamps", task.timestamps.join(","), "--detail", "transcript", "--no-whisper"], outDir: undefined, cacheDir: cache };
+    return { na: "not available via CLI" };
+  },
+  tasks: { overview: true, frames: true },
 };
 
 export const candidates = [
@@ -135,4 +180,5 @@ export const candidates = [
   mediaIntel("media-intel-base", "ggml-base-q5_1.bin"),
   mediaUnderstanding,
   videoAnalyzer,
+  claudeVideo,
 ];
