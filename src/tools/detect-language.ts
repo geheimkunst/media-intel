@@ -76,3 +76,29 @@ export async function detectLanguage(config: Config, input: DetectLanguageInput)
 export function summarizeDetectLanguage(result: DetectLanguageResult): string {
   return `Detected language: ${result.language} (confidence: ${(result.confidence * 100).toFixed(0)}%).`;
 }
+
+import type { McpServer } from "@modelcontextprotocol/server";
+import { toolErrorResult } from "../errors.js";
+
+export function registerDetectLanguage(server: McpServer, config: Config): void {
+  server.registerTool(
+    "detect_language",
+    {
+      title: "Detect language",
+      description:
+        "Spoken language of the first 30 s (configurable) via local whisper.cpp, as ISO-639-1 code with confidence. " +
+        "Cheap; run it before get_transcript on material whose language is unknown so the right model and OCR language are used.",
+      inputSchema: detectLanguageInput,
+      outputSchema: detectLanguageOutput,
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await detectLanguage(config, args);
+        return { content: [{ type: "text", text: summarizeDetectLanguage(result) }], structuredContent: result };
+      } catch (error) {
+        return toolErrorResult(error);
+      }
+    },
+  );
+}

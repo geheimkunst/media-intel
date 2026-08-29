@@ -312,8 +312,8 @@ describe("media-intel MCP server: get_video_grids end to end", () => {
       name: "get_video_grids",
       arguments: {
         source: join(fixtures, "clip.mp4"),
-        cells: "4",
-        grid_long_edge: "1568",
+        cells: 4,
+        grid_long_edge: 1568,
         max_frames: 4,
         frame_format: "jpeg",
         quality: 80,
@@ -340,8 +340,8 @@ describe("media-intel MCP server: get_video_grids end to end", () => {
       arguments: {
         source: join(fixtures, "clip.mp4"),
         window: { start_s: 0.5, end_s: 2.5 },
-        cells: "4",
-        grid_long_edge: "1568",
+        cells: 4,
+        grid_long_edge: 1568,
         max_frames: 8,
         frame_format: "jpeg",
         quality: 80,

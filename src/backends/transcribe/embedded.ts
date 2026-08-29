@@ -52,7 +52,7 @@ export async function extractEmbeddedSubtitles(
       );
     }
 
-    return { segments, language: opts.language };
+    return { segments, ...(opts.language !== undefined ? { language: opts.language } : {}) };
   } catch (err) {
     if (err instanceof MediaIntelError) throw err;
     throw new MediaIntelError(

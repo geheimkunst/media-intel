@@ -13,8 +13,14 @@ import { cacheEntry, writeSidecarBytes } from "../cache.js";
 export const getVideoGridsInput = z.object({
   source: z.string().min(1).describe("Absolute path to a local video file, or a direct http(s) URL."),
   window: windowInput.optional().describe("Time window to process. Omit for the whole file (subject to budget)."),
-  cells: z.enum(["4", "9", "16", "25", "36", "64"]).default("64").transform(Number).describe("Contact sheet grid size (cells). Default 64."),
-  grid_long_edge: z.enum(["1568", "2576"]).default("1568").transform(Number).describe("Pixel width of the grid's longer edge. Default 1568."),
+  cells: z
+    .union([z.literal(4), z.literal(9), z.literal(16), z.literal(25), z.literal(36), z.literal(64)])
+    .default(64)
+    .describe("Contact sheet grid size (cells per grid, square). Default 64; use 16 when on-screen text must stay readable."),
+  grid_long_edge: z
+    .union([z.literal(1568), z.literal(2576)])
+    .default(1568)
+    .describe("Pixel length of the grid's longer edge. 1568 fits Claude's standard image budget; 2576 for newer models."),
   max_frames: z.number().int().min(1).max(2048).default(512).describe("Maximum frames to extract. Default 512."),
   frame_format: z.enum(["jpeg", "png", "webp"]).default("jpeg").describe("Frame encoding format. Default jpeg."),
   quality: z.number().int().min(1).max(100).default(80).describe("JPEG/WebP quality. Default 80."),
@@ -470,4 +476,40 @@ export function summarizeGetVideoGrids(r: GetVideoGridsResult): string {
 
   const warnings = r.warnings.length > 0 ? `\nWarnings:\n- ${r.warnings.join("\n- ")}` : "";
   return content + warnings;
+}
+
+import type { McpServer } from "@modelcontextprotocol/server";
+import { readFile as readFrameFile } from "node:fs/promises";
+import { toolErrorResult } from "../errors.js";
+
+export function registerGetVideoGrids(server: McpServer, config: Config): void {
+  server.registerTool(
+    "get_video_grids",
+    {
+      title: "Get video grids",
+      description:
+        "Contact sheets of a video: frames sampled by duration (or explicit timestamps) and tiled into grids. " +
+        "Default 64 cells and 1568 px long edge (about 1.9k tokens per grid on Claude); use cells=16 when on-screen text matters. " +
+        "Near-identical frames are deduplicated (pHash). Long videos paginate by time window (has_more/next_window). " +
+        "The manifest maps grid and cell (row-major from top-left) to seconds: read times from the manifest, never from pixels.",
+      inputSchema: getVideoGridsInput,
+      outputSchema: getVideoGridsOutput,
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await getVideoGrids(config, args);
+        const imageBlocks = await Promise.all(
+          result.grids.map(async (g) => ({
+            type: "image" as const,
+            data: (await readFrameFile(g.cache_path)).toString("base64"),
+            mimeType: g.format === "webp" ? "image/webp" : g.format === "png" ? "image/png" : "image/jpeg",
+          })),
+        );
+        return { content: [{ type: "text", text: summarizeGetVideoGrids(result) }, ...imageBlocks], structuredContent: result };
+      } catch (error) {
+        return toolErrorResult(error);
+      }
+    },
+  );
 }

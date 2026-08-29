@@ -107,5 +107,5 @@ export async function extractSidecarSubtitles(location: string, opts: SidecarOpt
     return null;
   }
 
-  return { segments, language: detectedLang };
+  return { segments, ...(detectedLang !== undefined ? { language: detectedLang } : {}) };
 }

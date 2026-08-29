@@ -6,6 +6,13 @@ import { registerAnalyzeAudio } from "./tools/analyze-audio.js";
 import { registerDiffFrames } from "./tools/diff-frames.js";
 import { doctor, doctorInput, doctorOutput, summarizeDoctor } from "./tools/doctor.js";
 import { registerGetScenes } from "./tools/get-scenes.js";
+import { registerDetectLanguage } from "./tools/detect-language.js";
+import { registerExtractText } from "./tools/extract-text.js";
+import { registerFetchMedia } from "./tools/fetch-media.js";
+import { registerGetEngagement } from "./tools/get-engagement.js";
+import { registerGetFrames } from "./tools/get-frames.js";
+import { registerGetTranscript } from "./tools/get-transcript.js";
+import { registerGetVideoGrids } from "./tools/get-video-grids.js";
 import { registerListCached } from "./tools/list-cached.js";
 import { registerMediaSearch } from "./tools/media-search.js";
 import { registerProbeImage } from "./tools/probe-image.js";
@@ -74,6 +81,15 @@ export function createServer(config: Config = loadConfig()): McpServer {
   );
 
   registerProbeImage(server, config);
+  registerFetchMedia(server, config);
+  registerGetEngagement(server, config);
+
+  // Stage 3 (extraction)
+  registerGetTranscript(server, config);
+  registerDetectLanguage(server, config);
+  registerGetFrames(server, config);
+  registerGetVideoGrids(server, config);
+  registerExtractText(server, config);
 
   // Stage 3 (analysis)
   registerGetScenes(server, config);

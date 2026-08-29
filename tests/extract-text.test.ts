@@ -341,7 +341,8 @@ describe("extract-text MCP round trip", () => {
     expect(result.isError).toBeFalsy();
     const text = result.content.find((c) => c.type === "text");
     const textContent = text && "text" in text ? text.text : "";
-    expect(textContent).toContain("Extracted text");
+    expect(textContent).toContain("OCR (");
+    expect(textContent).toContain("MEDIA_TEXT_BEGIN");
 
     // structuredContent should be present.
     const sc = result.structuredContent as { language: string; results: Array<{ text: string }> };
