@@ -1,7 +1,7 @@
 import { lookup } from "node:dns/promises";
 import { realpath, stat } from "node:fs/promises";
 import { isIP } from "node:net";
-import { isAbsolute, resolve } from "node:path";
+import { isAbsolute, relative, resolve } from "node:path";
 import { MediaIntelError } from "./errors.js";
 
 export type SourceKind = "file" | "url";
@@ -112,9 +112,26 @@ export async function resolveSource(source: string, options: ResolveOptions = {}
   return resolveLocal(trimmed, options);
 }
 
+/** Absolute directories a local source must live in; empty means no restriction. */
+function allowedRoots(env: NodeJS.ProcessEnv = process.env): string[] {
+  return (env.MEDIA_INTEL_ALLOWED_ROOTS ?? "")
+    .split(":")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}
+
+function isInside(root: string, path: string): boolean {
+  const rel = relative(root, path);
+  return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
+}
+
 async function resolveLocal(rawPath: string, options: ResolveOptions): Promise<ResolvedSource> {
   const cwd = options.cwd ?? process.cwd();
   const path = isAbsolute(rawPath) ? rawPath : resolve(cwd, rawPath);
+  // Relative paths may not climb out of the working directory (no "../../etc/passwd").
+  if (!isAbsolute(rawPath) && !isInside(cwd, path)) {
+    throw new MediaIntelError("source_outside_cwd", `Relative path escapes the working directory: ${rawPath}`, "Pass an absolute path.");
+  }
   let real: string;
   try {
     real = await realpath(path);
@@ -124,6 +141,10 @@ async function resolveLocal(rawPath: string, options: ResolveOptions): Promise<R
       `No file at ${path}`,
       "Pass an absolute path to an existing file, or an http(s) URL. Remote platform pages (YouTube etc.) need fetch_media first.",
     );
+  }
+  const roots = allowedRoots();
+  if (roots.length > 0 && !roots.some((r) => isInside(r, real))) {
+    throw new MediaIntelError("source_outside_allowed_roots", `${real} is outside MEDIA_INTEL_ALLOWED_ROOTS`, `Allowed roots: ${roots.join(", ")}`);
   }
   const info = await stat(real);
   if (!info.isFile()) throw new MediaIntelError("invalid_source", `${path} is not a regular file`);

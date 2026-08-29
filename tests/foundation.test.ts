@@ -208,3 +208,19 @@ describe("doctor and probe deep", () => {
     await expect(probeMedia(tiny, { source: join(fixtures, "clip.mp4") })).rejects.toMatchObject({ code: "input_too_large" });
   });
 });
+
+describe("source path policy", () => {
+  it("refuses relative paths that escape the working directory", async () => {
+    await expect(resolveSource("../../etc/passwd", { cwd: "/tmp/x/y" })).rejects.toMatchObject({ code: "source_outside_cwd" });
+  });
+  it("honors MEDIA_INTEL_ALLOWED_ROOTS for absolute paths", async () => {
+    const prev = process.env.MEDIA_INTEL_ALLOWED_ROOTS;
+    process.env.MEDIA_INTEL_ALLOWED_ROOTS = "/nonexistent-root";
+    try {
+      await expect(resolveSource(join(fixtures, "red.png"))).rejects.toMatchObject({ code: "source_outside_allowed_roots" });
+    } finally {
+      if (prev === undefined) delete process.env.MEDIA_INTEL_ALLOWED_ROOTS;
+      else process.env.MEDIA_INTEL_ALLOWED_ROOTS = prev;
+    }
+  });
+});

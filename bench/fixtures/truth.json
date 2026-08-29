@@ -1,0 +1,89 @@
+{
+  "speech": {
+    "speech-de-clean.m4a": {
+      "text": "Hallo, das ist eine Testnotiz für den Benchmark. Morgen um zehn Uhr habe ich einen Termin mit dem Kunden in Berlin. Bitte erinnere mich daran, die Präsentation vorzubereiten und die Rechnung für August zu schicken. Die Zahlen aus dem zweiten Quartal sind besser als erwartet.",
+      "lang": "de"
+    },
+    "speech-en-clean.m4a": {
+      "text": "This is a short recording for the benchmark. The deployment finished on Tuesday and the error rate dropped below two percent. Please send the invoice for August and schedule the review with the customer in Berlin next week.",
+      "lang": "en"
+    },
+    "speech-de-long.m4a": {
+      "text": "Willkommen zur Wochenbesprechung. Erstens: Der Server läuft seit dem Umzug stabil, die Antwortzeiten liegen unter zweihundert Millisekunden. Zweitens: Die neue Suchfunktion ist fertig und wird am Freitag freigeschaltet. Drittens: Wir brauchen noch eine Entscheidung über das Budget für das dritte Quartal. Bitte prüft bis Donnerstag die Zahlen und schickt mir eure Rückmeldung. Zum Schluss ein Hinweis: Die Rechnung für August muss bis zum fünfzehnten raus, sonst gibt es Mahngebühren. Danke und bis nächste Woche.",
+      "lang": "de"
+    },
+    "speech-de-noise.m4a": {
+      "text": "Hallo, das ist eine Testnotiz für den Benchmark. Morgen um zehn Uhr habe ich einen Termin mit dem Kunden in Berlin. Bitte erinnere mich daran, die Präsentation vorzubereiten und die Rechnung für August zu schicken. Die Zahlen aus dem zweiten Quartal sind besser als erwartet.",
+      "lang": "de"
+    },
+    "speech-en-music.m4a": {
+      "text": "This is a short recording for the benchmark. The deployment finished on Tuesday and the error rate dropped below two percent. Please send the invoice for August and schedule the review with the customer in Berlin next week.",
+      "lang": "en"
+    }
+  },
+  "ocr": {
+    "ocr-terminal-720.png": {
+      "text": "$ npm run build\n> tsc -p tsconfig.json\nsrc/server.ts(12,5): error TS2304: Cannot find name 'registerTool'.\nFound 1 error in src/server.ts:12\n$ git status\nOn branch main, nothing to commit"
+    },
+    "ocr-terminal-1080.png": {
+      "text": "$ curl -s https://api.example.com/v1/orders/8821\n{\"id\": 8821, \"status\": \"failed\", \"reason\": \"payment declined\"}\nERROR: ENOENT: no such file or directory, open 'config.yaml'\n    at Object.openSync (node:fs:581:3)\nTest Files 1 failed | 3 passed (4)"
+    },
+    "ocr-dialog-1080.png": {
+      "text": "Zahlung fehlgeschlagen\nDie Karte wurde abgelehnt. Bitte prüfen Sie Ihre Angaben.\nRechnungsnummer 2026-08-0417\nBetrag: 1.249,00 EUR\nErneut versuchen        Abbrechen"
+    },
+    "ocr-video.mp4": {
+      "frames": {
+        "1.5": "$ npm run build\n> tsc -p tsconfig.json\nsrc/server.ts(12,5): error TS2304: Cannot find name 'registerTool'.\nFound 1 error in src/server.ts:12\n$ git status\nOn branch main, nothing to commit",
+        "4.5": "$ curl -s https://api.example.com/v1/orders/8821\n{\"id\": 8821, \"status\": \"failed\", \"reason\": \"payment declined\"}\nERROR: ENOENT: no such file or directory, open 'config.yaml'\n    at Object.openSync (node:fs:581:3)\nTest Files 1 failed | 3 passed (4)",
+        "7.5": "Zahlung fehlgeschlagen\nDie Karte wurde abgelehnt. Bitte prüfen Sie Ihre Angaben.\nRechnungsnummer 2026-08-0417\nBetrag: 1.249,00 EUR\nErneut versuchen        Abbrechen"
+      }
+    }
+  },
+  "cuts": {
+    "ocr-video.mp4": {
+      "cuts": [
+        3,
+        6
+      ],
+      "tolerance_s": 0.3
+    },
+    "cuts-10.mp4": {
+      "cuts": [
+        2,
+        3.5,
+        4.5,
+        7,
+        7.8,
+        10.8,
+        12,
+        13.7,
+        15.9,
+        16.8
+      ],
+      "tolerance_s": 0.25,
+      "duration_s": 19.999999999999996
+    },
+    "fades-3.mp4": {
+      "cuts": [
+        3.75,
+        7.25,
+        10.75
+      ],
+      "tolerance_s": 0.6,
+      "duration_s": 14
+    }
+  },
+  "language": {
+    "speech-de-clean.m4a": "de",
+    "speech-en-clean.m4a": "en",
+    "speech-de-long.m4a": "de"
+  },
+  "robustness": {
+    "corrupt.mp4": "graceful error",
+    "empty.mp4": "graceful error",
+    "silent.wav": "empty transcript or clear warning, no crash",
+    "noaudio.mp4": "transcript refused with reason, frames still work",
+    "http://169.254.169.254/latest/meta-data": "refused (private address)",
+    "../../etc/passwd": "not found or refused, never read"
+  }
+}

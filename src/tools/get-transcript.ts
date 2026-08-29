@@ -142,15 +142,21 @@ async function getTranscriptInner(config: Config, input: GetTranscriptInput): Pr
     }
   }
 
+  let whisperError: unknown;
   if (input.backend === "auto" || input.backend === "whisper") {
-    result = await tryWhisperCpp(config, resolved.location, start_s, end_s, input).catch(() => null);
+    result = await tryWhisperCpp(config, resolved.location, start_s, end_s, input).catch((error: unknown) => {
+      whisperError = error;
+      return null;
+    });
     if (result) {
       const cacheKey = buildCacheKey(result.source, input.language, start_s, end_s, input.word_timestamps);
       await writeSidecarJson(cache, `transcript.${cacheKey}.json`, result);
       return buildResult(input, result, pag, probe.duration_s, config);
     }
     if (input.backend === "whisper") {
-      throw new MediaIntelError("whisper_unavailable", "whisper-cpp not available", "Install with: brew install whisper-cpp");
+      // Surface the real reason (missing binary, no speech, bad model) instead of a generic message.
+      if (whisperError instanceof MediaIntelError) throw whisperError;
+      throw new MediaIntelError("whisper_unavailable", `whisper-cpp failed: ${whisperError instanceof Error ? whisperError.message : String(whisperError)}`, "Run doctor; install with brew install whisper-cpp and download a model.");
     }
   }
 
