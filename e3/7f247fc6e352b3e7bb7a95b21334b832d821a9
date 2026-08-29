@@ -1,0 +1,25 @@
+bench/results/run-20260829-175913.json
+  s_dd83aa1d90e0ec::t_ffb1a9c124b31d 1-594
+bench/results/final-2026-08-29.json
+  s_dd83aa1d90e0ec::t_4f4654510f0640 1-2832
+README.md
+  s_dd83aa1d90e0ec::t_674d3fa04bbf9e 146-149
+docs/benchmarks/2026-08-29-stufe-1.md
+  s_dd83aa1d90e0ec::t_35e5140b8e111d 24-104,108-150
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "e37f247fc6e352b3e7bb7a95b21334b832d821a9",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
