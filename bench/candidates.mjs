@@ -85,7 +85,7 @@ function mediaIntel(name, whisperModel) {
 const mediaUnderstanding = {
   name: "media-understanding",
   kind: "mcp",
-  notes: "whisper.cpp via node-av, model base-q5_1 (multilingual); no language field, no scenes tool (scene sampling of grids used as proxy), no OCR; timestamps burned into images.",
+  notes: "whisper.cpp via node-av. On this host every get_transcript call kills the server with SIGSEGV (exit 139), reproduced with the official image ghcr.io/dymoo/media-understanding:1.1.0, with the bundled base.en-q5_1 and with base-q5_1, with and without hardware probing; transcript therefore n/a (crash) so the rest of the suite can run. No language field, no scenes tool (scene sampling of grids used as proxy), no OCR; timestamps burned into images.",
   spawn: (ctx) => dockerSpawn(ctx, "media-understanding:bench", {
     XDG_CACHE_HOME: "/cache",
     MEDIA_UNDERSTANDING_MODEL: "base-q5_1",
@@ -93,10 +93,10 @@ const mediaUnderstanding = {
   }, ["--entrypoint", "node"], ["dist/mcp.js"]),
   tasks: {
     probe: (src) => ({ tool: "probe_media", args: { paths: src } }),
-    transcript: (src) => ({ tool: "get_transcript", args: { file_path: src, format: "json" } }),
-    frames: (src, t) => ({ tool: "get_frames", args: { file_path: src, timestamps: t.timestamps } }),
-    overview: (src) => ({ tool: "get_video_grids", args: { file_path: src } }),
-    scenes: (src) => ({ tool: "get_video_grids", args: { file_path: src, sampling_strategy: "scene", scene_threshold: 0.3, max_grids: 6 } }),
+    transcript: () => ({ na: "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)" }),
+    frames: (src, t) => ({ tool: "get_frames", args: { file_path: src, timestamps: t.timestamps, max_total_chars: 600000 } }),
+    overview: (src) => ({ tool: "get_video_grids", args: { file_path: src, max_total_chars: 600000 } }),
+    scenes: (src) => ({ tool: "get_video_grids", args: { file_path: src, sampling_strategy: "scene", scene_threshold: 0.3, max_grids: 6, max_total_chars: 600000 } }),
   },
   parse: {
     transcriptText: (r) => {
@@ -130,11 +130,11 @@ const videoAnalyzer = {
   notes: "No ASR backend in the image (needs Python openai-whisper or an API key): transcript n/a. Only video extensions accepted: audio and PNG fixtures n/a. Times as M:SS (1 s resolution). OCR only inside analyze_video; tesseract.js with tessdata pre-placed in the cache.",
   spawn: (ctx) => dockerSpawn(ctx, "mcp-video-analyzer:bench", { MCP_CACHE_DIR: "/cache" }),
   tasks: {
-    probe: (src) => (isVideo(src) ? { tool: "get_metadata", args: { url: src } } : { na: "audio not accepted (video extensions only)" }),
-    transcript: () => ({ na: "no speech-to-text backend in the image (whisper CLI or API key required)" }),
+    probe: (src, t) => (isVideo(src) || t?.task === "robust" ? { tool: "get_metadata", args: { url: src } } : { na: "audio not accepted (video extensions only)" }),
+    transcript: (src, t) => (t?.task === "robust" ? { tool: "get_transcript", args: { url: src } } : { na: "no speech-to-text backend in the image (whisper CLI or API key required)" }),
     frames: (src, t) => t.timestamps.map((ts) => ({ tool: "get_frame_at", args: { url: src, timestamp: secondsToClock(ts) } })),
     overview: (src) => ({ tool: "get_frames", args: { url: src, options: { maxFrames: 20, dense: true } } }),
-    scenes: (src) => ({ tool: "analyze_video", args: { url: src, options: { fields: ["frames"], threshold: 0.3, detail: "standard", forceRefresh: true } } }),
+    scenes: (src) => ({ tool: "analyze_video", args: { url: src, options: { fields: ["frames"], threshold: 0.3, detail: "standard", forceRefresh: true, ocrLanguage: "deu+eng" } } }),
     ocr: (src, t) => (isVideo(src) ? { tool: "analyze_video", args: { url: src, options: { fields: ["ocrResults"], ocrLanguage: "deu+eng", detail: "detailed", forceRefresh: true } } } : { na: "image files not accepted (video extensions only)" }),
   },
   parse: {

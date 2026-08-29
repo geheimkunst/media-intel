@@ -1,0 +1,2406 @@
+{
+  "meta": {
+    "date": "2026-08-29T15:35:42.089Z",
+    "host": "hermes",
+    "cpus": 4,
+    "cpu": "AMD EPYC 9645 96-Core Processor",
+    "mem_gb": 7.8,
+    "fixtures": "/home/yunus/bench/fixtures",
+    "docker": "sudo docker",
+    "loose_tolerance_s": 1
+  },
+  "candidates": [
+    {
+      "name": "media-intel",
+      "kind": "mcp",
+      "image": "media-intel:bench",
+      "tools": [
+        "doctor",
+        "list_cached",
+        "probe_media",
+        "probe_image",
+        "fetch_media",
+        "get_engagement",
+        "understand_media",
+        "get_transcript",
+        "detect_language",
+        "get_frames",
+        "get_video_grids",
+        "extract_text",
+        "get_scenes",
+        "analyze_audio",
+        "diff_frames",
+        "analyze_moment",
+        "media_search"
+      ],
+      "startup_ms": 745,
+      "alive_after_suite": true,
+      "results": [
+        {
+          "task": "probe",
+          "file": "speech-de-clean.m4a",
+          "ok": true,
+          "wall_ms": 196,
+          "peak_mem_mb": 55.8,
+          "response_bytes": 659,
+          "text_chars": 103,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-clean.m4a",
+          "ok": true,
+          "wall_ms": 77,
+          "peak_mem_mb": 56.2,
+          "response_bytes": 657,
+          "text_chars": 102,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-long.m4a",
+          "ok": true,
+          "wall_ms": 69,
+          "peak_mem_mb": 56.6,
+          "response_bytes": 658,
+          "text_chars": 103,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-noise.m4a",
+          "ok": true,
+          "wall_ms": 78,
+          "peak_mem_mb": 56.9,
+          "response_bytes": 659,
+          "text_chars": 103,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-music.m4a",
+          "ok": true,
+          "wall_ms": 68,
+          "peak_mem_mb": 57.3,
+          "response_bytes": 657,
+          "text_chars": 102,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "cuts-10.mp4",
+          "ok": true,
+          "wall_ms": 87,
+          "peak_mem_mb": 57.7,
+          "response_bytes": 992,
+          "text_chars": 231,
+          "images": [],
+          "est_tokens": 58,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "ocr-video.mp4",
+          "ok": true,
+          "wall_ms": 76,
+          "peak_mem_mb": 36.8,
+          "response_bytes": 992,
+          "text_chars": 232,
+          "images": [],
+          "est_tokens": 58,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-clean.m4a",
+          "ok": true,
+          "wall_ms": 29310,
+          "peak_mem_mb": 831.2,
+          "response_bytes": 1906,
+          "text_chars": 572,
+          "images": [],
+          "est_tokens": 143,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0,
+            "hyp_chars": 273,
+            "language": "de",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-clean.m4a",
+          "ok": true,
+          "wall_ms": 27963,
+          "peak_mem_mb": 761,
+          "response_bytes": 1590,
+          "text_chars": 472,
+          "images": [],
+          "est_tokens": 118,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0.026,
+            "hyp_chars": 214,
+            "language": "en",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-long.m4a",
+          "ok": true,
+          "wall_ms": 43511,
+          "peak_mem_mb": 841.9,
+          "response_bytes": 3009,
+          "text_chars": 924,
+          "images": [],
+          "est_tokens": 231,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0.014,
+            "hyp_chars": 500,
+            "language": "de",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-noise.m4a",
+          "ok": true,
+          "wall_ms": 29171,
+          "peak_mem_mb": 768.7,
+          "response_bytes": 1510,
+          "text_chars": 456,
+          "images": [],
+          "est_tokens": 114,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0.022,
+            "hyp_chars": 273,
+            "language": "de",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-music.m4a",
+          "ok": true,
+          "wall_ms": 27837,
+          "peak_mem_mb": 768.1,
+          "response_bytes": 1599,
+          "text_chars": 475,
+          "images": [],
+          "est_tokens": 119,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0.026,
+            "hyp_chars": 214,
+            "language": "en",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "language",
+          "file": "speech-de-clean.m4a",
+          "ok": true,
+          "wall_ms": 28852,
+          "peak_mem_mb": 771.4,
+          "response_bytes": 210,
+          "text_chars": 22,
+          "images": [],
+          "est_tokens": 6,
+          "tool": "detect_language",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "language": "de",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "language",
+          "file": "speech-en-clean.m4a",
+          "ok": true,
+          "wall_ms": 27807,
+          "peak_mem_mb": 768.5,
+          "response_bytes": 210,
+          "text_chars": 22,
+          "images": [],
+          "est_tokens": 6,
+          "tool": "detect_language",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "language": "en",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "frames",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 670,
+          "peak_mem_mb": 47.7,
+          "response_bytes": 192555,
+          "text_chars": 52,
+          "images": [
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 27441,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 28027,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 29664,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 29108,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 28774,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 3948,
+          "tool": "get_frames",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "images": 5,
+            "mean_abs_dev_s": 0
+          }
+        },
+        {
+          "task": "overview",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 7354,
+          "peak_mem_mb": 211.5,
+          "response_bytes": 22050,
+          "text_chars": 412,
+          "images": [
+            {
+              "width": 1568,
+              "height": 880,
+              "bytes": 12116,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 1943,
+          "tool": "get_video_grids",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "images": 1,
+            "pixels": 1379840
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "cuts-10.mp4",
+          "ok": true,
+          "wall_ms": 570,
+          "peak_mem_mb": 80.9,
+          "response_bytes": 1906,
+          "text_chars": 356,
+          "images": [],
+          "est_tokens": 89,
+          "tool": "get_scenes",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "tp": 9,
+            "detected": 9,
+            "truth": 10,
+            "precision": 1,
+            "recall": 0.9,
+            "f1": 0.947,
+            "loose_precision": 1,
+            "loose_recall": 0.9,
+            "loose_f1": 0.947,
+            "cuts_detected": [
+              2,
+              3.52,
+              4.52,
+              7.84,
+              10.84,
+              12.04,
+              13.76,
+              15.96,
+              16.88
+            ]
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "fades-3.mp4",
+          "ok": true,
+          "wall_ms": 427,
+          "peak_mem_mb": 81.1,
+          "response_bytes": 1053,
+          "text_chars": 237,
+          "images": [],
+          "est_tokens": 60,
+          "tool": "get_scenes",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "tp": 0,
+            "detected": 0,
+            "truth": 3,
+            "precision": 0,
+            "recall": 0,
+            "f1": 0,
+            "loose_precision": 0,
+            "loose_recall": 0,
+            "loose_f1": 0,
+            "cuts_detected": []
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "ocr-video.mp4",
+          "ok": true,
+          "wall_ms": 295,
+          "peak_mem_mb": 81.3,
+          "response_bytes": 1099,
+          "text_chars": 181,
+          "images": [],
+          "est_tokens": 46,
+          "tool": "get_scenes",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "tp": 1,
+            "detected": 1,
+            "truth": 2,
+            "precision": 1,
+            "recall": 0.5,
+            "f1": 0.667,
+            "loose_precision": 1,
+            "loose_recall": 0.5,
+            "loose_f1": 0.667,
+            "cuts_detected": [
+              6
+            ]
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-terminal-720.png",
+          "ok": true,
+          "wall_ms": 627,
+          "peak_mem_mb": 81.6,
+          "response_bytes": 1442,
+          "text_chars": 278,
+          "images": [],
+          "est_tokens": 70,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 187
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-terminal-1080.png",
+          "ok": true,
+          "wall_ms": 797,
+          "peak_mem_mb": 81.9,
+          "response_bytes": 1570,
+          "text_chars": 335,
+          "images": [],
+          "est_tokens": 84,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 244
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-dialog-1080.png",
+          "ok": true,
+          "wall_ms": 545,
+          "peak_mem_mb": 82.1,
+          "response_bytes": 1282,
+          "text_chars": 248,
+          "images": [],
+          "est_tokens": 62,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 157
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 1.5,
+          "ok": true,
+          "wall_ms": 752,
+          "peak_mem_mb": 82.3,
+          "response_bytes": 1453,
+          "text_chars": 280,
+          "images": [],
+          "est_tokens": 70,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 188
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 4.5,
+          "ok": true,
+          "wall_ms": 979,
+          "peak_mem_mb": 82.4,
+          "response_bytes": 1573,
+          "text_chars": 336,
+          "images": [],
+          "est_tokens": 84,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 244
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 7.5,
+          "ok": true,
+          "wall_ms": 556,
+          "peak_mem_mb": 82.4,
+          "response_bytes": 1287,
+          "text_chars": 249,
+          "images": [],
+          "est_tokens": 63,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 157
+          }
+        },
+        {
+          "task": "robust",
+          "file": "corrupt.mp4",
+          "ok": true,
+          "wall_ms": 88,
+          "peak_mem_mb": 82.4,
+          "response_bytes": 233,
+          "text_chars": 178,
+          "images": [],
+          "est_tokens": 45,
+          "tool": "probe_media",
+          "is_error": true,
+          "has_structured": false,
+          "error": "ffprobe_failed: /data/corrupt.mp4: Invalid data found when processing input\nHint: The file is probably not a media container, is corrupt, or the URL is not directly downloadable.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "ffprobe_failed: /data/corrupt.mp4: Invalid data found when processing input\nHint: The file is probably not a media container, is corrupt, or the URL is not dire"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "empty.mp4",
+          "ok": true,
+          "wall_ms": 71,
+          "peak_mem_mb": 82.4,
+          "response_bytes": 231,
+          "text_chars": 176,
+          "images": [],
+          "est_tokens": 44,
+          "tool": "probe_media",
+          "is_error": true,
+          "has_structured": false,
+          "error": "ffprobe_failed: /data/empty.mp4: Invalid data found when processing input\nHint: The file is probably not a media container, is corrupt, or the URL is not directly downloadable.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "ffprobe_failed: /data/empty.mp4: Invalid data found when processing input\nHint: The file is probably not a media container, is corrupt, or the URL is not direct"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "silent.wav",
+          "ok": true,
+          "wall_ms": 528,
+          "peak_mem_mb": 82.4,
+          "response_bytes": 175,
+          "text_chars": 120,
+          "images": [],
+          "est_tokens": 30,
+          "tool": "get_transcript",
+          "is_error": true,
+          "has_structured": false,
+          "error": "whisper_empty: whisper-cli produced no transcript\nHint: Check the audio content; with --vad the file may be all silence.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "whisper_empty: whisper-cli produced no transcript\nHint: Check the audio content; with --vad the file may be all silence."
+          }
+        },
+        {
+          "task": "robust",
+          "file": "noaudio.mp4",
+          "ok": true,
+          "wall_ms": 86,
+          "peak_mem_mb": 82.4,
+          "response_bytes": 123,
+          "text_chars": 68,
+          "images": [],
+          "est_tokens": 17,
+          "tool": "get_transcript",
+          "is_error": true,
+          "has_structured": false,
+          "error": "no_audio: Video has no audio stream\nHint: Use OCR or images instead.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "no_audio: Video has no audio stream\nHint: Use OCR or images instead."
+          }
+        },
+        {
+          "task": "robust",
+          "file": "http://169.254.169.254/latest/meta-data",
+          "ok": true,
+          "wall_ms": 3,
+          "peak_mem_mb": 82.4,
+          "response_bytes": 251,
+          "text_chars": 196,
+          "images": [],
+          "est_tokens": 49,
+          "tool": "probe_media",
+          "is_error": true,
+          "has_structured": false,
+          "error": "source_private_host: 169.254.169.254 resolves to a private or local address; refusing to fetch it\nHint: media-intel only fetches public http(s) URLs. Download the file first and pass a local path.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "source_private_host: 169.254.169.254 resolves to a private or local address; refusing to fetch it\nHint: media-intel only fetches public http(s) URLs. Download t"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "../../etc/passwd",
+          "ok": true,
+          "wall_ms": 4,
+          "peak_mem_mb": 82.4,
+          "response_bytes": 165,
+          "text_chars": 110,
+          "images": [],
+          "est_tokens": 28,
+          "tool": "probe_media",
+          "is_error": true,
+          "has_structured": false,
+          "error": "source_outside_cwd: Relative path escapes the working directory: ../../etc/passwd\nHint: Pass an absolute path.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "source_outside_cwd: Relative path escapes the working directory: ../../etc/passwd\nHint: Pass an absolute path."
+          }
+        }
+      ],
+      "stderr_tail": "(node:1) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\nmedia-intel 0.2.0 ready on stdio\n"
+    },
+    {
+      "name": "media-intel-base",
+      "kind": "mcp",
+      "image": "media-intel:bench",
+      "tools": [
+        "doctor",
+        "list_cached",
+        "probe_media",
+        "probe_image",
+        "fetch_media",
+        "get_engagement",
+        "understand_media",
+        "get_transcript",
+        "detect_language",
+        "get_frames",
+        "get_video_grids",
+        "extract_text",
+        "get_scenes",
+        "analyze_audio",
+        "diff_frames",
+        "analyze_moment",
+        "media_search"
+      ],
+      "startup_ms": 486,
+      "alive_after_suite": true,
+      "results": [
+        {
+          "task": "probe",
+          "file": "speech-de-clean.m4a",
+          "ok": true,
+          "wall_ms": 170,
+          "peak_mem_mb": 52.8,
+          "response_bytes": 659,
+          "text_chars": 103,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-clean.m4a",
+          "ok": true,
+          "wall_ms": 69,
+          "peak_mem_mb": 52.9,
+          "response_bytes": 657,
+          "text_chars": 102,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-long.m4a",
+          "ok": true,
+          "wall_ms": 76,
+          "peak_mem_mb": 53,
+          "response_bytes": 658,
+          "text_chars": 103,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-noise.m4a",
+          "ok": true,
+          "wall_ms": 82,
+          "peak_mem_mb": 35.9,
+          "response_bytes": 659,
+          "text_chars": 103,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-music.m4a",
+          "ok": true,
+          "wall_ms": 70,
+          "peak_mem_mb": 35.6,
+          "response_bytes": 657,
+          "text_chars": 102,
+          "images": [],
+          "est_tokens": 26,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "cuts-10.mp4",
+          "ok": true,
+          "wall_ms": 82,
+          "peak_mem_mb": 36.6,
+          "response_bytes": 992,
+          "text_chars": 231,
+          "images": [],
+          "est_tokens": 58,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "probe",
+          "file": "ocr-video.mp4",
+          "ok": true,
+          "wall_ms": 70,
+          "peak_mem_mb": 36.8,
+          "response_bytes": 992,
+          "text_chars": 232,
+          "images": [],
+          "est_tokens": 58,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": true
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-clean.m4a",
+          "ok": true,
+          "wall_ms": 8091,
+          "peak_mem_mb": 237.3,
+          "response_bytes": 1776,
+          "text_chars": 534,
+          "images": [],
+          "est_tokens": 134,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0.022,
+            "hyp_chars": 274,
+            "language": "de",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-clean.m4a",
+          "ok": true,
+          "wall_ms": 2258,
+          "peak_mem_mb": 190.8,
+          "response_bytes": 1590,
+          "text_chars": 472,
+          "images": [],
+          "est_tokens": 118,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0.026,
+            "hyp_chars": 214,
+            "language": "en",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-long.m4a",
+          "ok": true,
+          "wall_ms": 5213,
+          "peak_mem_mb": 239.9,
+          "response_bytes": 3136,
+          "text_chars": 961,
+          "images": [],
+          "est_tokens": 241,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0.122,
+            "hyp_chars": 497,
+            "language": "de",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-noise.m4a",
+          "ok": true,
+          "wall_ms": 4380,
+          "peak_mem_mb": 246.8,
+          "response_bytes": 1788,
+          "text_chars": 538,
+          "images": [],
+          "est_tokens": 135,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0.111,
+            "hyp_chars": 275,
+            "language": "de",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-music.m4a",
+          "ok": true,
+          "wall_ms": 2272,
+          "peak_mem_mb": 199.9,
+          "response_bytes": 1599,
+          "text_chars": 475,
+          "images": [],
+          "est_tokens": 119,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "wer": 0.026,
+            "hyp_chars": 214,
+            "language": "en",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "language",
+          "file": "speech-de-clean.m4a",
+          "ok": true,
+          "wall_ms": 3143,
+          "peak_mem_mb": 200.8,
+          "response_bytes": 210,
+          "text_chars": 22,
+          "images": [],
+          "est_tokens": 6,
+          "tool": "detect_language",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "language": "de",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "language",
+          "file": "speech-en-clean.m4a",
+          "ok": true,
+          "wall_ms": 2720,
+          "peak_mem_mb": 200.7,
+          "response_bytes": 210,
+          "text_chars": 22,
+          "images": [],
+          "est_tokens": 6,
+          "tool": "detect_language",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "language": "en",
+            "language_ok": true
+          }
+        },
+        {
+          "task": "frames",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 653,
+          "peak_mem_mb": 52.1,
+          "response_bytes": 192555,
+          "text_chars": 52,
+          "images": [
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 27441,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 28027,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 29664,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 29108,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1024,
+              "height": 576,
+              "bytes": 28774,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 3948,
+          "tool": "get_frames",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "images": 5,
+            "mean_abs_dev_s": 0
+          }
+        },
+        {
+          "task": "overview",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 7398,
+          "peak_mem_mb": 219.5,
+          "response_bytes": 22050,
+          "text_chars": 412,
+          "images": [
+            {
+              "width": 1568,
+              "height": 880,
+              "bytes": 12116,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 1943,
+          "tool": "get_video_grids",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "images": 1,
+            "pixels": 1379840
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "cuts-10.mp4",
+          "ok": true,
+          "wall_ms": 582,
+          "peak_mem_mb": 83.1,
+          "response_bytes": 1906,
+          "text_chars": 356,
+          "images": [],
+          "est_tokens": 89,
+          "tool": "get_scenes",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "tp": 9,
+            "detected": 9,
+            "truth": 10,
+            "precision": 1,
+            "recall": 0.9,
+            "f1": 0.947,
+            "loose_precision": 1,
+            "loose_recall": 0.9,
+            "loose_f1": 0.947,
+            "cuts_detected": [
+              2,
+              3.52,
+              4.52,
+              7.84,
+              10.84,
+              12.04,
+              13.76,
+              15.96,
+              16.88
+            ]
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "fades-3.mp4",
+          "ok": true,
+          "wall_ms": 600,
+          "peak_mem_mb": 83.1,
+          "response_bytes": 1053,
+          "text_chars": 237,
+          "images": [],
+          "est_tokens": 60,
+          "tool": "get_scenes",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "tp": 0,
+            "detected": 0,
+            "truth": 3,
+            "precision": 0,
+            "recall": 0,
+            "f1": 0,
+            "loose_precision": 0,
+            "loose_recall": 0,
+            "loose_f1": 0,
+            "cuts_detected": []
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "ocr-video.mp4",
+          "ok": true,
+          "wall_ms": 302,
+          "peak_mem_mb": 83.4,
+          "response_bytes": 1099,
+          "text_chars": 181,
+          "images": [],
+          "est_tokens": 46,
+          "tool": "get_scenes",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "tp": 1,
+            "detected": 1,
+            "truth": 2,
+            "precision": 1,
+            "recall": 0.5,
+            "f1": 0.667,
+            "loose_precision": 1,
+            "loose_recall": 0.5,
+            "loose_f1": 0.667,
+            "cuts_detected": [
+              6
+            ]
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-terminal-720.png",
+          "ok": true,
+          "wall_ms": 612,
+          "peak_mem_mb": 83.8,
+          "response_bytes": 1442,
+          "text_chars": 278,
+          "images": [],
+          "est_tokens": 70,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 187
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-terminal-1080.png",
+          "ok": true,
+          "wall_ms": 762,
+          "peak_mem_mb": 84,
+          "response_bytes": 1570,
+          "text_chars": 335,
+          "images": [],
+          "est_tokens": 84,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 244
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-dialog-1080.png",
+          "ok": true,
+          "wall_ms": 509,
+          "peak_mem_mb": 83.9,
+          "response_bytes": 1282,
+          "text_chars": 248,
+          "images": [],
+          "est_tokens": 62,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 157
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 1.5,
+          "ok": true,
+          "wall_ms": 775,
+          "peak_mem_mb": 83.9,
+          "response_bytes": 1453,
+          "text_chars": 280,
+          "images": [],
+          "est_tokens": 70,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 188
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 4.5,
+          "ok": true,
+          "wall_ms": 1370,
+          "peak_mem_mb": 139.4,
+          "response_bytes": 1573,
+          "text_chars": 336,
+          "images": [],
+          "est_tokens": 84,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 244
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 7.5,
+          "ok": true,
+          "wall_ms": 503,
+          "peak_mem_mb": 83.8,
+          "response_bytes": 1287,
+          "text_chars": 249,
+          "images": [],
+          "est_tokens": 63,
+          "tool": "extract_text",
+          "is_error": false,
+          "has_structured": true,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 157
+          }
+        },
+        {
+          "task": "robust",
+          "file": "corrupt.mp4",
+          "ok": true,
+          "wall_ms": 66,
+          "peak_mem_mb": 83.8,
+          "response_bytes": 233,
+          "text_chars": 178,
+          "images": [],
+          "est_tokens": 45,
+          "tool": "probe_media",
+          "is_error": true,
+          "has_structured": false,
+          "error": "ffprobe_failed: /data/corrupt.mp4: Invalid data found when processing input\nHint: The file is probably not a media container, is corrupt, or the URL is not directly downloadable.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "ffprobe_failed: /data/corrupt.mp4: Invalid data found when processing input\nHint: The file is probably not a media container, is corrupt, or the URL is not dire"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "empty.mp4",
+          "ok": true,
+          "wall_ms": 68,
+          "peak_mem_mb": 83.7,
+          "response_bytes": 231,
+          "text_chars": 176,
+          "images": [],
+          "est_tokens": 44,
+          "tool": "probe_media",
+          "is_error": true,
+          "has_structured": false,
+          "error": "ffprobe_failed: /data/empty.mp4: Invalid data found when processing input\nHint: The file is probably not a media container, is corrupt, or the URL is not directly downloadable.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "ffprobe_failed: /data/empty.mp4: Invalid data found when processing input\nHint: The file is probably not a media container, is corrupt, or the URL is not direct"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "silent.wav",
+          "ok": true,
+          "wall_ms": 258,
+          "peak_mem_mb": 83.7,
+          "response_bytes": 175,
+          "text_chars": 120,
+          "images": [],
+          "est_tokens": 30,
+          "tool": "get_transcript",
+          "is_error": true,
+          "has_structured": false,
+          "error": "whisper_empty: whisper-cli produced no transcript\nHint: Check the audio content; with --vad the file may be all silence.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "whisper_empty: whisper-cli produced no transcript\nHint: Check the audio content; with --vad the file may be all silence."
+          }
+        },
+        {
+          "task": "robust",
+          "file": "noaudio.mp4",
+          "ok": true,
+          "wall_ms": 73,
+          "peak_mem_mb": 83.7,
+          "response_bytes": 123,
+          "text_chars": 68,
+          "images": [],
+          "est_tokens": 17,
+          "tool": "get_transcript",
+          "is_error": true,
+          "has_structured": false,
+          "error": "no_audio: Video has no audio stream\nHint: Use OCR or images instead.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "no_audio: Video has no audio stream\nHint: Use OCR or images instead."
+          }
+        },
+        {
+          "task": "robust",
+          "file": "http://169.254.169.254/latest/meta-data",
+          "ok": true,
+          "wall_ms": 5,
+          "peak_mem_mb": 83.7,
+          "response_bytes": 251,
+          "text_chars": 196,
+          "images": [],
+          "est_tokens": 49,
+          "tool": "probe_media",
+          "is_error": true,
+          "has_structured": false,
+          "error": "source_private_host: 169.254.169.254 resolves to a private or local address; refusing to fetch it\nHint: media-intel only fetches public http(s) URLs. Download the file first and pass a local path.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "source_private_host: 169.254.169.254 resolves to a private or local address; refusing to fetch it\nHint: media-intel only fetches public http(s) URLs. Download t"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "../../etc/passwd",
+          "ok": true,
+          "wall_ms": 2,
+          "peak_mem_mb": 83.7,
+          "response_bytes": 165,
+          "text_chars": 110,
+          "images": [],
+          "est_tokens": 28,
+          "tool": "probe_media",
+          "is_error": true,
+          "has_structured": false,
+          "error": "source_outside_cwd: Relative path escapes the working directory: ../../etc/passwd\nHint: Pass an absolute path.",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "source_outside_cwd: Relative path escapes the working directory: ../../etc/passwd\nHint: Pass an absolute path."
+          }
+        }
+      ],
+      "stderr_tail": "(node:1) ExperimentalWarning: SQLite is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\nmedia-intel 0.2.0 ready on stdio\n"
+    },
+    {
+      "name": "media-understanding",
+      "kind": "mcp",
+      "notes": "whisper.cpp via node-av, model base-q5_1 (multilingual); no language field, no scenes tool (scene sampling of grids used as proxy), no OCR; timestamps burned into images.",
+      "image": "media-understanding:bench",
+      "tools": [
+        "probe_media",
+        "understand_media",
+        "get_video_grids",
+        "get_frames",
+        "get_transcript",
+        "fetch_ytdlp"
+      ],
+      "startup_ms": 524,
+      "alive_after_suite": false,
+      "results": [
+        {
+          "task": "probe",
+          "file": "speech-de-clean.m4a",
+          "ok": true,
+          "wall_ms": 14,
+          "peak_mem_mb": 76.3,
+          "response_bytes": 217,
+          "text_chars": 170,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-clean.m4a",
+          "ok": true,
+          "wall_ms": 8,
+          "peak_mem_mb": 77,
+          "response_bytes": 216,
+          "text_chars": 169,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-long.m4a",
+          "ok": true,
+          "wall_ms": 7,
+          "peak_mem_mb": 77.8,
+          "response_bytes": 216,
+          "text_chars": 169,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-noise.m4a",
+          "ok": true,
+          "wall_ms": 6,
+          "peak_mem_mb": 59.1,
+          "response_bytes": 217,
+          "text_chars": 170,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-music.m4a",
+          "ok": true,
+          "wall_ms": 7,
+          "peak_mem_mb": 58.2,
+          "response_bytes": 216,
+          "text_chars": 169,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "cuts-10.mp4",
+          "ok": true,
+          "wall_ms": 8,
+          "peak_mem_mb": 60.3,
+          "response_bytes": 298,
+          "text_chars": 247,
+          "images": [],
+          "est_tokens": 62,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "ocr-video.mp4",
+          "ok": true,
+          "wall_ms": 14,
+          "peak_mem_mb": 62.2,
+          "response_bytes": 299,
+          "text_chars": 248,
+          "images": [],
+          "est_tokens": 62,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-clean.m4a",
+          "ok": false,
+          "wall_ms": 222,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_transcript",
+          "error": "Connection closed"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_transcript",
+          "error": "Not connected"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-long.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_transcript",
+          "error": "Not connected"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-noise.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_transcript",
+          "error": "Not connected"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-music.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_transcript",
+          "error": "Not connected"
+        },
+        {
+          "task": "frames",
+          "file": "frames-60s.mp4",
+          "ok": false,
+          "wall_ms": 1,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_frames",
+          "error": "Not connected"
+        },
+        {
+          "task": "overview",
+          "file": "frames-60s.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_video_grids",
+          "error": "Not connected"
+        },
+        {
+          "task": "scenes",
+          "file": "cuts-10.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_video_grids",
+          "error": "Not connected"
+        },
+        {
+          "task": "scenes",
+          "file": "fades-3.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_video_grids",
+          "error": "Not connected"
+        },
+        {
+          "task": "scenes",
+          "file": "ocr-video.mp4",
+          "ok": false,
+          "wall_ms": 1,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_video_grids",
+          "error": "Not connected"
+        },
+        {
+          "task": "robust",
+          "file": "corrupt.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "probe_media",
+          "error": "Not connected",
+          "quality": {
+            "graceful": false,
+            "text": "Not connected"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "empty.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "probe_media",
+          "error": "Not connected",
+          "quality": {
+            "graceful": false,
+            "text": "Not connected"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "silent.wav",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_transcript",
+          "error": "Not connected",
+          "quality": {
+            "graceful": false,
+            "text": "Not connected"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "noaudio.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_transcript",
+          "error": "Not connected",
+          "quality": {
+            "graceful": false,
+            "text": "Not connected"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "http://169.254.169.254/latest/meta-data",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "probe_media",
+          "error": "Not connected",
+          "quality": {
+            "graceful": false,
+            "text": "Not connected"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "../../etc/passwd",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "probe_media",
+          "error": "Not connected",
+          "quality": {
+            "graceful": false,
+            "text": "Not connected"
+          }
+        }
+      ],
+      "stderr_tail": "media-understanding: yt-dlp detected — URL support enabled\n"
+    },
+    {
+      "name": "mcp-video-analyzer",
+      "kind": "mcp",
+      "notes": "No ASR backend in the image (needs Python openai-whisper or an API key): transcript n/a. Only video extensions accepted: audio and PNG fixtures n/a. Times as M:SS (1 s resolution). OCR only inside analyze_video; tesseract.js with tessdata pre-placed in the cache.",
+      "image": "mcp-video-analyzer:bench",
+      "tools": [
+        "analyze_video",
+        "analyze_videos",
+        "get_frame_at",
+        "get_frame_burst",
+        "get_transcript",
+        "get_metadata",
+        "get_frames",
+        "analyze_moment"
+      ],
+      "startup_ms": 653,
+      "alive_after_suite": false,
+      "results": [
+        {
+          "task": "probe",
+          "file": "speech-de-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-long.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-noise.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-music.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "cuts-10.mp4",
+          "ok": true,
+          "wall_ms": 98,
+          "peak_mem_mb": 108.3,
+          "response_bytes": 495,
+          "text_chars": 391,
+          "images": [],
+          "est_tokens": 98,
+          "tool": "get_metadata",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "ocr-video.mp4",
+          "ok": true,
+          "wall_ms": 17,
+          "peak_mem_mb": 108.4,
+          "response_bytes": 498,
+          "text_chars": 394,
+          "images": [],
+          "est_tokens": 99,
+          "tool": "get_metadata",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-long.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-noise.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-music.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "frames",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 826,
+          "peak_mem_mb": 135.8,
+          "response_bytes": 126068,
+          "text_chars": 310,
+          "images": [
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18218,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18992,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 19168,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18519,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 19034,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 2478,
+          "tool": "get_frame_at",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "images": 5,
+            "mean_abs_dev_s": 0.15
+          }
+        },
+        {
+          "task": "overview",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 1680,
+          "peak_mem_mb": 207,
+          "response_bytes": 25053,
+          "text_chars": 95,
+          "images": [
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18638,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 504,
+          "tool": "get_frames",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "images": 1,
+            "pixels": 360000
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "cuts-10.mp4",
+          "ok": false,
+          "wall_ms": 720,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "analyze_video",
+          "error": "Connection closed"
+        },
+        {
+          "task": "scenes",
+          "file": "fades-3.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "analyze_video",
+          "error": "Not connected"
+        },
+        {
+          "task": "scenes",
+          "file": "ocr-video.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "analyze_video",
+          "error": "Not connected"
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-terminal-720.png",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "image files not accepted (video extensions only)"
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-terminal-1080.png",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "image files not accepted (video extensions only)"
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-dialog-1080.png",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "image files not accepted (video extensions only)"
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 1.5,
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "analyze_video",
+          "error": "Not connected"
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 4.5,
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "analyze_video",
+          "error": "Not connected"
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 7.5,
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "analyze_video",
+          "error": "Not connected"
+        },
+        {
+          "task": "robust",
+          "file": "corrupt.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_metadata",
+          "error": "Not connected",
+          "quality": {
+            "graceful": false,
+            "text": "Not connected"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "empty.mp4",
+          "ok": false,
+          "wall_ms": 1,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_metadata",
+          "error": "Not connected",
+          "quality": {
+            "graceful": false,
+            "text": "Not connected"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "silent.wav",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "robust",
+          "file": "noaudio.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "robust",
+          "file": "http://169.254.169.254/latest/meta-data",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "robust",
+          "file": "../../etc/passwd",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        }
+      ],
+      "stderr_tail": "node:internal/event_target:1118\n  process.nextTick(() => { throw err; });\n                           ^\n\nError: TypeError: fetch failed\n    at Worker.<anonymous> (/app/node_modules/tesseract.js/src/createWorker.js:217:15)\n    at Worker.emit (node:events:519:28)\n    at MessagePort.<anonymous> (node:internal/worker:270:53)\n    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:843:20)\n    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)\n\nNode.js v22.23.2\n"
+    },
+    {
+      "name": "claude-video-script",
+      "kind": "script",
+      "notes": "Agent skill, not a server: frames.py called directly (uniform sampling, stdlib Python + ffmpeg). Transcript needs Groq/OpenAI keys: n/a offline. No OCR, no scene tool via CLI.",
+      "tools": [],
+      "startup_ms": 0,
+      "alive_after_suite": true,
+      "results": [
+        {
+          "task": "frames",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 1450,
+          "peak_mem_mb": 0,
+          "response_bytes": 1330,
+          "text_chars": 1198,
+          "images": [],
+          "est_tokens": 300,
+          "tool": "watch.py",
+          "exit_code": 0,
+          "quality": {
+            "images_listed": 5,
+            "images": 0
+          }
+        },
+        {
+          "task": "overview",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 1116,
+          "peak_mem_mb": 0,
+          "response_bytes": 524863,
+          "text_chars": 6247,
+          "images": [
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12280,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12877,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13172,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13529,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13810,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13184,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12273,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13026,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12073,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12842,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13147,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13378,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13619,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13132,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12024,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13026,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12146,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12788,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12950,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13687,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13660,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13230,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12114,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13088,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12277,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12810,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12979,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13561,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13136,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13077,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12374,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13062,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12304,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12890,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13214,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13543,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13713,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13289,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 12236,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 512,
+              "height": 288,
+              "bytes": 13096,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 9442,
+          "tool": "frames.py",
+          "exit_code": 0,
+          "quality": {
+            "images": 40,
+            "pixels": 5898240
+          }
+        }
+      ]
+    }
+  ]
+}
