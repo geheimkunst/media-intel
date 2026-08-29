@@ -1,0 +1,48 @@
+src/server.ts
+  s_dd83aa1d90e0ec::t_2087c55d6366f4 85-94
+  s_dd83aa1d90e0ec::t_f494d3e6c0585c 7
+  s_dd83aa1d90e0ec::t_68a15045fb382d 68-84,95-104
+  s_dd83aa1d90e0ec::t_0c4fa7dc40339c 1
+tests/get-video-grids.test.ts
+  s_dd83aa1d90e0ec::t_267418304d6c7d 223,226,235
+  s_dd83aa1d90e0ec::t_889f396a725983 1-5,7-25,27-28,30,32-36,38-39,43-48,52-55,57,61-63,65-69,71,73-77,79-81,83-106,108-112,114-115,117-122,124,126-136,147,163-222,224-225,227-234,236-237
+  s_dd83aa1d90e0ec::t_a38e5899c937ff 49
+  s_dd83aa1d90e0ec::t_ae88c495526720 125
+  s_dd83aa1d90e0ec::t_52956e7b940c8c 31
+  s_dd83aa1d90e0ec::t_ccabeb84bbdc40 50-51,56,58-60
+  s_dd83aa1d90e0ec::t_9fdef4c4f59e36 40-42
+  s_dd83aa1d90e0ec::t_b692a8fa6226a6 137-146,148-162
+  s_dd83aa1d90e0ec::t_153ada03e833ac 6,26,29,37,64,70,72,78,82,107,113,116,123
+src/tools/get-video-grids.ts
+  s_dd83aa1d90e0ec::t_6b0ab6aae2a820 282
+  s_dd83aa1d90e0ec::t_a9decece62d292 7,11
+  s_dd83aa1d90e0ec::t_483fdba70acf4e 30-32,62,68-69
+  s_dd83aa1d90e0ec::t_ebb4c4b381a1d1 278-280
+  s_dd83aa1d90e0ec::t_66715872b79b30 263
+  s_dd83aa1d90e0ec::t_36940a463d75d5 2,5-6,8-10,12-29,33-61,63-67,70-135,137-149,151-160,164-165,171-185,190,196-203,212-216,226-231,240-262,264-277,281,283-397
+  s_dd83aa1d90e0ec::t_480d54299d1f80 186-187,191
+  s_dd83aa1d90e0ec::t_43c6c0d3be6c74 169-170
+  s_dd83aa1d90e0ec::t_7da320035476db 189,193-195,204-211,219-220,222-225,232-239
+  s_dd83aa1d90e0ec::t_6a66c5835008e7 4
+  s_dd83aa1d90e0ec::t_e3c5af436fabf8 150,188,192
+  s_dd83aa1d90e0ec::t_4cd5704fc45313 1,3
+  s_dd83aa1d90e0ec::t_11376a2e584fc6 136
+  s_dd83aa1d90e0ec::t_47adfb5b757dcd 161-163,166-168
+  s_dd83aa1d90e0ec::t_091660ee95a7e4 217-218,221
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "e82008d1e9c242780d82b8c7e7a91f3a65f163c9",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
