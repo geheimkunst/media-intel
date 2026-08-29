@@ -3,6 +3,8 @@ import { loadConfig, type Config } from "./config.js";
 import { toolErrorResult } from "./errors.js";
 import { doctor, doctorInput, doctorOutput, summarizeDoctor } from "./tools/doctor.js";
 import { probeMedia, probeMediaInput, probeMediaOutput, summarizeProbe } from "./tools/probe-media.js";
+import { fetchMedia, fetchMediaInput, fetchMediaOutput, summarizeFetchMedia } from "./tools/fetch-media.js";
+import { getEngagement, getEngagementInput, getEngagementOutput, summarizeGetEngagement } from "./tools/get-engagement.js";
 
 export const SERVER_NAME = "media-intel";
 export const SERVER_VERSION = "0.1.0";
@@ -57,6 +59,51 @@ export function createServer(config: Config = loadConfig()): McpServer {
       try {
         const result = await probeMedia(config, args);
         return { content: [{ type: "text", text: summarizeProbe(result) }], structuredContent: result };
+      } catch (error) {
+        return toolErrorResult(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "fetch_media",
+    {
+      title: "Fetch media",
+      description:
+        "Download a video, audio, or metadata from a platform page URL via yt-dlp. " +
+        "Supports selective downloads (video, audio, subtitles, thumbnail), quality selection, " +
+        "time-window cutting, subtitle language choice, and caching. " +
+        "Platform pages (YouTube, etc.) must go through this tool first; local files can go directly to probe_media.",
+      inputSchema: fetchMediaInput,
+      outputSchema: fetchMediaOutput,
+      annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await fetchMedia(config, args);
+        return { content: [{ type: "text", text: summarizeFetchMedia(result) }], structuredContent: result };
+      } catch (error) {
+        return toolErrorResult(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "get_engagement",
+    {
+      title: "Get engagement",
+      description:
+        "Extract engagement metrics from a video URL without downloading it: view count, likes, comments, chapters, " +
+        "heatmap (most replayed sections), SponsorBlock categories, and optionally top comments. " +
+        "Uses yt-dlp to read metadata only; does not download media.",
+      inputSchema: getEngagementInput,
+      outputSchema: getEngagementOutput,
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await getEngagement(config, args);
+        return { content: [{ type: "text", text: summarizeGetEngagement(result) }], structuredContent: result };
       } catch (error) {
         return toolErrorResult(error);
       }
