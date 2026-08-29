@@ -1,0 +1,55 @@
+{
+  "name": "media-intel",
+  "version": "0.1.0",
+  "description": "Consolidated MCP server for media understanding: probe, transcribe, frames, scenes, OCR",
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "dev": "tsx src/cli.ts",
+    "start": "node dist/cli.js"
+  },
+  "keywords": [
+    "mcp",
+    "media",
+    "ffmpeg",
+    "transcription",
+    "video"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "media-intel": "dist/cli.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "execa": "^10.0.1",
+    "file-type": "^22.0.2",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
+    "sharp": "^0.35.4",
+    "sharp-phash": "^2.2.0",
+    "zod": "^4.5.2"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "^2.0.0",
+    "@types/node": "^26.4.0",
+    "@types/pixelmatch": "^5.2.6",
+    "@types/pngjs": "^6.0.5",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}
