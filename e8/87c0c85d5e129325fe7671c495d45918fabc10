@@ -1,0 +1,51 @@
+src/server.ts
+  s_dd83aa1d90e0ec::t_e4a1a81ce07613 4
+  s_dd83aa1d90e0ec::t_844f83898f31c9 7-8
+  s_dd83aa1d90e0ec::t_ba86bf2534e684 69-112
+src/backends/transcribe/whisper-cpp.ts
+  s_dd83aa1d90e0ec::t_c130b75bec5cf0 47
+  s_dd83aa1d90e0ec::t_33b1147da885ec 1-7,9-46,48-56,58-122
+  s_dd83aa1d90e0ec::t_4b31d6c33ea545 8
+  s_dd83aa1d90e0ec::t_541958d74d08cf 57
+src/backends/transcribe/groq.ts
+  s_dd83aa1d90e0ec::t_a07fa9a789ec98 1-58,60-136
+  s_dd83aa1d90e0ec::t_63f9871bcc7a28 59
+src/backends/transcribe/openai.ts
+  s_dd83aa1d90e0ec::t_d881dd2c7212d0 59
+  s_dd83aa1d90e0ec::t_d54fcf2b989c22 1-58,60-136
+src/backends/transcribe/srt.ts
+  s_dd83aa1d90e0ec::t_fb4c5aa77bbe87 1-164
+src/backends/transcribe/sidecar.ts
+  s_dd83aa1d90e0ec::t_bab9890285c30a 1-111
+src/tools/detect-language.ts
+  s_dd83aa1d90e0ec::t_47eaa18076b208 1-7,10-75
+  s_dd83aa1d90e0ec::t_789fbcc9400413 8-9
+tests/transcript.test.ts
+  s_dd83aa1d90e0ec::t_d1408fe13e9357 1-286
+src/tools/get-transcript.ts
+  s_dd83aa1d90e0ec::t_ed1542e526cb14 17-18,27
+  s_dd83aa1d90e0ec::t_74b5fe42e358ad 125,136,147,162,183
+  s_dd83aa1d90e0ec::t_8a5c85a3fd9761 1-16,19-26,28-113,115-124,126-135,137-146,148-161,163-182,184-214,219-358
+  s_dd83aa1d90e0ec::t_3977f238e93459 215-218
+  s_dd83aa1d90e0ec::t_e162a58e38f274 114
+src/backends/transcribe/cost.ts
+  s_dd83aa1d90e0ec::t_404a33a535fdb4 1-37
+src/backends/transcribe/embedded.ts
+  s_dd83aa1d90e0ec::t_82100ecf506a94 1-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "e887c0c85d5e129325fe7671c495d45918fabc10",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
