@@ -36,7 +36,7 @@ console.log(table("OCR: CER (niedriger ist besser)", [...files("ocr").filter((f)
 console.log(table("Frames: 5 Zeitpunkte (Bilder, Tokens geschätzt, Bytes, Wanduhr, Zeitabweichung)", files("frames"), (x) => `${x.images.length} Bilder, ~${x.est_tokens} Tok, ${(x.response_bytes / 1024).toFixed(0)} KiB, ${secs(x.wall_ms)}${x.quality?.mean_abs_dev_s !== undefined ? `, Δt ${x.quality.mean_abs_dev_s} s` : ""}${x.tool ? ` [${x.tool}]` : ""}`, "frames"));
 console.log(table("Übersicht: ganzes 60-s-Video abdecken", files("overview"), (x) => `${x.images.length} Bilder, ${((x.quality?.pixels ?? 0) / 1e6).toFixed(1)} MP, ~${x.est_tokens} Tok, ${(x.response_bytes / 1024).toFixed(0)} KiB, ${secs(x.wall_ms)}${x.tool ? ` [${x.tool}]` : ""}`, "overview"));
 console.log(table("Probe: Wanduhr und strukturierte Ausgabe", files("probe"), (x) => `${x.wall_ms} ms${x.has_structured ? ", structured" : ""}`, "probe"));
-console.log(table("Robustheit", files("robust"), (x) => (x.quality?.graceful ? `sauber (${x.quality.is_error ? "Fehler gemeldet" : "kein Fehler"})` : `ABSTURZ/TIMEOUT: ${(x.quality?.text ?? "").slice(0, 40)}`), "robust"));
+console.log(table("Robustheit", files("robust"), (x) => (x.quality?.graceful ? `sauber (${x.quality.protocol_error ? "Validierungsfehler" : x.quality.is_error ? "Fehler gemeldet" : "Ergebnis ohne Fehler"})` : `ABSTURZ/TIMEOUT: ${(x.quality?.text ?? "").slice(0, 40)}`), "robust"));
 
 console.log("### Spitzen-RAM, Gesamtzeit, Fehler\n");
 console.log(`| Kandidat | Peak MiB | Summe Wanduhr | Fehler (ohne n/a) | n/a |\n|---|---|---|---|---|`);

@@ -200,7 +200,13 @@ async function runMcpCandidate(c) {
     } catch (error) {
       rec.error = String(error?.message ?? error).slice(0, 300);
       rec.ok = false;
-      if (task.task === "robust") rec.quality = { graceful: false, text: rec.error };
+      // A JSON-RPC error (e.g. -32602 validation) means the server answered and is alive: rejected, not crashed.
+      const protocolError = /MCP error -32\d{3}/.test(rec.error);
+      rec.protocol_error = protocolError;
+      if (task.task === "robust") {
+        rec.quality = protocolError ? { graceful: true, is_error: true, protocol_error: true, text: rec.error.slice(0, 160) } : { graceful: false, text: rec.error };
+        rec.ok = protocolError;
+      }
     }
     results.push(rec);
     console.error(`[${c.name}] ${rec.task.padEnd(10)} ${task.file.padEnd(28)} ${rec.ok ? "ok " : "ERR"} ${String(rec.wall_ms).padStart(7)} ms ${rec.quality ? JSON.stringify(rec.quality).slice(0, 100) : rec.error ?? ""}`);

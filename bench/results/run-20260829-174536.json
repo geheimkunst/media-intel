@@ -1,0 +1,639 @@
+{
+  "meta": {
+    "date": "2026-08-29T15:45:36.761Z",
+    "host": "hermes",
+    "cpus": 4,
+    "cpu": "AMD EPYC 9645 96-Core Processor",
+    "mem_gb": 7.8,
+    "fixtures": "/home/yunus/bench/fixtures",
+    "docker": "sudo docker",
+    "loose_tolerance_s": 1
+  },
+  "candidates": [
+    {
+      "name": "mcp-video-analyzer",
+      "kind": "mcp",
+      "notes": "No ASR backend in the image (needs Python openai-whisper or an API key): transcript n/a. Only video extensions accepted: audio and PNG fixtures n/a. Times as M:SS (1 s resolution). OCR only inside analyze_video; tesseract.js with tessdata pre-placed in the cache.",
+      "image": "mcp-video-analyzer:bench",
+      "tools": [
+        "analyze_video",
+        "analyze_videos",
+        "get_frame_at",
+        "get_frame_burst",
+        "get_transcript",
+        "get_metadata",
+        "get_frames",
+        "analyze_moment"
+      ],
+      "startup_ms": 747,
+      "alive_after_suite": true,
+      "results": [
+        {
+          "task": "probe",
+          "file": "speech-de-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-long.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-noise.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-music.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "audio not accepted (video extensions only)"
+        },
+        {
+          "task": "probe",
+          "file": "cuts-10.mp4",
+          "ok": true,
+          "wall_ms": 26,
+          "peak_mem_mb": 95.1,
+          "response_bytes": 495,
+          "text_chars": 391,
+          "images": [],
+          "est_tokens": 98,
+          "tool": "get_metadata",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "ocr-video.mp4",
+          "ok": true,
+          "wall_ms": 19,
+          "peak_mem_mb": 95.1,
+          "response_bytes": 498,
+          "text_chars": 394,
+          "images": [],
+          "est_tokens": 99,
+          "tool": "get_metadata",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-long.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-noise.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-music.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "no speech-to-text backend in the image (whisper CLI or API key required)"
+        },
+        {
+          "task": "frames",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 886,
+          "peak_mem_mb": 122.5,
+          "response_bytes": 126068,
+          "text_chars": 310,
+          "images": [
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18218,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18992,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 19168,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18519,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 19034,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 2478,
+          "tool": "get_frame_at",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "images": 5,
+            "mean_abs_dev_s": 0.15
+          }
+        },
+        {
+          "task": "overview",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 1719,
+          "peak_mem_mb": 163.6,
+          "response_bytes": 25053,
+          "text_chars": 95,
+          "images": [
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18638,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 504,
+          "tool": "get_frames",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "images": 1,
+            "pixels": 360000
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "cuts-10.mp4",
+          "ok": true,
+          "wall_ms": 7181,
+          "peak_mem_mb": 398.8,
+          "response_bytes": 94307,
+          "text_chars": 1360,
+          "images": [
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 8933,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 2444,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18213,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 6487,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 2443,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 6115,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 2440,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 22169,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 4180,
+          "tool": "analyze_video",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "tp": 4,
+            "detected": 8,
+            "truth": 10,
+            "precision": 0.5,
+            "recall": 0.4,
+            "f1": 0.444,
+            "loose_precision": 0.875,
+            "loose_recall": 0.7,
+            "loose_f1": 0.778,
+            "cuts_detected": [
+              2,
+              3,
+              7,
+              10,
+              12,
+              13,
+              15,
+              16
+            ]
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "fades-3.mp4",
+          "ok": true,
+          "wall_ms": 7178,
+          "peak_mem_mb": 423.3,
+          "response_bytes": 89411,
+          "text_chars": 944,
+          "images": [
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 15924,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 15520,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 9022,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 7279,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 18296,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 2636,
+          "tool": "analyze_video",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "tp": 3,
+            "detected": 4,
+            "truth": 3,
+            "precision": 0.75,
+            "recall": 1,
+            "f1": 0.857,
+            "loose_precision": 0.75,
+            "loose_recall": 1,
+            "loose_f1": 0.857,
+            "cuts_detected": [
+              2,
+              4,
+              7,
+              11
+            ]
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "ocr-video.mp4",
+          "ok": true,
+          "wall_ms": 1653,
+          "peak_mem_mb": 437.1,
+          "response_bytes": 18802,
+          "text_chars": 422,
+          "images": [
+            {
+              "width": 800,
+              "height": 450,
+              "bytes": 13689,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 586,
+          "tool": "analyze_video",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "tp": 1,
+            "detected": 1,
+            "truth": 2,
+            "precision": 1,
+            "recall": 0.5,
+            "f1": 0.667,
+            "loose_precision": 1,
+            "loose_recall": 0.5,
+            "loose_f1": 0.667,
+            "cuts_detected": [
+              6
+            ]
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-terminal-720.png",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "image files not accepted (video extensions only)"
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-terminal-1080.png",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "image files not accepted (video extensions only)"
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-dialog-1080.png",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "image files not accepted (video extensions only)"
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 1.5,
+          "ok": true,
+          "wall_ms": 11831,
+          "peak_mem_mb": 518.5,
+          "response_bytes": 1595,
+          "text_chars": 1426,
+          "images": [],
+          "est_tokens": 357,
+          "tool": "analyze_video",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 191
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 4.5,
+          "ok": true,
+          "wall_ms": 11769,
+          "peak_mem_mb": 542.3,
+          "response_bytes": 1595,
+          "text_chars": 1426,
+          "images": [],
+          "est_tokens": 357,
+          "tool": "analyze_video",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "cer": 0,
+            "hyp_chars": 244
+          }
+        },
+        {
+          "task": "ocr",
+          "file": "ocr-video.mp4",
+          "t": 7.5,
+          "ok": true,
+          "wall_ms": 11647,
+          "peak_mem_mb": 563.8,
+          "response_bytes": 1595,
+          "text_chars": 1426,
+          "images": [],
+          "est_tokens": 357,
+          "tool": "analyze_video",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "cer": 0.032,
+            "hyp_chars": 161
+          }
+        },
+        {
+          "task": "robust",
+          "file": "corrupt.mp4",
+          "ok": true,
+          "wall_ms": 21,
+          "peak_mem_mb": 424.9,
+          "response_bytes": 343,
+          "text_chars": 261,
+          "images": [],
+          "est_tokens": 66,
+          "tool": "get_metadata",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "graceful": true,
+            "is_error": false,
+            "text": "{\n  \"metadata\": {\n    \"platform\": \"local\",\n    \"title\": \"corrupt.mp4\",\n    \"duration\": 0,\n    \"durationFormatted\": \"0:00\",\n    \"url\": \"/data/corrupt.mp4\",\n    \""
+          }
+        },
+        {
+          "task": "robust",
+          "file": "empty.mp4",
+          "ok": true,
+          "wall_ms": 20,
+          "peak_mem_mb": 424.9,
+          "response_bytes": 336,
+          "text_chars": 254,
+          "images": [],
+          "est_tokens": 64,
+          "tool": "get_metadata",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "graceful": true,
+            "is_error": false,
+            "text": "{\n  \"metadata\": {\n    \"platform\": \"local\",\n    \"title\": \"empty.mp4\",\n    \"duration\": 0,\n    \"durationFormatted\": \"0:00\",\n    \"url\": \"/data/empty.mp4\",\n    \"file"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "silent.wav",
+          "ok": false,
+          "wall_ms": 6,
+          "peak_mem_mb": 425,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_transcript",
+          "error": "MCP error -32602: Tool 'get_transcript' parameter validation failed: url: Must be a supported video URL (Loom, YouTube, Vimeo, TikTok, Instagram, X/Twitter, Twitch, Dailymotion, Facebook), a direct .mp4/.webm/.mov URL, or an absolute path / file:// URI to a local video file. Please check the paramet",
+          "quality": {
+            "graceful": false,
+            "text": "MCP error -32602: Tool 'get_transcript' parameter validation failed: url: Must be a supported video URL (Loom, YouTube, Vimeo, TikTok, Instagram, X/Twitter, Twitch, Dailymotion, Facebook), a direct .mp4/.webm/.mov URL, or an absolute path / file:// URI to a local video file. Please check the paramet"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "noaudio.mp4",
+          "ok": true,
+          "wall_ms": 45,
+          "peak_mem_mb": 425,
+          "response_bytes": 295,
+          "text_chars": 242,
+          "images": [],
+          "est_tokens": 61,
+          "tool": "get_transcript",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "graceful": true,
+            "is_error": false,
+            "text": "{\n  \"transcript\": [],\n  \"warnings\": [\n    \"No audio track detected by the probe — skipped Whisper transcription. If the video does have audio, the probe may not"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "http://169.254.169.254/latest/meta-data",
+          "ok": false,
+          "wall_ms": 5,
+          "peak_mem_mb": 425,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_metadata",
+          "error": "MCP error -32602: Tool 'get_metadata' parameter validation failed: url: Must be a supported video URL (Loom, YouTube, Vimeo, TikTok, Instagram, X/Twitter, Twitch, Dailymotion, Facebook), a direct .mp4/.webm/.mov URL, or an absolute path / file:// URI to a local video file. Please check the parameter",
+          "quality": {
+            "graceful": false,
+            "text": "MCP error -32602: Tool 'get_metadata' parameter validation failed: url: Must be a supported video URL (Loom, YouTube, Vimeo, TikTok, Instagram, X/Twitter, Twitch, Dailymotion, Facebook), a direct .mp4/.webm/.mov URL, or an absolute path / file:// URI to a local video file. Please check the parameter"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "../../etc/passwd",
+          "ok": false,
+          "wall_ms": 4,
+          "peak_mem_mb": 424.9,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "tool": "get_metadata",
+          "error": "MCP error -32602: Tool 'get_metadata' parameter validation failed: url: Must be a supported video URL (Loom, YouTube, Vimeo, TikTok, Instagram, X/Twitter, Twitch, Dailymotion, Facebook), a direct .mp4/.webm/.mov URL, or an absolute path / file:// URI to a local video file. Please check the parameter",
+          "quality": {
+            "graceful": false,
+            "text": "MCP error -32602: Tool 'get_metadata' parameter validation failed: url: Must be a supported video URL (Loom, YouTube, Vimeo, TikTok, Instagram, X/Twitter, Twitch, Dailymotion, Facebook), a direct .mp4/.webm/.mov URL, or an absolute path / file:// URI to a local video file. Please check the parameter"
+          }
+        }
+      ],
+      "stderr_tail": "Image too small to scale!! (2x48 vs min width of 3)\nLine cannot be recognized!!\nImage too small to scale!! (2x36 vs min width of 3)\nLine cannot be recognized!!\n"
+    }
+  ]
+}
