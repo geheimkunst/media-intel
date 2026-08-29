@@ -1,0 +1,23 @@
+src/tools/get-frames.ts
+  s_dd83aa1d90e0ec::t_4e7e332eb47d93 1-374
+tests/get-frames.test.ts
+  s_dd83aa1d90e0ec::t_2e9d50271a77d9 1-249
+tests/server.test.ts
+  s_dd83aa1d90e0ec::t_a908d64ccb13a0 56-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "99c49e42e29c9d029e81d126531133f4d5a2a8a7",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
