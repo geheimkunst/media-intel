@@ -1,0 +1,45 @@
+bench/run-vps.sh
+  s_dd83aa1d90e0ec::t_b3e7c61501633d 1-46
+bench/candidates.mjs
+  s_dd83aa1d90e0ec::t_c54b40110ffb03 1-138
+src/source.ts
+  s_dd83aa1d90e0ec::t_d683ed3f9b22c4 115-127,131-134
+  s_dd83aa1d90e0ec::t_e672fff8f2ae9b 145-148
+  s_dd83aa1d90e0ec::t_9936a1a3e129c5 4
+bench/candidates.md
+  s_dd83aa1d90e0ec::t_6f9ab113588267 1-259
+bench/fixtures/truth.json
+  s_dd83aa1d90e0ec::t_a9abf09620f797 1-89
+bench/README.md
+  s_dd83aa1d90e0ec::t_6a20d4415caecc 1-32
+tests/foundation.test.ts
+  s_dd83aa1d90e0ec::t_9936a1a3e129c5 211-226
+bench/metrics.mjs
+  s_dd83aa1d90e0ec::t_8d2517be27cf96 1-93
+bench/report.mjs
+  s_dd83aa1d90e0ec::t_666ec2870ff46b 1-44
+bench/make-fixtures.mjs
+  s_dd83aa1d90e0ec::t_51ad4fb7d2d0ec 1-117
+bench/run.mjs
+  s_dd83aa1d90e0ec::t_98d6bd8d4e34b7 1-199
+src/tools/get-transcript.ts
+  s_dd83aa1d90e0ec::t_cf305cbd7af5cc 145,147-150,157-159
+bench/results/run-20260829-172350.json
+  s_dd83aa1d90e0ec::t_9d4815ace6c84b 1-658
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "d2ac3d16d1a81caddf7c04b6d037ea52b3426129",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
