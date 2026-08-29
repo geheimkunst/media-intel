@@ -34,6 +34,8 @@
 
 ## Nach dem Launch
 
+0. Aus dem Benchmark (`docs/benchmarks/2026-08-29-stufe-1.md`): Blenden-Detektor für `get_scenes` (fades 0 von 3 erkannt, mcp-video-analyzer 3 von 3), Whisper-Default nach Plattform (large nur mit Metal/CUDA), Grid-Parallelität an Kernzahl koppeln
+
 1. `media`-Connector (media-understanding-Fork) abbauen, sobald media-intel in claude.ai läuft
 2. MCP Tasks für `understand_media` oberhalb 20 min; `resource_link` ab zwei Grids
 3. `get_speakers` (sherpa-onnx oder Deepgram/ElevenLabs), zweites lokales ASR (Parakeet), `fpcalc` für Duplikate
