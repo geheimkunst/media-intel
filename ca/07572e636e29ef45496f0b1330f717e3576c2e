@@ -1,0 +1,49 @@
+README.md
+  s_dd83aa1d90e0ec::t_00ffd3f98df6e5 75,121-122
+src/server.ts
+  s_dd83aa1d90e0ec::t_fab0dc1df22187 24
+package.json
+  s_dd83aa1d90e0ec::t_fab0dc1df22187 3
+src/cli.ts
+  s_dd83aa1d90e0ec::t_fab0dc1df22187 24-26
+src/backends/transcribe/srt.ts
+  s_dd83aa1d90e0ec::t_fab0dc1df22187 9-10
+src/backends/transcribe/elevenlabs.ts
+  s_dd83aa1d90e0ec::t_fab0dc1df22187 1-295
+src/tools/doctor.ts
+  s_dd83aa1d90e0ec::t_fab0dc1df22187 116,119-120
+docs/architecture.md
+  s_dd83aa1d90e0ec::t_00ffd3f98df6e5 29,76
+docs/capabilities.md
+  s_dd83aa1d90e0ec::t_00ffd3f98df6e5 13
+tests/elevenlabs.test.ts
+  s_dd83aa1d90e0ec::t_038b1e0eaca920 55-65,249
+  s_dd83aa1d90e0ec::t_00ffd3f98df6e5 1-54,66-248,250-261
+tests/transcript.test.ts
+  s_dd83aa1d90e0ec::t_00ffd3f98df6e5 128-131,133-134
+src/config.ts
+  s_dd83aa1d90e0ec::t_fab0dc1df22187 46-47,99,111-113
+docs/roadmap.md
+  s_dd83aa1d90e0ec::t_00ffd3f98df6e5 13-14,42
+src/backends/transcribe/cost.ts
+  s_dd83aa1d90e0ec::t_fab0dc1df22187 2-6,9-12,14,20-21,23-24,29,36-37,39
+src/tools/get-transcript.ts
+  s_dd83aa1d90e0ec::t_bc2ee5bdb79db2 18,378-379
+  s_dd83aa1d90e0ec::t_00ffd3f98df6e5 8-11,27-28,35,47,49,51-54,58,65,91-93,174-175,179,182-193,195,197-199,202,206-217,221-223,225-227,231-237,306-307,311,315,318,324,327,357-359,399-401
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "ca07572e636e29ef45496f0b1330f717e3576c2e",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
