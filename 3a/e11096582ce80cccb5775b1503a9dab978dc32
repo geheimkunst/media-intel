@@ -1,0 +1,42 @@
+src/backends/transcribe/srt.ts
+  s_dd83aa1d90e0ec::t_2b2d6718ba0a90 2,12-13,17,22,24,26-30,32-36,43-44,47,50-51,53,55-56,58-60,63-64,68,71-75,78-81,83-85,89,91-92,94-96,99-113,115,117-124,128-141,143-149,154,159,164
+tests/extract-text.test.ts
+  s_dd83aa1d90e0ec::t_3c4b566d54f294 344-345
+src/tools/detect-language.ts
+  s_dd83aa1d90e0ec::t_206f2c52d056a1 79-104
+src/backends/transcribe/embedded.ts
+  s_dd83aa1d90e0ec::t_77aa2501c11a2f 55
+tests/get-video-grids.test.ts
+  s_dd83aa1d90e0ec::t_7bb5965c9ab801 315,343
+  s_dd83aa1d90e0ec::t_1a36a98850e209 316,344
+src/tools/get-video-grids.ts
+  s_dd83aa1d90e0ec::t_d87b7628f0d3b9 16-23
+  s_dd83aa1d90e0ec::t_206f2c52d056a1 480-515
+src/backends/transcribe/sidecar.ts
+  s_dd83aa1d90e0ec::t_b686309ee45cf0 110
+src/tools/get-transcript.ts
+  s_dd83aa1d90e0ec::t_716f302dbf2106 16,300
+  s_dd83aa1d90e0ec::t_7272c05ba73190 66
+  s_dd83aa1d90e0ec::t_206f2c52d056a1 351-381
+src/server.ts
+  s_dd83aa1d90e0ec::t_02574a17be15e7 9-15
+  s_dd83aa1d90e0ec::t_1f8834c9b91535 84-92
+src/tools/extract-text.ts
+  s_dd83aa1d90e0ec::t_206f2c52d056a1 246-275
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "3ae11096582ce80cccb5775b1503a9dab978dc32",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
