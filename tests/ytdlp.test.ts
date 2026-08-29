@@ -180,7 +180,7 @@ describe("fetch_media tool", () => {
     };
     const result = await fetchMedia(config, input);
     expect(result.id).toBe("dQw4w9WgXcQ");
-    expect(result.title).toBe("Test Video");
+    expect(result.title?.text).toBe("Test Video");
     expect(result.duration_s).toBe(213);
     expect(result.files.video).toBeDefined();
     expect(result.files.thumbnail).toBeDefined();
@@ -248,10 +248,11 @@ describe("get_engagement tool", () => {
     const input: GetEngagementInput = {
       url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
       include: ["metrics", "chapters", "heatmap", "sponsorblock"],
+      refresh: true,
     };
     const result = await getEngagement(config, input);
     expect(result.id).toBe("dQw4w9WgXcQ");
-    expect(result.title).toBe("Test Video");
+    expect(result.title?.text).toBe("Test Video");
     expect(result.metrics?.view_count).toBe(1000000);
     expect(result.metrics?.like_count).toBe(50000);
     expect(result.chapters).toHaveLength(2);

@@ -1,9 +1,11 @@
 import { readdir, stat } from "node:fs/promises";
 import { join } from "node:path";
+import type { McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
 import type { Config } from "../config.js";
-import { commonOutput, wrapUntrusted } from "../contracts.js";
+import { commonOutput, untrustedText, wrapUntrusted } from "../contracts.js";
 import { MediaIntelError } from "../errors.js";
+import { toolErrorResult } from "../errors.js";
 import { cacheEntry, readSidecarJson, sidecarExists, writeSidecarJson } from "../cache.js";
 import { resolveSource } from "../source.js";
 import { fetchInfojson, runYtdlp, type Infojson } from "../backends/ytdlp.js";
@@ -34,7 +36,7 @@ export const fetchMediaOutput = z.object({
   url: z.string(),
   extractor: z.string().optional(),
   id: z.string().optional(),
-  title: z.string().optional(), // untrusted
+  title: untrustedText.optional(),
   uploader: z.string().optional(), // untrusted, capped
   duration_s: z.number().optional(),
   cache_dir: z.string(),
@@ -125,9 +127,9 @@ export async function fetchMedia(config: Config, input: FetchMediaInput): Promis
 
   // Handle sections
   if (input.section) {
-    const startMs = Math.round(input.section.start_s * 1000);
-    const endMs = Math.round(input.section.end_s * 1000);
-    ytdlpArgs.push("--download-sections", `*${startMs}-${endMs}`);
+    const start = input.section.start_s;
+    const end = input.section.end_s;
+    ytdlpArgs.push("--download-sections", `*${start}-${end}`);
   }
 
   // If not downloading any media, just get info with -J
@@ -196,7 +198,7 @@ async function buildResult(
     url: baseUrl,
     extractor: info?.extractor,
     id: info?.id,
-    ...(info?.title ? { title: wrapUntrusted(info.title, 500).text } : {}),
+    ...(info?.title ? { title: wrapUntrusted(info.title, 500) } : {}),
     ...(info?.uploader ? { uploader: info.uploader.slice(0, 200) } : {}),
     ...(info?.duration !== undefined ? { duration_s: info.duration } : {}),
     cache_dir: entry.dir,
@@ -253,7 +255,16 @@ async function buildResult(
       const langMatch = subFile.match(/^subs\.([a-z]{2})(?:\.auto)?\.vtt$/);
       if (langMatch && langMatch[1] !== undefined) {
         const lang = langMatch[1];
-        const automatic = subFile.includes(".auto.");
+        // Determine if automatic based on infojson: check if lang exists in automatic_captions vs subtitles
+        let automatic = false;
+        if (info?.automatic_captions && info.automatic_captions[lang] !== undefined) {
+          automatic = true;
+        } else if (info?.requested_subtitles && info.requested_subtitles[lang]?.automatic) {
+          automatic = true;
+        } else {
+          // Fall back to filename heuristic if infojson doesn't have this data
+          automatic = subFile.includes(".auto.");
+        }
         result.files.subtitles.push({
           language: lang,
           automatic,
@@ -275,7 +286,7 @@ async function buildResult(
 
 export function summarizeFetchMedia(r: FetchMediaResult): string {
   const parts: string[] = [];
-  if (r.title) parts.push(`"${r.title}"`);
+  if (r.title) parts.push(`"${r.title.text}"`);
   if (r.uploader) parts.push(`by ${r.uploader}`);
   if (r.duration_s !== undefined) parts.push(`${Math.round(r.duration_s)}s`);
   if (r.files.video) parts.push(`video ${r.files.video.height ?? "?"}p`);
@@ -287,4 +298,29 @@ export function summarizeFetchMedia(r: FetchMediaResult): string {
   const cache = r.from_cache ? "(from cache)" : "(downloaded fresh)";
   const warn = r.warnings.length > 0 ? `\nWarnings:\n- ${r.warnings.join("\n- ")}` : "";
   return `${line} ${cache}${warn}`;
+}
+
+export function registerFetchMedia(server: McpServer, config: Config): void {
+  server.registerTool(
+    "fetch_media",
+    {
+      title: "Fetch media",
+      description:
+        "Download a video, audio, or metadata from a platform page URL via yt-dlp. " +
+        "Supports selective downloads (video, audio, subtitles, thumbnail), quality selection, " +
+        "time-window cutting, subtitle language choice, and caching. " +
+        "Platform pages (YouTube, etc.) must go through this tool first; local files can go directly to probe_media.",
+      inputSchema: fetchMediaInput,
+      outputSchema: fetchMediaOutput,
+      annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await fetchMedia(config, args);
+        return { content: [{ type: "text", text: summarizeFetchMedia(result) }], structuredContent: result };
+      } catch (error) {
+        return toolErrorResult(error);
+      }
+    },
+  );
 }

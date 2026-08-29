@@ -1,7 +1,9 @@
+import type { McpServer } from "@modelcontextprotocol/server";
 import * as z from "zod/v4";
 import type { Config } from "../config.js";
-import { commonOutput, frameUntrusted, wrapUntrusted } from "../contracts.js";
+import { commonOutput, frameUntrusted, untrustedText, wrapUntrusted } from "../contracts.js";
 import { MediaIntelError } from "../errors.js";
+import { toolErrorResult } from "../errors.js";
 import { resolveSource } from "../source.js";
 import { cacheEntry, readSidecarJson, writeSidecarJson } from "../cache.js";
 import { fetchInfojson } from "../backends/ytdlp.js";
@@ -49,7 +51,7 @@ export const getEngagementOutput = z.object({
   url: z.string(),
   extractor: z.string().optional(),
   id: z.string().optional(),
-  title: z.string().optional(), // untrusted
+  title: untrustedText.optional(),
   channel: z.string().optional(), // untrusted, capped
   upload_date: z.string().optional(), // YYYY-MM-DD
   duration_s: z.number().optional(),
@@ -59,12 +61,20 @@ export const getEngagementOutput = z.object({
   most_replayed: z.array(heatmapEntry),
   sponsorblock: z.array(sponsorblockEntry),
   comments: z.array(comment),
-  comments_text: z.string().optional(), // untrusted, framed
+  comments_text: untrustedText.optional(),
   ...commonOutput,
 });
 
 export type GetEngagementInput = z.infer<typeof getEngagementInput>;
 export type GetEngagementResult = z.infer<typeof getEngagementOutput>;
+
+/**
+ * Convert YYYYMMDD format to YYYY-MM-DD format.
+ */
+function formatUploadDate(dateStr: string | undefined): string | undefined {
+  if (!dateStr || dateStr.length !== 8) return undefined;
+  return dateStr.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+}
 
 /**
  * Tier-1 tool: get engagement metrics for a video without downloading it.
@@ -97,18 +107,36 @@ export async function getEngagement(config: Config, input: GetEngagementInput): 
   // Fetch infojson
   let infoResult = await fetchInfojson(config, input.url, { timeoutMs: config.processTimeoutMs * 5 });
 
-  // Fetch comments if requested
+  // Fetch comments if requested: run yt-dlp with --write-comments extractor args
   if (include.includes("comments")) {
-    // This is a simplified approach; in production we might need to run yt-dlp again with --write-comments
-    // For now, we'll use comments from the infojson if available
+    try {
+      const commentArgs = [
+        "-J",
+        "--skip-download",
+        "--write-comments",
+        "--extractor-args",
+        `youtube:max_comments=${maxComments},all,${maxComments},${maxComments};comment_sort=top`,
+        input.url,
+      ];
+      const commentResult = await fetchInfojson(config, input.url, {
+        extraArgs: ["--write-comments", "--extractor-args", `youtube:max_comments=${maxComments},all,${maxComments},${maxComments};comment_sort=top`],
+        timeoutMs: config.processTimeoutMs * 5,
+      });
+      if (commentResult.comments && commentResult.comments.length > 0) {
+        infoResult.comments = commentResult.comments;
+      }
+    } catch {
+      // If comments fetching fails, continue without them
+    }
   }
 
   const result: GetEngagementResult = {
     url: input.url,
     extractor: infoResult.extractor,
     id: infoResult.id,
-    title: infoResult.title ? wrapUntrusted(infoResult.title, 500).text : undefined,
+    ...(infoResult.title ? { title: wrapUntrusted(infoResult.title, 500) } : {}),
     channel: infoResult.channel ? infoResult.channel.slice(0, 200) : undefined,
+    ...(infoResult.upload_date ? { upload_date: formatUploadDate(infoResult.upload_date) } : {}),
     duration_s: infoResult.duration,
     metrics: include.includes("metrics")
       ? {
@@ -166,7 +194,7 @@ export async function getEngagement(config: Config, input: GetEngagementInput): 
     // Build comments_text for framing
     const allCommentTexts = commentsList.map((c) => `${c.author ?? "Unknown"}: ${c.text ?? ""}`).join("\n");
     const wrapped = wrapUntrusted(allCommentTexts, config.maxTextFieldChars);
-    result.comments_text = wrapped.text;
+    result.comments_text = wrapped;
   }
 
   // Warnings
@@ -182,7 +210,7 @@ export async function getEngagement(config: Config, input: GetEngagementInput): 
 
 export function summarizeGetEngagement(r: GetEngagementResult): string {
   const parts: string[] = [];
-  if (r.title) parts.push(`"${r.title}"`);
+  if (r.title) parts.push(`"${r.title.text}"`);
   if (r.channel) parts.push(`from ${r.channel}`);
   if (r.duration_s !== undefined) parts.push(`${Math.round(r.duration_s)}s`);
 
@@ -203,4 +231,28 @@ export function summarizeGetEngagement(r: GetEngagementResult): string {
   const line = parts.join(" | ");
   const warn = r.warnings.length > 0 ? `\nWarnings:\n- ${r.warnings.join("\n- ")}` : "";
   return `${line}${warn}`;
+}
+
+export function registerGetEngagement(server: McpServer, config: Config): void {
+  server.registerTool(
+    "get_engagement",
+    {
+      title: "Get engagement",
+      description:
+        "Extract engagement metrics from a video URL without downloading it: view count, likes, comments, chapters, " +
+        "heatmap (most replayed sections), SponsorBlock categories, and optionally top comments. " +
+        "Uses yt-dlp to read metadata only; does not download media.",
+      inputSchema: getEngagementInput,
+      outputSchema: getEngagementOutput,
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await getEngagement(config, args);
+        return { content: [{ type: "text", text: summarizeGetEngagement(result) }], structuredContent: result };
+      } catch (error) {
+        return toolErrorResult(error);
+      }
+    },
+  );
 }
