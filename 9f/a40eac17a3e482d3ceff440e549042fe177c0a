@@ -1,0 +1,20 @@
+src/backends/ytdlp.ts
+  h_b5c0fbb816f657 1-151
+src/tools/fetch-media.ts
+  h_b5c0fbb816f657 1-326
+src/tools/get-engagement.ts
+  h_b5c0fbb816f657 1-258
+tests/ytdlp.test.ts
+  h_b5c0fbb816f657 1-304
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "9fa40eac17a3e482d3ceff440e549042fe177c0a",
+  "prompts": {},
+  "humans": {
+    "h_b5c0fbb816f657": {
+      "author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
