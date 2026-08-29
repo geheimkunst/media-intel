@@ -1,8 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { loadConfig, type Config } from "./config.js";
 import { toolErrorResult } from "./errors.js";
+import { frameUntrusted } from "./contracts.js";
 import { doctor, doctorInput, doctorOutput, summarizeDoctor } from "./tools/doctor.js";
 import { probeMedia, probeMediaInput, probeMediaOutput, summarizeProbe } from "./tools/probe-media.js";
+import { getTranscript, getTranscriptInput, getTranscriptOutput, summarizeGetTranscript } from "./tools/get-transcript.js";
+import { detectLanguage, detectLanguageInput, detectLanguageOutput, summarizeDetectLanguage } from "./tools/detect-language.js";
 
 export const SERVER_NAME = "media-intel";
 export const SERVER_VERSION = "0.1.0";
@@ -57,6 +60,50 @@ export function createServer(config: Config = loadConfig()): McpServer {
       try {
         const result = await probeMedia(config, args);
         return { content: [{ type: "text", text: summarizeProbe(result) }], structuredContent: result };
+      } catch (error) {
+        return toolErrorResult(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "get_transcript",
+    {
+      title: "Get transcript",
+      description:
+        "Extract or generate a transcript from a media file. Automatically chains through embedded subtitles, sidecar files (.srt/.vtt), " +
+        "local whisper.cpp (free, ~2 min per 5 min), and paid APIs (OpenAI/Groq, with cost preflight). " +
+        "Long media is paginated into 20-minute windows. Use window parameter and has_more/next_window for pagination.",
+      inputSchema: getTranscriptInput,
+      outputSchema: getTranscriptOutput,
+      annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await getTranscript(config, args);
+        return {
+          content: [{ type: "text", text: `${summarizeGetTranscript(result)}\n\n${frameUntrusted("Transcript", result.text)}` }],
+          structuredContent: result,
+        };
+      } catch (error) {
+        return toolErrorResult(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    "detect_language",
+    {
+      title: "Detect language",
+      description: "Detect the language of audio in a media file using whisper.cpp (local, free, ~10 sec for 30 sec probe). Returns an ISO-639-1 language code.",
+      inputSchema: detectLanguageInput,
+      outputSchema: detectLanguageOutput,
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true },
+    },
+    async (args) => {
+      try {
+        const result = await detectLanguage(config, args);
+        return { content: [{ type: "text", text: summarizeDetectLanguage(result) }], structuredContent: result };
       } catch (error) {
         return toolErrorResult(error);
       }
