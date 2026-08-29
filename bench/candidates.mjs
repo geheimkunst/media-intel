@@ -96,7 +96,7 @@ const mediaUnderstanding = {
     transcript: () => ({ na: "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)" }),
     frames: (src, t) => ({ tool: "get_frames", args: { file_path: src, timestamps: t.timestamps, max_total_chars: 600000 } }),
     overview: (src) => ({ tool: "get_video_grids", args: { file_path: src, max_total_chars: 600000 } }),
-    scenes: (src) => ({ tool: "get_video_grids", args: { file_path: src, sampling_strategy: "scene", scene_threshold: 0.3, seconds_per_frame: 0.5, max_total_chars: 600000 } }),
+    scenes: (src) => ({ tool: "get_video_grids", args: { file_path: src, sampling_strategy: "scene", scene_threshold: 0.3, frame_interval: 1, max_total_chars: 600000 } }),
   },
   parse: {
     transcriptText: (r) => {
@@ -114,7 +114,14 @@ const mediaUnderstanding = {
           if (t !== undefined && t > 0.05) out.push(t);
         }
       }
-      return [...new Set(out)].sort((a, b) => a - b);
+      // Scene sampling yields bursts of tiles around each change; collapse tiles within 0.75 s to one cut.
+      const sorted = [...new Set(out)].sort((a, b) => a - b);
+      const cuts = [];
+      for (const t of sorted) {
+        if (cuts.length === 0 || t - cuts[cuts.length - 1].last > 0.75) cuts.push({ first: t, last: t });
+        else cuts[cuts.length - 1].last = t;
+      }
+      return cuts.map((c) => c.first);
     },
     frameTimes: (r) => {
       const text = textOf(r);

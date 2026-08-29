@@ -1,0 +1,429 @@
+{
+  "meta": {
+    "date": "2026-08-29T15:56:52.532Z",
+    "host": "hermes",
+    "cpus": 4,
+    "cpu": "AMD EPYC 9645 96-Core Processor",
+    "mem_gb": 7.8,
+    "fixtures": "/home/yunus/bench/fixtures",
+    "docker": "sudo docker",
+    "loose_tolerance_s": 1
+  },
+  "candidates": [
+    {
+      "name": "media-understanding",
+      "kind": "mcp",
+      "notes": "whisper.cpp via node-av. On this host every get_transcript call kills the server with SIGSEGV (exit 139), reproduced with the official image ghcr.io/dymoo/media-understanding:1.1.0, with the bundled base.en-q5_1 and with base-q5_1, with and without hardware probing; transcript therefore n/a (crash) so the rest of the suite can run. No language field, no scenes tool (scene sampling of grids used as proxy), no OCR; timestamps burned into images.",
+      "image": "media-understanding:bench",
+      "tools": [
+        "probe_media",
+        "understand_media",
+        "get_video_grids",
+        "get_frames",
+        "get_transcript",
+        "fetch_ytdlp"
+      ],
+      "startup_ms": 659,
+      "alive_after_suite": true,
+      "results": [
+        {
+          "task": "probe",
+          "file": "speech-de-clean.m4a",
+          "ok": true,
+          "wall_ms": 22,
+          "peak_mem_mb": 76.5,
+          "response_bytes": 217,
+          "text_chars": 170,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-clean.m4a",
+          "ok": true,
+          "wall_ms": 8,
+          "peak_mem_mb": 77.4,
+          "response_bytes": 216,
+          "text_chars": 169,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-long.m4a",
+          "ok": true,
+          "wall_ms": 6,
+          "peak_mem_mb": 77.6,
+          "response_bytes": 216,
+          "text_chars": 169,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "speech-de-noise.m4a",
+          "ok": true,
+          "wall_ms": 7,
+          "peak_mem_mb": 58.9,
+          "response_bytes": 217,
+          "text_chars": 170,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "speech-en-music.m4a",
+          "ok": true,
+          "wall_ms": 7,
+          "peak_mem_mb": 58.3,
+          "response_bytes": 216,
+          "text_chars": 169,
+          "images": [],
+          "est_tokens": 43,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "cuts-10.mp4",
+          "ok": true,
+          "wall_ms": 10,
+          "peak_mem_mb": 60.8,
+          "response_bytes": 298,
+          "text_chars": 247,
+          "images": [],
+          "est_tokens": 62,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "probe",
+          "file": "ocr-video.mp4",
+          "ok": true,
+          "wall_ms": 11,
+          "peak_mem_mb": 62.7,
+          "response_bytes": 299,
+          "text_chars": 248,
+          "images": [],
+          "est_tokens": 62,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-clean.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-long.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-de-noise.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)"
+        },
+        {
+          "task": "transcript",
+          "file": "speech-en-music.m4a",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)"
+        },
+        {
+          "task": "frames",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 588,
+          "peak_mem_mb": 136.8,
+          "response_bytes": 352629,
+          "text_chars": 214,
+          "images": [
+            {
+              "width": 1280,
+              "height": 754,
+              "bytes": 52990,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1280,
+              "height": 754,
+              "bytes": 53359,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1280,
+              "height": 754,
+              "bytes": 52990,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1280,
+              "height": 754,
+              "bytes": 52091,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1280,
+              "height": 754,
+              "bytes": 52559,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 6489,
+          "tool": "get_frames",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "images": 5,
+            "mean_abs_dev_s": 0
+          }
+        },
+        {
+          "task": "overview",
+          "file": "frames-60s.mp4",
+          "ok": true,
+          "wall_ms": 10115,
+          "peak_mem_mb": 373.7,
+          "response_bytes": 530173,
+          "text_chars": 1265,
+          "images": [
+            {
+              "width": 1280,
+              "height": 755,
+              "bytes": 99368,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1280,
+              "height": 755,
+              "bytes": 98828,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1280,
+              "height": 755,
+              "bytes": 98989,
+              "mime": "image/jpeg"
+            },
+            {
+              "width": 1280,
+              "height": 755,
+              "bytes": 99215,
+              "mime": "image/jpeg"
+            }
+          ],
+          "est_tokens": 5473,
+          "tool": "get_video_grids",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "images": 4,
+            "pixels": 3865600
+          }
+        },
+        {
+          "task": "scenes",
+          "file": "cuts-10.mp4",
+          "ok": false,
+          "wall_ms": 13,
+          "peak_mem_mb": 393.2,
+          "response_bytes": 301,
+          "text_chars": 247,
+          "images": [],
+          "est_tokens": 62,
+          "tool": "get_video_grids",
+          "is_error": true,
+          "has_structured": false,
+          "error": "[INVALID_SAMPLING] Requested window 0.000s-20.000s is too short for 6 grid(s) at seconds_per_grid=3.333 and seconds_per_frame=0.500. Increase seconds_per_grid, increase seconds_per_frame, reduce max_grids, or shorten the number of frames per grid."
+        },
+        {
+          "task": "scenes",
+          "file": "fades-3.mp4",
+          "ok": false,
+          "wall_ms": 11,
+          "peak_mem_mb": 393.3,
+          "response_bytes": 301,
+          "text_chars": 247,
+          "images": [],
+          "est_tokens": 62,
+          "tool": "get_video_grids",
+          "is_error": true,
+          "has_structured": false,
+          "error": "[INVALID_SAMPLING] Requested window 0.000s-14.520s is too short for 6 grid(s) at seconds_per_grid=2.420 and seconds_per_frame=0.500. Increase seconds_per_grid, increase seconds_per_frame, reduce max_grids, or shorten the number of frames per grid."
+        },
+        {
+          "task": "scenes",
+          "file": "ocr-video.mp4",
+          "ok": false,
+          "wall_ms": 12,
+          "peak_mem_mb": 393.3,
+          "response_bytes": 300,
+          "text_chars": 246,
+          "images": [],
+          "est_tokens": 62,
+          "tool": "get_video_grids",
+          "is_error": true,
+          "has_structured": false,
+          "error": "[INVALID_SAMPLING] Requested window 0.000s-9.000s is too short for 6 grid(s) at seconds_per_grid=1.500 and seconds_per_frame=0.500. Increase seconds_per_grid, increase seconds_per_frame, reduce max_grids, or shorten the number of frames per grid."
+        },
+        {
+          "task": "robust",
+          "file": "corrupt.mp4",
+          "ok": true,
+          "wall_ms": 5,
+          "peak_mem_mb": 393.3,
+          "response_bytes": 173,
+          "text_chars": 131,
+          "images": [],
+          "est_tokens": 33,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "graceful": true,
+            "is_error": false,
+            "text": "Probed 1 file(s): 0 succeeded, 1 failed.\n\nFile: /data/corrupt.mp4\nError: [UNSUPPORTED_FORMAT] Cannot probe media: /data/corrupt.mp4"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "empty.mp4",
+          "ok": true,
+          "wall_ms": 5,
+          "peak_mem_mb": 393.3,
+          "response_bytes": 169,
+          "text_chars": 127,
+          "images": [],
+          "est_tokens": 32,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "graceful": true,
+            "is_error": false,
+            "text": "Probed 1 file(s): 0 succeeded, 1 failed.\n\nFile: /data/empty.mp4\nError: [UNSUPPORTED_FORMAT] Cannot probe media: /data/empty.mp4"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "silent.wav",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)"
+        },
+        {
+          "task": "robust",
+          "file": "noaudio.mp4",
+          "ok": false,
+          "wall_ms": 0,
+          "peak_mem_mb": 0,
+          "response_bytes": 0,
+          "text_chars": 0,
+          "images": [],
+          "est_tokens": 0,
+          "na": "crash: SIGSEGV in node-av whisper on this host (reproduced with official image 1.1.0)"
+        },
+        {
+          "task": "robust",
+          "file": "http://169.254.169.254/latest/meta-data",
+          "ok": true,
+          "wall_ms": 1074,
+          "peak_mem_mb": 448.5,
+          "response_bytes": 1020,
+          "text_chars": 954,
+          "images": [],
+          "est_tokens": 239,
+          "tool": "probe_media",
+          "is_error": true,
+          "has_structured": false,
+          "error": "[YT_DLP_FAILED] Failed to download video for http://169.254.169.254/latest/meta-data: Command failed: /usr/local/bin/yt-dlp --no-check-certificates --ffmpeg-location /app/node_modules/.pnpm/node-av@5.2.2/node_modules/node-av/binary/ffmpeg -f worst[ext=mp4]/worst -o /tmp/media-understanding-ytdlp/de4",
+          "quality": {
+            "graceful": true,
+            "is_error": true,
+            "text": "[YT_DLP_FAILED] Failed to download video for http://169.254.169.254/latest/meta-data: Command failed: /usr/local/bin/yt-dlp --no-check-certificates --ffmpeg-loc"
+          }
+        },
+        {
+          "task": "robust",
+          "file": "../../etc/passwd",
+          "ok": true,
+          "wall_ms": 4,
+          "peak_mem_mb": 393.3,
+          "response_bytes": 161,
+          "text_chars": 119,
+          "images": [],
+          "est_tokens": 30,
+          "tool": "probe_media",
+          "is_error": false,
+          "has_structured": false,
+          "quality": {
+            "graceful": true,
+            "is_error": false,
+            "text": "Probed 1 file(s): 0 succeeded, 1 failed.\n\nFile: /etc/passwd\nError: [UNSUPPORTED_FORMAT] Cannot probe media: /etc/passwd"
+          }
+        }
+      ],
+      "stderr_tail": "[swscaler @ 0x7fc94d21b800] deprecated pixel format used, make sure you did set range correctly\n[swscaler @ 0x7fc96caf4480] deprecated pixel format used, make sure you did set range correctly\n[swscaler @ 0x7fc9551514c0] deprecated pixel format used, make sure you did set range correctly\n[mov,mp4,m4a,3gp,3g2,mj2 @ 0x7fc95410a7c0] Format mov,mp4,m4a,3gp,3g2,mj2 detected only with low score of 1, misdetection possible!\n[mov,mp4,m4a,3gp,3g2,mj2 @ 0x7fc95410a7c0] moov atom not found\n[mov,mp4,m4a,3gp,3g2,mj2 @ 0x7fc96c1c3fc0] Format mov,mp4,m4a,3gp,3g2,mj2 detected only with low score of 1, misdetection possible!\n[mov,mp4,m4a,3gp,3g2,mj2 @ 0x7fc96c1c3fc0] moov atom not found\n"
+    }
+  ]
+}
