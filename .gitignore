@@ -7,3 +7,6 @@ coverage/
 .env
 .env.*
 .claude/
+
+# OMC runtime state (oh-my-claudecode)
+.omc/
