@@ -220,4 +220,30 @@ describe("get_frames tool", () => {
       }),
     ).rejects.toMatchObject({ code: expect.any(String) });
   });
+
+  it("preserves full precision for close timestamps (no cache collision)", async () => {
+    // Test that timestamps differing by less than 1ms (e.g., 0.5001 vs 0.5)
+    // do not collide in the cache. Without full-precision timestamps, both
+    // would round to 500ms and produce the same cache key.
+    const result = await getFrames(config, {
+      source: join(fixtures, "clip.mp4"),
+      timestamps: [0.5, 0.5001],
+      frame_format: "jpeg",
+    });
+
+    expect(result.frames).toHaveLength(2);
+    expect(result.skipped).toHaveLength(0);
+
+    // Each frame should have a distinct cache path
+    const path1 = result.frames[0].cache_path;
+    const path2 = result.frames[1].cache_path;
+    expect(path1).not.toBe(path2);
+
+    // Both files should exist and have content
+    const fs = require("node:fs");
+    const size1 = fs.statSync(path1).size;
+    const size2 = fs.statSync(path2).size;
+    expect(size1).toBeGreaterThan(0);
+    expect(size2).toBeGreaterThan(0);
+  });
 });

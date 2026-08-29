@@ -104,7 +104,7 @@ function formatTimestamp(seconds: number): string {
  * Includes the timestamp (in milliseconds), scaling width, format, quality, overlay flag, and region hash if present.
  */
 function sidecarName(
-  t_ms: number,
+  t_ms: number | string,
   width: number,
   format: FrameFormat,
   quality: number,
@@ -227,7 +227,8 @@ export async function getFrames(config: Config, input: GetFramesInput): Promise<
   type ExtractedFrame = { buffer: Buffer; frameEntry: FrameData };
   const extractionTasks = validTimestamps.map((ts) => {
     return async (): Promise<ExtractedFrame> => {
-      const sidecarFileName = sidecarName(Math.round(ts * 1000), input.max_width, input.frame_format, input.quality, input.overlay_timestamp, input.region);
+      const t_ms_str = (ts * 1000).toFixed(3);
+      const sidecarFileName = sidecarName(t_ms_str, input.max_width, input.frame_format, input.quality, input.overlay_timestamp, input.region);
       const cacheHit = await sidecarExists(cache, sidecarFileName);
 
       let buffer: Buffer;
