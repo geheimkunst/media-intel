@@ -7,6 +7,8 @@ import { registerDiffFrames } from "./tools/diff-frames.js";
 import { doctor, doctorInput, doctorOutput, summarizeDoctor } from "./tools/doctor.js";
 import { registerGetScenes } from "./tools/get-scenes.js";
 import { registerListCached } from "./tools/list-cached.js";
+import { registerMediaSearch } from "./tools/media-search.js";
+import { registerProbeImage } from "./tools/probe-image.js";
 import { probeMedia, probeMediaInput, probeMediaOutput, summarizeProbe } from "./tools/probe-media.js";
 
 export const SERVER_NAME = "media-intel";
@@ -71,10 +73,15 @@ export function createServer(config: Config = loadConfig()): McpServer {
     },
   );
 
+  registerProbeImage(server, config);
+
   // Stage 3 (analysis)
   registerGetScenes(server, config);
   registerAnalyzeAudio(server, config);
   registerDiffFrames(server, config);
+
+  // Stage 4 (search over the cache)
+  registerMediaSearch(server, config);
 
   // Prompts
   registerPrompts(server);

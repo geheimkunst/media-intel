@@ -26,6 +26,7 @@
     "media-intel": "dist/cli.js"
   },
   "dependencies": {
+    "@modelcontextprotocol/node": "^2.0.0",
     "@modelcontextprotocol/server": "^2.0.0",
     "execa": "^10.0.1",
     "file-type": "^22.0.2",
@@ -33,7 +34,8 @@
     "pngjs": "^7.0.0",
     "sharp": "^0.35.4",
     "sharp-phash": "^2.2.0",
-    "zod": "^4.5.2"
+    "zod": "^4.5.2",
+    "zxing-wasm": "^3.1.3"
   },
   "devDependencies": {
     "@modelcontextprotocol/client": "^2.0.0",

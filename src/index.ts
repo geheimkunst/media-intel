@@ -14,3 +14,7 @@ export { analyzeAudio as analyzeAudioTool, analyzeAudioInput, analyzeAudioOutput
 export { diffFrames, diffFramesInput, diffFramesOutput, registerDiffFrames } from "./tools/diff-frames.js";
 export { listCached, listCachedInput, listCachedOutput, registerListCached } from "./tools/list-cached.js";
 export { registerPrompts } from "./prompts.js";
+export { mediaSearch, mediaSearchInput, mediaSearchOutput, registerMediaSearch } from "./tools/media-search.js";
+export { probeImage, probeImageInput, probeImageOutput, registerProbeImage } from "./tools/probe-image.js";
+export { indexDocument, searchIndex, indexStats, closeIndex, type IndexDocument, type SearchHit } from "./search.js";
+export { startHttp, type HttpOptions } from "./http.js";
