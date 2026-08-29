@@ -1,0 +1,21 @@
+src/tools/get-video-grids.ts
+  s_dd83aa1d90e0ec::t_95d590c3cadf94 1-473
+tests/get-video-grids.test.ts
+  s_dd83aa1d90e0ec::t_40145152ddadfc 1-356
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "3bd8362fe064e9cf2b1fdad343b499192dcfd51e",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
