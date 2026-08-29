@@ -1,0 +1,23 @@
+docs/benchmarks/2026-08-29-stufe-1.md
+  s_dd83aa1d90e0ec::t_fb8bb1fb2dbb12 1-35
+bench/candidates.mjs
+  s_dd83aa1d90e0ec::t_b0e548910b30de 99
+bench/merge.mjs
+  s_dd83aa1d90e0ec::t_ad74bd1f676eec 1-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.0",
+  "base_commit_sha": "3d9f591c88f346199b3dea9ad240bdaa543bd06b",
+  "prompts": {},
+  "sessions": {
+    "s_dd83aa1d90e0ec": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d765ea-b9d0-4cf9-add3-3580fd289d01",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
