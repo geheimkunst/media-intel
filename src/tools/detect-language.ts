@@ -8,6 +8,7 @@ import type { Config } from "../config.js";
 import { commonOutput } from "../contracts.js";
 import { MediaIntelError } from "../errors.js";
 import { probeMedia } from "./probe-media.js";
+import { resolveSource } from "../source.js";
 import { transcribeWithWhisperCpp } from "../backends/transcribe/whisper-cpp.js";
 
 export const detectLanguageInput = z.object({
@@ -43,11 +44,13 @@ export async function detectLanguage(config: Config, input: DetectLanguageInput)
     throw new MediaIntelError("no_audio", "Video has no audio stream", "Use a different media file.");
   }
 
-  // Use whisper.cpp to detect language
+  // Use whisper.cpp to detect language from the first probe_duration_s seconds
   try {
     const result = await transcribeWithWhisperCpp(config, resolved.location, {
       language: "auto",
       wordTimestamps: false,
+      startSeconds: 0,
+      endSeconds: input.probe_duration_s,
     });
 
     return {

@@ -7,7 +7,8 @@ import { readFile, unlink } from "node:fs/promises";
 import { join } from "node:path";
 import { cpus } from "node:os";
 import type { Config } from "../../config.js";
-import { toWav16k, tmpDir } from "../../ffmpeg.js";
+import { toWav16k } from "../../ffmpeg.js";
+import { tmpDir } from "../../cache.js";
 import { runBinary } from "../../process.js";
 import { MediaIntelError } from "../../errors.js";
 import { whisperModelPath, vadModelPath } from "../../tools/doctor.js";
@@ -16,6 +17,8 @@ import type { Segment } from "./srt.js";
 export interface WhisperCppOptions {
   language?: string; // ISO-639-1 code or "auto"
   wordTimestamps?: boolean;
+  startSeconds?: number;
+  endSeconds?: number;
 }
 
 interface WhisperCppOutput {
@@ -49,7 +52,8 @@ export async function transcribeWithWhisperCpp(
 
   try {
     // Transcode to WAV 16 kHz mono
-    await toWav16k(config, location, wavFile);
+    const window = opts.startSeconds !== undefined ? { start_s: opts.startSeconds, ...(opts.endSeconds !== undefined ? { end_s: opts.endSeconds } : {}) } : undefined;
+    await toWav16k(config, location, wavFile, window);
 
     const modelPath = whisperModelPath(config);
     const vadModelPath_ = vadModelPath(config);
@@ -89,9 +93,10 @@ export async function transcribeWithWhisperCpp(
       throw new MediaIntelError("whisper_empty", "whisper-cli produced no transcript", "Check the audio content.");
     }
 
+    const timeOffset = opts.startSeconds ?? 0;
     const segments: Segment[] = output.result.map((seg) => ({
-      start_s: seg.offsets.from / 1000,
-      end_s: seg.offsets.to / 1000,
+      start_s: seg.offsets.from / 1000 + timeOffset,
+      end_s: seg.offsets.to / 1000 + timeOffset,
       text: seg.text.trim(),
     }));
 
@@ -101,14 +106,14 @@ export async function transcribeWithWhisperCpp(
 
     const langMatch = result.stderr.match(/auto-detected language: (\w+) \(p = ([\d.]+)\)/);
     if (langMatch) {
-      language = langMatch[1];
-      confidence = parseFloat(langMatch[2]);
+      language = langMatch[1]!;
+      confidence = parseFloat(langMatch[2]!);
     }
 
     return {
       segments,
       language,
-      language_confidence: confidence,
+      ...(confidence !== undefined ? { language_confidence: confidence } : {}),
       model: "large-v3-turbo-q5_0",
     };
   } finally {

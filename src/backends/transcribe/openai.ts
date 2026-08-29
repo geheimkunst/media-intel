@@ -7,13 +7,16 @@
 import { readFile, unlink, stat } from "node:fs/promises";
 import { join } from "node:path";
 import type { Config } from "../../config.js";
-import { ffmpeg, tmpDir } from "../../ffmpeg.js";
+import { ffmpeg, toWav16k } from "../../ffmpeg.js";
+import { tmpDir } from "../../cache.js";
 import { MediaIntelError } from "../../errors.js";
 import { redactSecrets } from "../../process.js";
 import type { Segment } from "./srt.js";
 
 export interface OpenAiOptions {
   language?: string; // ISO-639-1 code
+  startSeconds?: number;
+  endSeconds?: number;
 }
 
 interface WhisperApiResponse {
@@ -57,10 +60,16 @@ export async function transcribeWithOpenAi(
   }
 
   const tmpDirPath = await tmpDir(config);
-  const wavFile = location.startsWith("/") ? location : join(tmpDirPath, "input.wav");
+  const wavFile = join(tmpDirPath, "input.wav");
   let uploadFile = wavFile;
+  let uploadMimeType = "audio/wav";
+  let uploadFilename = "audio.wav";
 
   try {
+    // Convert to WAV 16 kHz mono (applies window if specified)
+    const window = opts.startSeconds !== undefined ? { start_s: opts.startSeconds, ...(opts.endSeconds !== undefined ? { end_s: opts.endSeconds } : {}) } : undefined;
+    await toWav16k(config, location, wavFile, window);
+
     // Check file size; if > 25 MB, transcode to MP3
     const fileStats = await stat(wavFile);
     if (fileStats.size > 25 * 1024 * 1024) {
@@ -68,6 +77,8 @@ export async function transcribeWithOpenAi(
       // Transcode to MP3 at 64 kbps, mono, 16 kHz
       await ffmpeg(config, ["-i", wavFile, "-ac", "1", "-ar", "16000", "-b:a", "64k", "-f", "mp3", mp3File]);
       uploadFile = mp3File;
+      uploadMimeType = "audio/mpeg";
+      uploadFilename = "audio.mp3";
     }
 
     // Read file for upload
@@ -76,7 +87,7 @@ export async function transcribeWithOpenAi(
     // Prepare FormData
     const formData = new FormData();
     formData.append("model", "whisper-1");
-    formData.append("file", new Blob([audioBuffer], { type: "audio/wav" }), "audio.wav");
+    formData.append("file", new Blob([audioBuffer], { type: uploadMimeType }), uploadFilename);
     formData.append("response_format", "verbose_json");
     if (opts.language && opts.language !== "auto") {
       formData.append("language", opts.language);
@@ -106,14 +117,15 @@ export async function transcribeWithOpenAi(
       throw new MediaIntelError("openai_empty", "OpenAI Whisper returned no transcript", "Check the audio content.");
     }
 
+    const timeOffset = opts.startSeconds ?? 0;
     const segments: Segment[] = data.segments.map((seg) => ({
-      start_s: seg.start,
-      end_s: seg.end,
+      start_s: seg.start + timeOffset,
+      end_s: seg.end + timeOffset,
       text: seg.text.trim(),
     }));
 
     // Estimate cost
-    const durationSeconds = segments.length > 0 ? segments[segments.length - 1].end_s : 0;
+    const durationSeconds = segments.length > 0 ? segments[segments.length - 1]!.end_s : 0;
     const costPerMin = 0.006;
     const costEstimate = (durationSeconds / 60) * costPerMin;
 
@@ -129,6 +141,7 @@ export async function transcribeWithOpenAi(
       if (uploadFile !== wavFile && uploadFile.includes("input.mp3")) {
         await unlink(uploadFile);
       }
+      await unlink(wavFile);
     } catch {
       // Ignore cleanup errors
     }

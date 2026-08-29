@@ -108,13 +108,8 @@ export async function getTranscript(config: Config, input: GetTranscriptInput): 
   // Resolve time window
   const { start_s, end_s, pagination: pag } = resolveWindow(input.window, probe.duration_s, TRANSCRIPTION_WINDOW_SECONDS);
 
-  // Check for cached result
+  // Get cache entry for later use
   const cache = await cacheEntry(config, resolved);
-  const cacheKey = buildCacheKey(input, start_s, end_s);
-  let cachedResult = await readSidecarJson<TranscriptionResult>(cache, `transcript.${cacheKey}.json`);
-  if (cachedResult && cachedResult.source) {
-    return buildResult(input, cachedResult, pag, probe.duration_s, config);
-  }
 
   // Try backends in order
   let result: TranscriptionResult | null = null;
@@ -122,6 +117,7 @@ export async function getTranscript(config: Config, input: GetTranscriptInput): 
   if (input.backend === "auto" || input.backend === "embedded") {
     result = await tryEmbeddedSubtitles(config, resolved.location, input).catch(() => null);
     if (result) {
+      const cacheKey = buildCacheKey(result.source, input.language, start_s, end_s, input.word_timestamps);
       await writeSidecarJson(cache, `transcript.${cacheKey}.json`, result);
       return buildResult(input, result, pag, probe.duration_s, config);
     }
@@ -133,6 +129,7 @@ export async function getTranscript(config: Config, input: GetTranscriptInput): 
   if (input.backend === "auto" || input.backend === "sidecar") {
     result = await trySidecarSubtitles(config, resolved.location, input).catch(() => null);
     if (result) {
+      const cacheKey = buildCacheKey(result.source, input.language, start_s, end_s, input.word_timestamps);
       await writeSidecarJson(cache, `transcript.${cacheKey}.json`, result);
       return buildResult(input, result, pag, probe.duration_s, config);
     }
@@ -144,6 +141,7 @@ export async function getTranscript(config: Config, input: GetTranscriptInput): 
   if (input.backend === "auto" || input.backend === "whisper") {
     result = await tryWhisperCpp(config, resolved.location, start_s, end_s, input).catch(() => null);
     if (result) {
+      const cacheKey = buildCacheKey(result.source, input.language, start_s, end_s, input.word_timestamps);
       await writeSidecarJson(cache, `transcript.${cacheKey}.json`, result);
       return buildResult(input, result, pag, probe.duration_s, config);
     }
@@ -159,6 +157,7 @@ export async function getTranscript(config: Config, input: GetTranscriptInput): 
       if (cost.estimated_cost_usd <= config.maxCostUsd) {
         result = await tryOpenAi(config, resolved.location, start_s, end_s, input).catch(() => null);
         if (result) {
+          const cacheKey = buildCacheKey(result.source, input.language, start_s, end_s, input.word_timestamps);
           await writeSidecarJson(cache, `transcript.${cacheKey}.json`, result);
           return buildResult(input, result, pag, probe.duration_s, config);
         }
@@ -180,6 +179,7 @@ export async function getTranscript(config: Config, input: GetTranscriptInput): 
       if (cost.estimated_cost_usd <= config.maxCostUsd) {
         result = await tryGroq(config, resolved.location, start_s, end_s, input).catch(() => null);
         if (result) {
+          const cacheKey = buildCacheKey(result.source, input.language, start_s, end_s, input.word_timestamps);
           await writeSidecarJson(cache, `transcript.${cacheKey}.json`, result);
           return buildResult(input, result, pag, probe.duration_s, config);
         }
@@ -208,8 +208,8 @@ export async function getTranscript(config: Config, input: GetTranscriptInput): 
 
 async function tryEmbeddedSubtitles(config: Config, location: string, input: GetTranscriptInput): Promise<TranscriptionResult> {
   const result = await extractEmbeddedSubtitles(config, location, {
-    language: input.language === "auto" ? undefined : input.language,
-    subtitleStreamIndex: input.subtitle_stream_index,
+    ...(input.language !== "auto" ? { language: input.language } : {}),
+    ...(input.subtitle_stream_index !== undefined ? { subtitleStreamIndex: input.subtitle_stream_index } : {}),
   });
 
   if (!result || result.segments.length === 0) {
@@ -225,7 +225,7 @@ async function tryEmbeddedSubtitles(config: Config, location: string, input: Get
 
 async function trySidecarSubtitles(config: Config, location: string, input: GetTranscriptInput): Promise<TranscriptionResult> {
   const result = await extractSidecarSubtitles(location, {
-    language: input.language === "auto" ? undefined : input.language,
+    ...(input.language !== "auto" ? { language: input.language } : {}),
   });
 
   if (!result) {
@@ -243,31 +243,29 @@ async function tryWhisperCpp(config: Config, location: string, start_s: number, 
   const result = await transcribeWithWhisperCpp(config, location, {
     language: input.language,
     wordTimestamps: input.word_timestamps,
+    startSeconds: start_s,
+    endSeconds: end_s,
   });
-
-  // Filter segments to the requested window
-  const filtered = result.segments.filter((seg) => seg.end_s > start_s && seg.start_s < end_s);
 
   return {
     source: "whisper_cpp",
-    segments: filtered,
+    segments: result.segments,
     language: result.language,
-    language_confidence: result.language_confidence,
+    ...(result.language_confidence !== undefined ? { language_confidence: result.language_confidence } : {}),
     model: result.model,
   };
 }
 
 async function tryOpenAi(config: Config, location: string, start_s: number, end_s: number, input: GetTranscriptInput): Promise<TranscriptionResult> {
   const result = await transcribeWithOpenAi(config, location, {
-    language: input.language === "auto" ? undefined : input.language,
+    ...(input.language !== "auto" ? { language: input.language } : {}),
+    startSeconds: start_s,
+    endSeconds: end_s,
   });
-
-  // Filter segments to the requested window
-  const filtered = result.segments.filter((seg) => seg.end_s > start_s && seg.start_s < end_s);
 
   return {
     source: "openai",
-    segments: filtered,
+    segments: result.segments,
     language: result.language,
     model: result.model,
     cost_estimate_usd: result.cost_estimate_usd,
@@ -276,25 +274,23 @@ async function tryOpenAi(config: Config, location: string, start_s: number, end_
 
 async function tryGroq(config: Config, location: string, start_s: number, end_s: number, input: GetTranscriptInput): Promise<TranscriptionResult> {
   const result = await transcribeWithGroq(config, location, {
-    language: input.language === "auto" ? undefined : input.language,
+    ...(input.language !== "auto" ? { language: input.language } : {}),
+    startSeconds: start_s,
+    endSeconds: end_s,
   });
-
-  // Filter segments to the requested window
-  const filtered = result.segments.filter((seg) => seg.end_s > start_s && seg.start_s < end_s);
 
   return {
     source: "groq",
-    segments: filtered,
+    segments: result.segments,
     language: result.language,
     model: result.model,
     cost_estimate_usd: result.cost_estimate_usd,
   };
 }
 
-function buildCacheKey(input: GetTranscriptInput, start_s: number, end_s: number): string {
-  const backend = input.backend === "auto" ? "auto" : input.backend;
-  const lang = input.language === "auto" ? "auto" : input.language;
-  const wt = input.word_timestamps ? "1" : "0";
+function buildCacheKey(backend: TranscriptionSource, language: string, start_s: number, end_s: number, wordTimestamps: boolean): string {
+  const lang = language === "auto" ? "auto" : language;
+  const wt = wordTimestamps ? "1" : "0";
   return `${backend}.${lang}.${Math.round(start_s)}-${Math.round(end_s)}.${wt}`;
 }
 
@@ -336,17 +332,13 @@ function buildResult(
   return {
     source: input.source,
     transcription_source: result.source,
-    model: result.model,
+    ...(result.model !== undefined ? { model: result.model } : {}),
     language: result.language,
-    language_confidence: result.language_confidence,
+    ...(result.language_confidence !== undefined ? { language_confidence: result.language_confidence } : {}),
     format: input.format,
     segments: windowedSegments,
     text: wrappedText,
-    ...(totalDurationS !== undefined ? { total_duration_s: round3(totalDurationS) } : {}),
-    window_start_s: round3(pag.window_start_s),
-    window_end_s: round3(pag.window_end_s),
-    has_more: pag.has_more,
-    ...(pag.next_window ? { next_window: pag.next_window } : {}),
+    ...pag,
     ...(result.cost_estimate_usd !== undefined ? { cost_estimate_usd: round3(result.cost_estimate_usd) } : {}),
     warnings,
     suggested_next: [],
