@@ -1,0 +1,20 @@
+CLAUDE.md
+  s_7cb9389b719260::t_6fe8ac96417e65 3-4
+  s_7cb9389b719260::t_99461b245ee2f4 11-14,32-33,42,44-46,48,54,56-57,59-61,67,71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bd6e882c0f59c9693e3e3d991c9783f5b0821662",
+  "prompts": {},
+  "sessions": {
+    "s_7cb9389b719260": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "29bc0bb2-c72a-4c0b-ac57-a294ac3cedab",
+        "model": "claude-fable-5"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
