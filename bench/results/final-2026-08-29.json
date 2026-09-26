@@ -5,7 +5,7 @@
     "cpus": 4,
     "cpu": "AMD EPYC 9645 96-Core Processor",
     "mem_gb": 7.8,
-    "fixtures": "/home/yunus/bench/fixtures",
+    "fixtures": "$HOME/bench/fixtures",
     "docker": "sudo docker",
     "loose_tolerance_s": 1,
     "merged_from": [

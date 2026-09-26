@@ -69,8 +69,8 @@ docs/               analysis.md, architecture.md, roadmap.md, research/
 ## MCP Usage
 
 - Docs lookup: `context7` for zod/execa/vitest. SDK v2 guides at https://ts.sdk.modelcontextprotocol.io/v2/ (fetch via `ctx_fetch_and_index`).
-- Reference repos cloned at `/Users/yunus/dev/_reference/media-intel/` (read-only inspiration, MIT).
-- Deployment target: hermes-vps via `mcp-new` (see `~/infra/System-Documentation/mcp-hosting-protokoll.md`).
+- Reference repos cloned at `<reference-clones>/` (read-only inspiration, MIT).
+- Deployment target: own VPS behind an OAuth 2.1 bridge (`mcp-new`).
 
 ## Verification
 

@@ -1,6 +1,6 @@
 # Roadmap media-intel
 
-> Stand 29-08-2026, 19:30. Phasen 0 bis 3 in einem Durchlauf umgesetzt. Offen sind nur noch zwei Klicks von Yunus und die Punkte unter "Nach dem Launch".
+> Stand 29-08-2026, 19:30. Phasen 0 bis 3 in einem Durchlauf umgesetzt. Offen sind nur noch zwei Klicks des Betreibers und die Punkte unter "Nach dem Launch".
 
 ## Phase 0: Fundament (erledigt)
 
@@ -26,14 +26,14 @@
 ## Phase 3: Betrieb (erledigt bis auf zwei User-Klicks)
 
 - [x] Stateless Streamable HTTP (`--http`, Host/Origin-Guards, optionaler Bearer), Dockerfile, CI (GitHub Actions)
-- [x] Deploy auf hermes-vps: `/home/yunus/dev/media-intel` (Node 24), whisper.cpp gebaut, Modell `large-v3-turbo-q5_0` plus VAD, tesseract 5.5 (deu+eng), exiftool, yt-dlp 2026.08.19
-- [x] Connector via `mcp-new`: Port 3016, Resource `https://media-intel.mcp.geheimkunst.eu`, Issuer `auth-media-intel.mcp.geheimkunst.eu`, mcp-check 6/6 grün, bestehende Connectoren regressionsfrei
-- [x] Claude Code (Mac): `media-intel` im User-Scope registriert, Status Connected; seit 29-08 abends über `/Users/yunus/.local/bin/media-intel-launcher` (Keys per `op read`, fail-soft)
+- [x] Deploy auf dem eigenen VPS: `$HOME/dev/media-intel` (Node 24), whisper.cpp gebaut, Modell `large-v3-turbo-q5_0` plus VAD, tesseract 5.5 (deu+eng), exiftool, yt-dlp 2026.08.19
+- [x] Connector via `mcp-new`: eigener Port, Resource- und Issuer-Host hinter Caddy, mcp-check 6/6 grün, bestehende Connectoren regressionsfrei
+- [x] Claude Code (Mac): `media-intel` im User-Scope registriert, Status Connected; seit 29-08 abends über `~/.local/bin/media-intel-launcher` (Keys per `op read`, fail-soft)
 - [x] VPS: Bridge startet über `~/.local/bin/media-intel-mcp-launcher` (liest `op.env`, Selbsttest `--check`)
-- [x] VPS: `op.env` angelegt (29-08 abends, Yunus), Launcher lädt ELEVENLABS_API_KEY und OPENAI_API_KEY
-- [ ] **Yunus:** ElevenLabs-Konto aufladen (0 Credits am 29-08, `quota_exceeded`); danach ist `backend=elevenlabs` sofort nutzbar
-- [ ] **Yunus:** Google Console → OAuth-Client → Redirect-URI `https://auth-media-intel.mcp.geheimkunst.eu/auth/google/callback` ergänzen
-- [ ] **Yunus:** claude.ai → Connectors → `https://media-intel.mcp.geheimkunst.eu` hinzufügen
+- [x] VPS: `op.env` angelegt (29-08 abends), Launcher lädt ELEVENLABS_API_KEY und OPENAI_API_KEY
+- [ ] **Betreiber:** ElevenLabs-Konto aufladen (0 Credits am 29-08, `quota_exceeded`); danach ist `backend=elevenlabs` sofort nutzbar
+- [ ] **Betreiber:** Google Console → OAuth-Client → Redirect-URI des Issuers ergänzen
+- [ ] **Betreiber:** claude.ai → Connectors → die Resource-URL hinzufügen
 - [ ] Hermes: `~/.hermes/config.yaml` auf media-intel umstellen (stdio, Launcher mit `op read` für Keys, sobald bezahlte Backends gewünscht)
 
 ## Nach dem Launch

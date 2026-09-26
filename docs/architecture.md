@@ -6,7 +6,7 @@
 
 | # | Entscheidung | Begründung |
 |---|---|---|
-| A1 | **TypeScript, Node 22+, `@modelcontextprotocol/server` 2.0** | Einziges Tier-1-SDK mit vollständiger Spec 2026-07-28 (verifiziert: Paket 2.0.0 auf npm, Spec-URL live). Drei der vier Referenz-Projekte sind Node; Hosting-Bridge auf hermes-vps ist Node. Python wäre für Whisper-Bindings bequemer, aber die Transkription läuft ohnehin in Kindprozessen oder über HTTP-APIs. |
+| A1 | **TypeScript, Node 22+, `@modelcontextprotocol/server` 2.0** | Einziges Tier-1-SDK mit vollständiger Spec 2026-07-28 (verifiziert: Paket 2.0.0 auf npm, Spec-URL live). Drei der vier Referenz-Projekte sind Node; Hosting-Bridge auf dem eigenen VPS ist Node. Python wäre für Whisper-Bindings bequemer, aber die Transkription läuft ohnehin in Kindprozessen oder über HTTP-APIs. |
 | A2 | **ffmpeg/ffprobe/yt-dlp/whisper-cli/tesseract als Prozesse via execa, keine nativen Node-Bindings** | Überall installierbar, keine postinstall-Kompilate, kein Node-ABI-Bruch (auf dem VPS mit better-sqlite3 erlebt). Ausnahme: `sharp` (vorgebaute Binaries, breit genutzt) für Bildmontage und Overlay. |
 | A3 | **stdio ist der primäre Transport, Streamable HTTP ist ein Adapter** | Lokal (Claude Code, Desktop, Hermes) läuft stdio. Für claude.ai-Connectoren übernimmt die vorhandene VPS-Bridge (`mcp-new`) OAuth 2.1 mit Google-Login und RFC-8707-Audience. Eigener HTTP-Einstieg mit `@modelcontextprotocol/node` in Phase 3, Auth bleibt außerhalb des Kerns. |
 | A4 | **Jedes Tool hat `outputSchema` und liefert `structuredContent` plus einen Textblock** | Agenten bekommen maschinenlesbare Felder, Menschen eine Zeile. Das SDK validiert die Ausgabe vor dem Senden. |
@@ -86,9 +86,9 @@ Ein Tool = eine Datei mit `xInput` (zod), `xOutput` (zod), reiner Funktion `x(co
 
 | Ziel | Wie |
 |---|---|
-| Claude Code / Desktop lokal | `claude mcp add media-intel -- node /Users/yunus/dev/media-intel/dist/cli.js`, später `npx media-intel` |
+| Claude Code / Desktop lokal | `claude mcp add media-intel -- node <repo>/dist/cli.js`, später `npx media-intel` |
 | Hermes (VPS) | stdio-Kind unter `~/.hermes/config.yaml`, Launcher setzt Keys via `op read` |
-| claude.ai-Connector | `mcp-new media-intel "▶ Media Intel" --cmd node --args dist/cli.js` auf hermes-vps; Bridge liefert OAuth 2.1 |
+| claude.ai-Connector | `mcp-new media-intel "▶ Media Intel" --cmd node --args dist/cli.js` auf dem eigenen VPS; Bridge liefert OAuth 2.1 |
 | Docker (Phase 3) | Multi-Stage-Image mit ffmpeg (mit freetype), yt-dlp, whisper-cli, tesseract; kein Modell im Image |
 | Streamable HTTP direkt (Phase 3) | `@modelcontextprotocol/node`, stateless, Origin-Prüfung, Bind 127.0.0.1, `requireBearerAuth` mit externem Verifier |
 | Veröffentlichung (Phase 3) | npm, offizielle MCP-Registry (`server.json`), `.mcpb` für Claude Desktop |

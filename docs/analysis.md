@@ -1,6 +1,6 @@
 # Analyse der vier Referenz-Projekte
 
-> Stand 29-08-2026. Synthese aus den Einzelberichten in `docs/research/` (dort stehen Dateipfade, Code-Zitate und Quellen). Repos liegen geklont unter `/Users/yunus/dev/_reference/media-intel/`.
+> Stand 29-08-2026. Synthese aus den Einzelberichten in `docs/research/` (dort stehen Dateipfade, Code-Zitate und Quellen). Repos liegen geklont unter `<reference-clones>/`.
 
 ## 1. Steckbriefe
 
@@ -11,7 +11,7 @@
 | bradautomates/claude-video | Agent Skill | Python stdlib, yt-dlp, ffmpeg, Groq/OpenAI Whisper | 3,2k LOC, 17 Dateien | 11 Commits, v0.2.0 30-06-2026 | 17 pytest-Dateien | MIT |
 | taoufik123-collab/claude-watch | Skill-Fork | wie oben plus Obsidian-Ingest | 2,2k LOC | 19 Commits, 24-07-2026 | keine | MIT |
 
-Lokaler Sonderfall: `/Users/yunus/dev/tools/media-understanding` ist ein Fork von media-understanding auf Branch `feat/openai-backend` (2 Commits voraus: OpenAI-Audio-Backend, Cost-Preflight, Cache-Key-Fix). Er läuft bereits auf hermes-vps als Connector `media.mcp.geheimkunst.eu`.
+Lokaler Sonderfall: `<local-fork>/media-understanding` ist ein Fork von media-understanding auf Branch `feat/openai-backend` (2 Commits voraus: OpenAI-Audio-Backend, Cost-Preflight, Cache-Key-Fix). Er läuft bereits auf dem eigenen VPS als Connector `media.mcp.geheimkunst.eu`.
 
 ## 2. Was jedes Projekt wirklich kann
 
@@ -57,14 +57,14 @@ Erweitert claude-video um "Hook-Mikroskop" (0 bis 10 s mit 2 fps und Wort-Timest
 - node-av als Decoder (media-understanding): native Binärabhängigkeit mit postinstall, bricht bei Node-Versionswechsel (auf dem VPS bereits erlebt mit better-sqlite3). ffmpeg als Prozess ist überall vorhanden und stabil.
 - Browser-Cookie-Scraping für yt-dlp (mcp-video-analyzer): Plattform-Falle, stattdessen `cookies.txt` per Konfiguration.
 - Obsidian-Ingest im Server (claude-watch): Domänenlogik gehört in einen Skill oder Prompt, nicht in den Server.
-- Eigene OAuth-Schicht im Kern: hermes-vps hat eine generische Bridge (`mcp-new`), die jeden stdio-Server zu einem OAuth-2.1-Connector macht. Auth bleibt dort.
+- Eigene OAuth-Schicht im Kern: der eigene VPS hat eine generische Bridge (`mcp-new`), die jeden stdio-Server zu einem OAuth-2.1-Connector macht. Auth bleibt dort.
 - Postinstall-Modell-Downloads: Modelle werden explizit geholt, nie beim `npm install`.
 
 ## 6. Nutzer und Use-Cases
 
 | Nutzer | Use-Case | Muss | Kann |
 |---|---|---|---|
-| Agent-Betreiber (Yunus, Hermes) | Voice-Notes und Screen-Recordings verstehen, YouTube-Talks zusammenfassen | probe, transcript (deutsch), frames, fetch | Szenen, OCR |
+| Agent-Betreiber (Mensch und Hermes-Agent) | Voice-Notes und Screen-Recordings verstehen, YouTube-Talks zusammenfassen | probe, transcript (deutsch), frames, fetch | Szenen, OCR |
 | Entwickler | Bug-Repro-Video analysieren, Meeting-Aufzeichnung protokollieren | transcript mit Timestamps, frame_at | OCR für Code/Fehlertexte |
 | Content-Creator, Sales | Konkurrenz-Reels sezieren, Hook-Analyse, Pacing | scenes, hook-window, transcript | Report-Prompt |
 | Enterprise-Hosting | Mehrere Nutzer über HTTP, Kostenkontrolle | Streamable HTTP, Cost-Preflight, Tasks | Auth-Bridge |

@@ -25,7 +25,7 @@
 ### claude-video
 **Verzeichnisstruktur:**
 ```
-/Users/yunus/dev/_reference/media-intel/claude-video
+<reference-clones>/claude-video
 ├── skills/watch/
 │   ├── SKILL.md                    # Skill-Kontrakt (Quelle der Wahrheit)
 │   └── scripts/
@@ -55,7 +55,7 @@
 ### claude-watch (Fork-Erweiterungen)
 **Zusätzliche Komponenten:**
 ```
-/Users/yunus/dev/_reference/media-intel/claude-watch
+<reference-clones>/claude-watch
 ├── SKILL.md                        # Erweiterte Version mit Ingest-Gate
 ├── scripts/
 │   ├── watch.py                    # Erweitert um Step 4.4-4.5
@@ -152,7 +152,7 @@ bc17ecf watch: pacing metrics (cuts/min, shot length, motion stub)
 ## 5 Übernehmenswerte Ideen für MCP-Server-Architektur
 
 ### Prompt-Patterns
-**Structured Report Template** (`/Users/yunus/dev/_reference/media-intel/claude-watch/SKILL.md`, Zeile ~150+):
+**Structured Report Template** (`<reference-clones>/claude-watch/SKILL.md`, Zeile ~150+):
 ```markdown
 # Structured Report Markers (in report.md)
 ## TL;DR
@@ -323,7 +323,7 @@ Tool-Config:
 - **media-intel MCP-Server:** Hybrid-Ansatz — claude-video Core + claude-watch Patterns (ohne Obsidian-Bind)
 
 ### Code-Quellen für Adaptation
-- Frame-Budget: `/Users/yunus/dev/_reference/media-intel/claude-video/skills/watch/scripts/frames.py:1-50`
-- Error-Handling: `/Users/yunus/dev/_reference/media-intel/claude-video/skills/watch/scripts/download.py:1-80`
-- Structured Report: `/Users/yunus/dev/_reference/media-intel/claude-watch/SKILL.md` § Step 1-5
-- Ingest-Pattern: `/Users/yunus/dev/_reference/media-intel/claude-watch/SKILL.md` § Configuration & Step 4.4-4.5
+- Frame-Budget: `<reference-clones>/claude-video/skills/watch/scripts/frames.py:1-50`
+- Error-Handling: `<reference-clones>/claude-video/skills/watch/scripts/download.py:1-80`
+- Structured Report: `<reference-clones>/claude-watch/SKILL.md` § Step 1-5
+- Ingest-Pattern: `<reference-clones>/claude-watch/SKILL.md` § Configuration & Step 4.4-4.5

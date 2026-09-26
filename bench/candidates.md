@@ -1,7 +1,7 @@
 # Referenz-Kandidaten: Bau, Start, Tool-Schnittstellen, Stolpersteine
 
 Stand 29-08-2026. Alles aus dem Quellcode belegt, nicht aus den READMEs.
-Repos unter `/Users/yunus/dev/_reference/media-intel/`:
+Repos unter `<reference-clones>/`:
 
 | Repo | Origin | HEAD |
 |---|---|---|
@@ -21,7 +21,7 @@ Umgebung des Laufs: Debian x86_64, 4 Cores, 8 GB, kein Netz, Fixtures schreibges
 ```bash
 # Kontext = Repo-Root, Dockerfile im Root
 docker buildx build --platform linux/amd64 -t media-understanding:bench \
-  /Users/yunus/dev/_reference/media-intel/media-understanding
+  <reference-clones>/media-understanding
 ```
 
 `buildx` bzw. BuildKit ist Pflicht: `Dockerfile:5` deklariert `ARG TARGETARCH` ohne Default und die `case`-Verzweigung beim yt-dlp-Download bricht mit `Unsupported TARGETARCH:` ab, wenn der klassische Builder die Variable leer lässt. Ersatzweise `--build-arg TARGETARCH=amd64`.
@@ -120,7 +120,7 @@ Zusätzlich vorhanden: `understand_media` (Transkript und Grids in einem Aufruf)
 
 ```bash
 docker build -t mcp-video-analyzer:bench \
-  /Users/yunus/dev/_reference/media-intel/mcp-video-analyzer
+  <reference-clones>/mcp-video-analyzer
 docker run -i --rm --network none -v "$FIXTURES:/data:ro" -v "$CACHE:/cache" \
   -e MCP_CACHE_DIR=/cache mcp-video-analyzer:bench
 ```

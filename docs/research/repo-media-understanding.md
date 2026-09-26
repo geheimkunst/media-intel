@@ -256,6 +256,6 @@ Dieser MCP-Server transkribiert Audio/Video/Bilder und extrahiert Inhalte für L
 ## Quellenangaben
 
 - **Upstream:** github.com/dymoo/media-understanding (a37ce99, v1.1.0)
-- **Fork:** /Users/yunus/dev/tools/media-understanding (feat/openai-backend, 2 Commits voraus)
+- **Fork:** <local-fork>/media-understanding (feat/openai-backend, 2 Commits voraus)
 - **Diff Analysierte:** src/media.ts, src/types.ts (206 Zeilen)
 - **Docs:** README.md, AGENTS.md, src/mcp.ts, src/tests/

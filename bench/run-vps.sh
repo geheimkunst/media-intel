@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Sync fixtures and bench code to hermes-vps, prepare caches (models, tessdata), run the suite, fetch results.
+# Sync fixtures and bench code to the VPS, prepare caches (models, tessdata), run the suite, fetch results.
 # Usage: bash bench/run-vps.sh [--only a,b] [--skip-sync]
 set -euo pipefail
-HOST=hermes-vps
-REMOTE=/home/yunus/dev/media-intel
+HOST=${BENCH_HOST:?set BENCH_HOST to your ssh host}
+REMOTE=$HOME/dev/media-intel
 ONLY=""
 SYNC=1
 while [ $# -gt 0 ]; do
@@ -21,8 +21,8 @@ ssh -o BatchMode=yes "$HOST" bash -s "$ONLY" <<'EOF'
 set -euo pipefail
 ONLY="${1:-}"
 export PATH=$HOME/.local/opt/node24/bin:$HOME/.local/bin:$PATH
-BENCH=/home/yunus/bench
-REMOTE=/home/yunus/dev/media-intel
+BENCH=$HOME/bench
+REMOTE=$HOME/dev/media-intel
 mkdir -p $BENCH/cache $BENCH/results $BENCH/ref
 rm -rf $BENCH/fixtures && cp -r $REMOTE/bench/fixtures $BENCH/fixtures && chmod -R a+rX $BENCH/fixtures
 # media-intel variants: whisper models + VAD inside their cache
@@ -50,5 +50,5 @@ node bench/run.mjs "${ARGS[@]}"
 ls -t $BENCH/results | head -1
 EOF
 mkdir -p bench/results
-rsync -az "$HOST:/home/yunus/bench/results/" bench/results/
+rsync -az "$HOST:$HOME/bench/results/" bench/results/
 ls -t bench/results | head -1
