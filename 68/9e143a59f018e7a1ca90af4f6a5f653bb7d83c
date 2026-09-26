@@ -1,0 +1,53 @@
+README.md
+  s_1393168baeefcf::t_a4ccb943cde665 3,5-8,10-15,17-18,20-23,25-27,29,35
+CLAUDE.md
+  s_1393168baeefcf::t_bd426542586183 72-73
+bench/candidates.md
+  s_1393168baeefcf::t_b118a52af2d405 4,24,123
+bench/results/final-2026-08-29.json
+  s_1393168baeefcf::t_7dfe41d0f12663 8
+bench/results/run-20260829-172350.json
+  s_1393168baeefcf::t_33f5ea69487134 8
+bench/results/run-20260829-173541.json
+  s_1393168baeefcf::t_01b072fba7a0f9 8
+bench/results/run-20260829-174536.json
+  s_1393168baeefcf::t_f6d718de2298f0 8
+bench/results/run-20260829-174728.json
+  s_1393168baeefcf::t_117d3dfd155a44 8
+bench/results/run-20260829-175652.json
+  s_1393168baeefcf::t_de24c479d3edea 8
+bench/results/run-20260829-175913.json
+  s_1393168baeefcf::t_a9ec93997e7acf 8
+bench/run-vps.sh
+  s_1393168baeefcf::t_7cf7de35971bce 2,5-6,24-25,53
+docs/analysis.md
+  s_1393168baeefcf::t_091c9c78a8edb7 3,14,60,67
+docs/architecture.md
+  s_1393168baeefcf::t_c1f310d72be5e7 9,89,91
+docs/benchmarks/2026-08-29-stufe-1.md
+  s_1393168baeefcf::t_e0168fc68cbf64 7
+docs/reference.md
+  s_1393168baeefcf::t_6efe1fb9bf1861 1-153
+docs/research/repo-claude-video-claude-watch.md
+  s_1393168baeefcf::t_eff5755ed9e85a 28,58,155,326-329
+docs/research/repo-media-understanding.md
+  s_1393168baeefcf::t_1e47bcaa9f4fdf 259
+docs/roadmap.md
+  s_1393168baeefcf::t_ec6fab37a612f5 3,29-31,33-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "689e143a59f018e7a1ca90af4f6a5f653bb7d83c",
+  "prompts": {},
+  "sessions": {
+    "s_1393168baeefcf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "37ab7472-a815-4b08-a0d7-3578dde54329",
+        "model": "claude-fable-5-1"
+      },
+      "human_author": "okletstryitnow <saintyvis@gmail.com>"
+    }
+  }
+}
